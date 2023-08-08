@@ -18,21 +18,26 @@ def convert_hand(cards_list):
 
 def get_rank(card):
     """
-    Gets the rank of a card from a given string
+    Gets the rank of a card from a given string,
+    raising an error if the rank is not valid
     """
     # The first rank the algorithm finds.
     # If multiple ranks are found then a ValueError will be raised
     found_ranks = []
     simple_ranks = ['j', 'q', 'k', 'a']
     complex_ranks = ['jack', 'queen', 'king', 'ace']
+    # The value for these ranks will be stored in the card object like this
+    rank_format = ['Jack', 'Queen', 'King', 'Ace']
     try:
         # Checking if the rank of the card is a number (2-10)
-        found_ranks = get_card_values(card, range(2, 11))
-        found_complex_ranks = get_card_values(card, complex_ranks)
+        found_ranks = get_card_values(card, range(2, 11), range(2, 11))
+        # Checking if the rank of the card is a word (Jack, Queen, King or Ace)
+        found_simple_ranks = get_card_values(card, simple_ranks, rank_format)
+        found_complex_ranks = get_card_values(card, complex_ranks, rank_format)
         # Only check for simple ranks if there are no complex
         # ranks found in the string, to prevent duplication
         if len(found_complex_ranks) == 0:
-            found_ranks.extend(get_card_values(card, simple_ranks))
+            found_ranks.extend(found_simple_ranks)
         else:
             found_ranks.extend(found_complex_ranks)
         
@@ -51,17 +56,18 @@ def get_rank(card):
         return found_ranks[0]
 
 
-def get_card_values(card, values):
+def get_card_values(card, values, value_formats):
     """
     Scans the card string to check if it contains any of
     the specified values, and returns a list of all values found
+    as their formatted versions
     """
     new_values = []
     card_lower = card.lower()
-    for value in values:
+    for value, string_format in zip(values, value_formats):
         value_str = str(value)
         if value_str in card_lower:
-            new_values.append(value)
+            new_values.append(string_format)
     return new_values
 
 
