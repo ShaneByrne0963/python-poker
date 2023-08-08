@@ -22,22 +22,16 @@ def get_rank(card):
     """
     # The first rank the algorithm finds.
     # If multiple ranks are found then a ValueError will be raised
-    found_rank = None
-    is_duplicate = False
+    found_ranks = []
     try:
         # Checking if the rank of the card is a number (2-10)
-        for number in range(2, 11):
-            number_str = str(number)
-            if number_str in card:
-                if found_rank is not None:
-                    is_duplicate = True
-                    break
-                found_rank = number
-        if found_rank is None:
+        found_ranks.extend(get_card_values(card, range(2, 11)))
+        
+        if found_ranks == []:
             raise ValueError(
                 f'No ranks found in "{card}"'
             )
-        if is_duplicate:
+        if len(found_ranks) > 1:
             raise ValueError(
                 f'Multiple ranks found in "{card}"'
             )
@@ -45,7 +39,20 @@ def get_rank(card):
         print(f'Invalid input: {e}. Please try again.\n')
         return None
     else:
-        return found_rank
+        return found_ranks[0]
+
+
+def get_card_values(card, values):
+    """
+    Scans the card string to check if it contains any of
+    the specified values, and returns a list of all values found
+    """
+    new_values = []
+    for value in values:
+        value_str = str(value)
+        if value_str in card:
+            new_values.append(value)
+    return new_values
 
 
 def validate_hand(cards_list):
