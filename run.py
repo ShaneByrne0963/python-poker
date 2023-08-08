@@ -23,12 +23,20 @@ def get_rank(card):
     # The first rank the algorithm finds.
     # If multiple ranks are found then a ValueError will be raised
     found_rank = None
+    is_duplicate = False
     try:
         # Checking if the rank of the card is a number (2-10)
         for number in range(2, 11):
             number_str = str(number)
             if number_str in card:
+                if found_rank is not None:
+                    is_duplicate = True
+                    break
                 found_rank = number
+        if is_duplicate:
+            raise ValueError(
+                f'Multiple ranks found in "{card}"'
+            )
     except ValueError as e:
         print(f'Invalid input: {e}. Please try again.\n')
         return None
