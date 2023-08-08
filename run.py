@@ -1,8 +1,11 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
+from pprint import pprint
 
-class Card:
+
+class CardType:
     """
-    Stores information about cards to be used for validation
+    Stores a single card input by the user, and contains
+    functions to convert that string into a card dictionary
     """
     simple_type = {
         'rank': ['j', 'q', 'k', 'a'],
@@ -17,6 +20,53 @@ class Card:
         'suit': ['Hearts', 'Diamonds', 'Clubs', 'Spades']
     }
 
+    def __init__(self, text):
+        self.text = text
+
+    def get(self, value_type):
+        """
+        Gets the rank or suit of the card,
+        raising an error if the type is not valid
+        """
+        found_values = []
+        simple_types = CardType.simple_type[value_type]
+        complex_types = CardType.complex_type[value_type]
+        # The value for these ranks will be stored in the card object like this
+        type_format = CardType.type_format[value_type]
+
+        found_simple_types = self.find_values(simple_types, type_format)
+        found_complex_types = self.find_values(complex_types, type_format)
+        # Checking if the rank of the card is a number (2-10)
+        if value_type == 'rank':
+            found_values = self.find_values(range(2, 11), range(2, 11))
+
+        # Adding any of the complex worded values if any were found
+        found_values.extend(found_complex_types)
+
+        # Only add the simple values if there are no
+        # other values found in the string
+        if len(found_values) == 0:
+            found_values.extend(found_simple_types)
+
+        if (type_is_valid(self.text, value_type, found_values)):
+            return found_values[0]
+        else:
+            return None
+
+    def find_values(self, values, value_formats):
+        """
+        Scans the card string to check if it contains any of
+        the specified values, and returns a list of all values found
+        as their formatted versions
+        """
+        new_values = []
+        card_lower = self.text.lower()
+        for value, string_format in zip(values, value_formats):
+            value_str = str(value)
+            if value_str in card_lower:
+                new_values.append(string_format)
+        return new_values
+
 
 def convert_hand(cards_list):
     """
@@ -26,8 +76,8 @@ def convert_hand(cards_list):
     """
     new_cards = []
     for card in cards_list:
-        rank = get_card_type(card, 'rank')
-        suit = get_card_type(card, 'suit')
+        rank = card.get('rank')
+        suit = card.get('suit')
         if rank is not None and suit is not None:
             card_obj = {'rank': rank, 'suit': suit}
             if not card_is_duplicate(card_obj, new_cards):
@@ -37,39 +87,6 @@ def convert_hand(cards_list):
         else:
             return None
     return new_cards
-
-
-def get_card_type(card, value_type):
-    """
-    Gets the rank of a card from a given string,
-    raising an error if the rank is not valid
-    """
-    # The first rank the algorithm finds.
-    # If multiple ranks are found then a ValueError will be raised
-    found_values = []
-    simple_types = Card.simple_type[value_type]
-    complex_types = Card.complex_type[value_type]
-    # The value for these ranks will be stored in the card object like this
-    type_format = Card.type_format[value_type]
-
-    found_simple_types = get_card_values(card, simple_types, type_format)
-    found_complex_types = get_card_values(card, complex_types, type_format)
-    # Checking if the rank of the card is a number (2-10)
-    if value_type == 'rank':
-        found_values = get_card_values(card, range(2, 11), range(2, 11))
-
-    # Adding any of the complex worded values if any were found
-    found_values.extend(found_complex_types)
-
-    # Only add the simple values if there are no
-    # other values found in the string
-    if len(found_values) == 0:
-        found_values.extend(found_simple_types)
-
-    if (type_is_valid(card, value_type, found_values)):
-        return found_values[0]
-    else:
-        return None
 
 
 def type_is_valid(card, value_type, found_values):
@@ -112,21 +129,6 @@ def card_is_duplicate(card, other_cards):
         return False
 
 
-def get_card_values(card, values, value_formats):
-    """
-    Scans the card string to check if it contains any of
-    the specified values, and returns a list of all values found
-    as their formatted versions
-    """
-    new_values = []
-    card_lower = card.lower()
-    for value, string_format in zip(values, value_formats):
-        value_str = str(value)
-        if value_str in card_lower:
-            new_values.append(string_format)
-    return new_values
-
-
 def validate_hand(cards_list):
     """
     Checks if a poker hand is valid
@@ -161,7 +163,12 @@ def get_hand_input():
         hand_input = input('Enter hand here: ')
 
         hand_list = hand_input.split(',')
-        new_hand = validate_hand(hand_list)
+        card_objects = []
+        for card_text in hand_list:
+            card_object = CardType(card_text)
+            card_objects.append(card_object)
+
+        new_hand = validate_hand(card_objects)
         if new_hand is not None:
             return new_hand
 
@@ -172,7 +179,7 @@ def main():
     """
     print('Welcome to Python Poker!\n')
     hand_input = get_hand_input()
-    print(hand_input)
+    pprint(hand_input)
 
 
 main()
