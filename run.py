@@ -23,9 +23,18 @@ def get_rank(card):
     # The first rank the algorithm finds.
     # If multiple ranks are found then a ValueError will be raised
     found_ranks = []
+    simple_ranks = ['j', 'q', 'k', 'a']
+    complex_ranks = ['jack', 'queen', 'king', 'ace']
     try:
         # Checking if the rank of the card is a number (2-10)
-        found_ranks.extend(get_card_values(card, range(2, 11)))
+        found_ranks = get_card_values(card, range(2, 11))
+        found_complex_ranks = get_card_values(card, complex_ranks)
+        # Only check for simple ranks if there are no complex
+        # ranks found in the string, to prevent duplication
+        if len(found_complex_ranks) == 0:
+            found_ranks.extend(get_card_values(card, simple_ranks))
+        else:
+            found_ranks.extend(found_complex_ranks)
         
         if found_ranks == []:
             raise ValueError(
