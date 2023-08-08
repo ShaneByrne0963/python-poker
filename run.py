@@ -1,5 +1,23 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
-from pprint import pprint
+
+
+class Hand:
+    """
+    Holds a list of cards, and can calculate the hand value
+    based on these cards
+    """
+    def __init__(self, cards):
+        """
+        Creates an instance of Hand
+        """
+        self.cards = cards
+
+    def print_hand(self):
+        """
+        Prints each card in this hand to the terminal
+        """
+        for card in self.cards:
+            print(card.description())
 
 
 class Card:
@@ -197,8 +215,8 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
-    hand_input = get_hand_input()
-    pprint(hand_input)
+    hand_input = Hand(get_hand_input())
+    hand_input.print_hand()
 
 
 main()
