@@ -33,6 +33,10 @@ def get_rank(card):
                     is_duplicate = True
                     break
                 found_rank = number
+        if found_rank is None:
+            raise ValueError(
+                f'No ranks found in "{card}"'
+            )
         if is_duplicate:
             raise ValueError(
                 f'Multiple ranks found in "{card}"'
