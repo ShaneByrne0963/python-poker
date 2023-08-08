@@ -2,6 +2,41 @@
 from pprint import pprint
 
 
+class Card:
+    """
+    A single card consisting of a rank and a suit
+    """
+    def __init__(self, rank, suit):
+        """
+        Creates an instance of Card
+        """
+        self.rank = rank
+        self.suit = suit
+
+    def description(self):
+        """
+        Returns the cards rank and suit as a readable string
+        """
+        return f'{self.rank} of {self.suit}'
+
+    def is_duplicate(self, cards_list):
+        """
+        Returns if this card already exists in a list of cards
+        """
+        try:
+            for card in cards_list:
+                if (self.rank == card.rank and
+                        self.suit == card.suit):
+                    raise ValueError(
+                        f'Multiple {self.description()}'
+                    )
+        except ValueError as e:
+            print(f'Invalid input: {e}. Please try again.\n')
+            return True
+        else:
+            return False
+
+
 class CardType:
     """
     Stores a single card input by the user, and contains
@@ -21,6 +56,9 @@ class CardType:
     }
 
     def __init__(self, text):
+        """
+        Creates an instance of CardType
+        """
         self.text = text
 
     def get(self, value_type):
@@ -80,8 +118,8 @@ def convert_hand(cards_list):
         if rank is not None:
             suit = card.get('suit')
             if suit is not None:
-                card_obj = {'rank': rank, 'suit': suit}
-                if not card_is_duplicate(card_obj, new_cards):
+                card_obj = Card(rank, suit)
+                if not card_obj.is_duplicate(new_cards):
                     new_cards.append(card_obj)
                     continue
         return None
@@ -108,24 +146,6 @@ def type_is_valid(card, value_type, found_values):
         return False
     else:
         return True
-
-
-def card_is_duplicate(card, other_cards):
-    """
-    Checks if a card is identical to any other existing card
-    """
-    try:
-        for other_card in other_cards:
-            if (card['rank'] == other_card['rank'] and
-                    card['suit'] == other_card['suit']):
-                raise ValueError(
-                    'Multiple cards of the same type'
-                )
-    except ValueError as e:
-        print(f'Invalid input: {e}. Please try again.\n')
-        return True
-    else:
-        return False
 
 
 def validate_hand(cards_list):
