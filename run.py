@@ -4,6 +4,7 @@ def validate_hand(cards_list):
     """
     Checks if a poker hand is valid
     """
+    formatted_hand = []
     try:
         # Each hand must contain at least 5 cards
         if len(cards_list) < 5:
@@ -12,10 +13,9 @@ def validate_hand(cards_list):
             )
     except ValueError as e:
         print(f'Invalid input: {e}. Please try again.\n')
-        return False
+        return None
     else:
-        print(cards_list)
-        return True
+        return formatted_hand
 
 
 def get_hand_input():
@@ -30,8 +30,9 @@ def get_hand_input():
         hand_input = input('Enter hand here: ')
 
         hand_list = hand_input.split(',')
-        if (validate_hand(hand_list)):
-            return hand_input
+        new_hand = validate_hand(hand_list)
+        if new_hand is not None:
+            return new_hand
 
 
 def main():
@@ -40,6 +41,7 @@ def main():
     """
     print('Welcome to Python Poker!\n')
     hand_input = get_hand_input()
+    print(hand_input)
 
 
 main()
