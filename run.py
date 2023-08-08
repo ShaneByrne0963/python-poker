@@ -57,9 +57,10 @@ def get_card_values(card, values):
     the specified values, and returns a list of all values found
     """
     new_values = []
+    card_lower = card.lower()
     for value in values:
         value_str = str(value)
-        if value_str in card:
+        if value_str in card_lower:
             new_values.append(value)
     return new_values
 
