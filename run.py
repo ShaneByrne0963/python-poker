@@ -62,6 +62,18 @@ def get_card_type(card, value_type):
     if len(found_values) == 0:
         found_values.extend(found_simple_types)
 
+    if (type_is_valid(card, value_type, found_values)):
+        return found_values[0]
+    else:
+        return None
+
+
+def type_is_valid(card, value_type, found_values):
+    """
+    Checks if any ranks or suits found in a card string is
+    valid. Will raise an error if there is not exactly one
+    value found
+    """
     try:
         if found_values == []:
             raise ValueError(
@@ -69,13 +81,13 @@ def get_card_type(card, value_type):
             )
         if len(found_values) > 1:
             raise ValueError(
-                f'Multiple {value_type}s found in "{card}"'
+                f'Multiple {value_type}s {found_values} found in "{card}"'
             )
     except ValueError as e:
         print(f'Invalid input: {e}. Please try again.\n')
-        return None
+        return False
     else:
-        return found_values[0]
+        return True
 
 
 def get_card_values(card, values, value_formats):
