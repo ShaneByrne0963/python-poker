@@ -1,14 +1,20 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 
 class Card:
+    """
+    Stores information about cards to be used for validation
+    """
     simple_type = {
-        'rank': ['j', 'q', 'k', 'a']
+        'rank': ['j', 'q', 'k', 'a'],
+        'suit': ['h', 'd', 'c', 's']
     }
     complex_type = {
-        'rank': ['jack', 'queen', 'king', 'ace']
+        'rank': ['jack', 'queen', 'king', 'ace'],
+        'suit': ['heart', 'diamond', 'club', 'spade']
     }
     type_format = {
-        'rank': ['Jack', 'Queen', 'King', 'Ace']
+        'rank': ['Jack', 'Queen', 'King', 'Ace'],
+        'suit': ['Hearts', 'Diamonds', 'Clubs', 'Spades']
     }
 
 
@@ -21,8 +27,9 @@ def convert_hand(cards_list):
     new_cards = []
     for card in cards_list:
         rank = get_card_type(card, 'rank')
-        if rank is not None:
-            new_cards.append({'rank': rank, 'suit': ''})
+        suit = get_card_type(card, 'suit')
+        if rank is not None and suit is not None:
+            new_cards.append({'rank': rank, 'suit': suit})
         else:
             return None
     return new_cards
@@ -40,20 +47,22 @@ def get_card_type(card, value_type):
     complex_types = Card.complex_type[value_type]
     # The value for these ranks will be stored in the card object like this
     type_format = Card.type_format[value_type]
+
+    found_simple_types = get_card_values(card, simple_types, type_format)
+    found_complex_types = get_card_values(card, complex_types, type_format)
+    # Checking if the rank of the card is a number (2-10)
+    if value_type == 'rank':
+        found_values = get_card_values(card, range(2, 11), range(2, 11))
+
+    # Adding any of the complex worded values if any were found
+    found_values.extend(found_complex_types)
+
+    # Only check for simple values if there are no
+    # other values found in the string
+    if len(found_values) == 0:
+        found_values.extend(found_simple_types)
+
     try:
-        # Checking if the rank of the card is a number (2-10)
-        if value_type == 'rank':
-            found_values = get_card_values(card, range(2, 11), range(2, 11))
-
-        found_simple_types = get_card_values(card, simple_types, type_format)
-        found_complex_types = get_card_values(card, complex_types, type_format)
-        # Only check for simple values if there are no complex
-        # values found in the string, to prevent duplication
-        if len(found_complex_types) == 0:
-            found_values.extend(found_simple_types)
-        else:
-            found_values.extend(found_complex_types)
-
         if found_values == []:
             raise ValueError(
                 f'No {value_type}s found in "{card}"'
