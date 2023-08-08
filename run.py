@@ -29,7 +29,11 @@ def convert_hand(cards_list):
         rank = get_card_type(card, 'rank')
         suit = get_card_type(card, 'suit')
         if rank is not None and suit is not None:
-            new_cards.append({'rank': rank, 'suit': suit})
+            card_obj = {'rank': rank, 'suit': suit}
+            if not card_is_duplicate(card_obj, new_cards):
+                new_cards.append(card_obj)
+            else:
+                return None
         else:
             return None
     return new_cards
@@ -57,7 +61,7 @@ def get_card_type(card, value_type):
     # Adding any of the complex worded values if any were found
     found_values.extend(found_complex_types)
 
-    # Only check for simple values if there are no
+    # Only add the simple values if there are no
     # other values found in the string
     if len(found_values) == 0:
         found_values.extend(found_simple_types)
@@ -88,6 +92,24 @@ def type_is_valid(card, value_type, found_values):
         return False
     else:
         return True
+
+
+def card_is_duplicate(card, other_cards):
+    """
+    Checks if a card is identical to any other existing card
+    """
+    try:
+        for other_card in other_cards:
+            if (card['rank'] == other_card['rank'] and
+                    card['suit'] == other_card['suit']):
+                raise ValueError(
+                    'Multiple cards of the same type'
+                )
+    except ValueError as e:
+        print(f'Invalid input: {e}. Please try again.\n')
+        return True
+    else:
+        return False
 
 
 def get_card_values(card, values, value_formats):
