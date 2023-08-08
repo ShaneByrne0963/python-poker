@@ -77,15 +77,14 @@ def convert_hand(cards_list):
     new_cards = []
     for card in cards_list:
         rank = card.get('rank')
-        suit = card.get('suit')
-        if rank is not None and suit is not None:
-            card_obj = {'rank': rank, 'suit': suit}
-            if not card_is_duplicate(card_obj, new_cards):
-                new_cards.append(card_obj)
-            else:
-                return None
-        else:
-            return None
+        if rank is not None:
+            suit = card.get('suit')
+            if suit is not None:
+                card_obj = {'rank': rank, 'suit': suit}
+                if not card_is_duplicate(card_obj, new_cards):
+                    new_cards.append(card_obj)
+                    continue
+        return None
     return new_cards
 
 
