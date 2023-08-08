@@ -1,5 +1,17 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 
+class Card:
+    simple_type = {
+        'rank': ['j', 'q', 'k', 'a']
+    }
+    complex_type = {
+        'rank': ['jack', 'queen', 'king', 'ace']
+    }
+    type_format = {
+        'rank': ['Jack', 'Queen', 'King', 'Ace']
+    }
+
+
 def convert_hand(cards_list):
     """
     Converts a list of strings into a list of objects
@@ -8,7 +20,7 @@ def convert_hand(cards_list):
     """
     new_cards = []
     for card in cards_list:
-        rank = get_rank(card)
+        rank = get_card_type(card, 'rank')
         if rank is not None:
             new_cards.append({'rank': rank, 'suit': ''})
         else:
@@ -16,44 +28,45 @@ def convert_hand(cards_list):
     return new_cards
 
 
-def get_rank(card):
+def get_card_type(card, value_type):
     """
     Gets the rank of a card from a given string,
     raising an error if the rank is not valid
     """
     # The first rank the algorithm finds.
     # If multiple ranks are found then a ValueError will be raised
-    found_ranks = []
-    simple_ranks = ['j', 'q', 'k', 'a']
-    complex_ranks = ['jack', 'queen', 'king', 'ace']
+    found_values = []
+    simple_types = Card.simple_type[value_type]
+    complex_types = Card.complex_type[value_type]
     # The value for these ranks will be stored in the card object like this
-    rank_format = ['Jack', 'Queen', 'King', 'Ace']
+    type_format = Card.type_format[value_type]
     try:
         # Checking if the rank of the card is a number (2-10)
-        found_ranks = get_card_values(card, range(2, 11), range(2, 11))
-        # Checking if the rank of the card is a word (Jack, Queen, King or Ace)
-        found_simple_ranks = get_card_values(card, simple_ranks, rank_format)
-        found_complex_ranks = get_card_values(card, complex_ranks, rank_format)
-        # Only check for simple ranks if there are no complex
-        # ranks found in the string, to prevent duplication
-        if len(found_complex_ranks) == 0:
-            found_ranks.extend(found_simple_ranks)
+        if value_type == 'rank':
+            found_values = get_card_values(card, range(2, 11), range(2, 11))
+
+        found_simple_types = get_card_values(card, simple_types, type_format)
+        found_complex_types = get_card_values(card, complex_types, type_format)
+        # Only check for simple values if there are no complex
+        # values found in the string, to prevent duplication
+        if len(found_complex_types) == 0:
+            found_values.extend(found_simple_types)
         else:
-            found_ranks.extend(found_complex_ranks)
-        
-        if found_ranks == []:
+            found_values.extend(found_complex_types)
+
+        if found_values == []:
             raise ValueError(
-                f'No ranks found in "{card}"'
+                f'No {value_type}s found in "{card}"'
             )
-        if len(found_ranks) > 1:
+        if len(found_values) > 1:
             raise ValueError(
-                f'Multiple ranks found in "{card}"'
+                f'Multiple {value_type}s found in "{card}"'
             )
     except ValueError as e:
         print(f'Invalid input: {e}. Please try again.\n')
         return None
     else:
-        return found_ranks[0]
+        return found_values[0]
 
 
 def get_card_values(card, values, value_formats):
