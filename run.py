@@ -54,6 +54,7 @@ class Hand:
         starting with the highest value and working its way
         down until a match is found
         """
+        self.sort()
         if (self.is_5_kind()):
             return '5 of a Kind'
         if (self.is_straight(True)):
@@ -73,6 +74,29 @@ class Hand:
         if (self.is_pair()):
             return 'Pair'
         return 'High Card'
+
+    def get_pairs(self):
+        """
+        Returns all the repeating ranks in a hand
+        """
+        # The ranks list stores each unique rank in the hand,
+        # and ranks_amount stores how many times that rank
+        # appears in the hand
+        ranks = []
+        ranks_amount = []
+        for card in self.cards:
+            # Checking if this rank already exists in ranks
+            found_rank = False
+            for i in range(len(ranks)):
+                if card.rank == ranks[i]:
+                    found_rank = True
+                    ranks_amount[i] += 1
+                    break
+            # Add the rank to the list if it does not exist there
+            if not found_rank:
+                ranks.append(card.rank)
+                ranks_amount.append(1)
+        return ranks_amount
 
     def is_5_kind(self):
         """
@@ -353,7 +377,12 @@ def main():
     print('Welcome to Python Poker!\n')
     card_values = get_hand_input()
     hand_input = Hand(card_values)
+    print('\nYour Hand:')
     hand_input.print_hand()
+    print('\nPairs:')
+    print(hand_input.get_pairs())
+    print('\nValue:')
+    print(hand_input.get_value())
 
 
 main()
