@@ -55,10 +55,8 @@ class Hand:
         down until a match is found
         """
         self.sort()
-        pairs = self.get_pairs()
-        # Sorts the pairs in ascending order, so the largest
-        # is at the end
-        pairs.sort()
+        pairs = self.get_repeating_values('rank')
+        suits = self.get_repeating_values('suit')
         if pairs[-1] >= 5:
             return '5 of a Kind'
         if self.is_straight(True):
@@ -67,7 +65,7 @@ class Hand:
             return '4 of a Kind'
         if pairs[-1] >= 3 and pairs[-2] >= 2:
             return 'Full House'
-        if self.is_flush():
+        if suits[-1] >= 5:
             return 'Flush'
         if self.is_straight(False):
             return 'Straight'
@@ -79,41 +77,44 @@ class Hand:
             return 'Pair'
         return 'High Card'
 
-    def get_pairs(self):
+    def get_repeating_values(self, value_type):
         """
-        Returns all the repeating ranks in a hand
+        Returns all the repeating ranks or suits in a hand,
+        depending on value_type
         """
         # The ranks list stores each unique rank in the hand,
         # and ranks_amount stores how many times that rank
         # appears in the hand
-        ranks = []
-        ranks_amount = []
+        values = []
+        value_amount = []
         for card in self.cards:
             # Checking if this rank already exists in ranks
-            found_rank = False
-            for i in range(len(ranks)):
-                if card.rank == ranks[i]:
-                    found_rank = True
-                    ranks_amount[i] += 1
+            found_value = False
+            # Getting what property of the card will be checked
+            # for repeats
+            card_value = card.rank
+            if value_type == 'suit':
+                card_value = card.suit
+
+            for i in range(len(values)):
+                if card_value == values[i]:
+                    found_value = True
+                    value_amount[i] += 1
                     break
-            # Add the rank to the list if it does not exist there
-            if not found_rank:
-                ranks.append(card.rank)
-                ranks_amount.append(1)
-        return ranks_amount
+            # Add the value to the list if it does not exist
+            if not found_value:
+                values.append(card_value)
+                value_amount.append(1)
+        # Sorts the pairs in ascending order, so the largest
+        # is at the end
+        value_amount.sort()
+        return value_amount
 
     def is_straight(self, flush):
         """
         Returns true if 5 cards are ranked in
         consecutive order, and have the same suit if
         specified
-        """
-        return False
-
-    def is_flush(self):
-        """
-        Returns true if 5 cards in the hand are of
-        the same suit
         """
         return False
 
