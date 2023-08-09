@@ -34,9 +34,19 @@ class Hand:
             'wildcards': 0
         }
         cards_template = self.cards.copy()
-        # while len(cards_template) > 0:
-        #     lowest_card = None
-        #     for card in cards_template:
+        while len(cards_template) > 0:
+            # Finding the lowest card in the list
+            lowest_card = None
+            lowest_value = 0
+            for card in cards_template:
+                card_val = card.get_rank()
+                if (lowest_card is None or
+                        card_val < lowest_value):
+                    lowest_card = card
+                    lowest_value = card_val
+            # Moving the lowest card to the sorted cards dict
+            self.cards_sorted['cards'].append(lowest_card)
+            cards_template.remove(lowest_card)
 
     def get_value(self, *wildcards):
         """
