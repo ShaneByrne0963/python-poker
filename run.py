@@ -102,13 +102,6 @@ class Hand:
                 ranks_amount.append(1)
         return ranks_amount
 
-    def is_5_kind(self):
-        """
-        Returns true if 5 cards in the hand are of
-        the same rank
-        """
-        return False
-
     def is_straight(self, flush):
         """
         Returns true if 5 cards are ranked in
@@ -117,45 +110,10 @@ class Hand:
         """
         return False
 
-    def is_4_kind(self):
-        """
-        Returns true if 4 cards in the hand are of
-        the same rank
-        """
-        return False
-
-    def is_full_house(self):
-        """
-        Returns true if the hand has 3 of a kind and
-        a pair of a different rank
-        """
-        return False
-
     def is_flush(self):
         """
         Returns true if 5 cards in the hand are of
         the same suit
-        """
-        return False
-
-    def is_3_kind(self):
-        """
-        Returns true if 3 cards in the hand are of
-        the same rank
-        """
-        return False
-
-    def is_2_pair(self):
-        """
-        Returns true if there are 2 pairs of cards
-        in the hand that are of the same rank
-        """
-        return False
-
-    def is_pair(self):
-        """
-        Returns true if 2 cards in the hand are of
-        the same rank
         """
         return False
 
