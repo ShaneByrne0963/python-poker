@@ -11,6 +11,10 @@ class Hand:
         Creates an instance of Hand
         """
         self.cards = cards
+        self.cards_sorted = {
+            'cards': [],
+            'wildcards': 0
+        }
 
     def print_hand(self):
         """
@@ -18,6 +22,21 @@ class Hand:
         """
         for card in self.cards:
             print(card.description())
+
+    def sort(self):
+        """
+        Sorts the cards in ascending order, removing
+        any wildcards and storing them in an integer
+        """
+        # Resetting the sorted hand if previously sorted
+        self.cards_sorted = {
+            'cards': [],
+            'wildcards': 0
+        }
+        cards_template = self.cards.copy()
+        # while len(cards_template) > 0:
+        #     lowest_card = None
+        #     for card in cards_template:
 
     def get_value(self, *wildcards):
         """
@@ -136,6 +155,20 @@ class Card:
             return True
         else:
             return False
+
+    def get_rank(self):
+        """
+        Returns the rank of the card as an integer
+        """
+        if self.rank == 'Jack':
+            return 11
+        if self.rank == 'Queen':
+            return 12
+        if self.rank == 'King':
+            return 13
+        if self.rank == 'Ace':
+            return 14
+        return int(self.rank)
 
 
 class CardType:
