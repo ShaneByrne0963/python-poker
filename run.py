@@ -146,7 +146,6 @@ def convert_hand(cards_list):
     """
     new_cards = []
     for card in cards_list:
-        rank = card.get('rank')
         card_obj = card.convert(new_cards)
         if card_obj is not None:
             new_cards.append(card_obj)
@@ -227,7 +226,8 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
-    hand_input = Hand(get_hand_input())
+    card_values = get_hand_input()
+    hand_input = Hand(card_values)
     hand_input.print_hand()
 
 
