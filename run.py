@@ -19,6 +19,89 @@ class Hand:
         for card in self.cards:
             print(card.description())
 
+    def get_value(self, *wildcards):
+        """
+        Checks if the hand has a certain card combination,
+        starting with the highest value and working its way
+        down until a match is found
+        """
+        if (self.is_5_kind()):
+            return '5 of a Kind'
+        if (self.is_straight(True)):
+            return 'Straight Flush'
+        if (self.is_4_kind()):
+            return '4 of a Kind'
+        if (self.is_full_house()):
+            return 'Full House'
+        if (self.is_flush()):
+            return 'Flush'
+        if (self.is_straight(False)):
+            return 'Straight'
+        if (self.is_3_kind()):
+            return '3 of a Kind'
+        if (self.is_2_pair()):
+            return 'Two Pair'
+        if (self.is_pair()):
+            return 'Pair'
+        return 'High Card'
+
+    def is_5_kind(self):
+        """
+        Returns true if 5 cards in the hand are of
+        the same rank
+        """
+        return False
+
+    def is_straight(self, flush):
+        """
+        Returns true if 5 cards are ranked in
+        consecutive order, and have the same suit if
+        specified
+        """
+        return False
+
+    def is_4_kind(self):
+        """
+        Returns true if 4 cards in the hand are of
+        the same rank
+        """
+        return False
+
+    def is_full_house(self):
+        """
+        Returns true if the hand has 3 of a kind and
+        a pair of a different rank
+        """
+        return False
+
+    def is_flush(self):
+        """
+        Returns true if 5 cards in the hand are of
+        the same suit
+        """
+        return False
+
+    def is_3_kind(self):
+        """
+        Returns true if 3 cards in the hand are of
+        the same rank
+        """
+        return False
+
+    def is_2_pair(self):
+        """
+        Returns true if there are 2 pairs of cards
+        in the hand that are of the same rank
+        """
+        return False
+
+    def is_pair(self):
+        """
+        Returns true if 2 cards in the hand are of
+        the same rank
+        """
+        return False
+
 
 class Card:
     """
@@ -121,7 +204,6 @@ class CardType:
                 if not card_obj.is_duplicate(other_cards):
                     return card_obj
         return None
-                    
 
     def find_values(self, values, value_formats):
         """
