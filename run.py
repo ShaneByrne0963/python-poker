@@ -109,6 +109,20 @@ class CardType:
         else:
             return None
 
+    def convert(self, other_cards):
+        """
+        Converts a string into an instance of Card and returns it, if valid
+        """
+        rank = self.get('rank')
+        if rank is not None:
+            suit = self.get('suit')
+            if suit is not None:
+                card_obj = Card(rank, suit)
+                if not card_obj.is_duplicate(other_cards):
+                    return card_obj
+        return None
+                    
+
     def find_values(self, values, value_formats):
         """
         Scans the card string to check if it contains any of
@@ -133,13 +147,10 @@ def convert_hand(cards_list):
     new_cards = []
     for card in cards_list:
         rank = card.get('rank')
-        if rank is not None:
-            suit = card.get('suit')
-            if suit is not None:
-                card_obj = Card(rank, suit)
-                if not card_obj.is_duplicate(new_cards):
-                    new_cards.append(card_obj)
-                    continue
+        card_obj = card.convert(new_cards)
+        if card_obj is not None:
+            new_cards.append(card_obj)
+            continue
         return None
     return new_cards
 
@@ -168,7 +179,8 @@ def type_is_valid(card, value_type, found_values):
 
 def validate_hand(cards_list):
     """
-    Checks if a poker hand is valid
+    Checks if a poker hand entered by the user can
+    produce a valid set of cards
     """
     formatted_hand = []
     try:
