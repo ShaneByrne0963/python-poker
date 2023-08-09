@@ -55,23 +55,27 @@ class Hand:
         down until a match is found
         """
         self.sort()
-        if (self.is_5_kind()):
+        pairs = self.get_pairs()
+        # Sorts the pairs in ascending order, so the largest
+        # is at the end
+        pairs.sort()
+        if pairs[-1] >= 5:
             return '5 of a Kind'
-        if (self.is_straight(True)):
+        if self.is_straight(True):
             return 'Straight Flush'
-        if (self.is_4_kind()):
+        if pairs[-1] >= 4:
             return '4 of a Kind'
-        if (self.is_full_house()):
+        if pairs[-1] >= 3 and pairs[-2] >= 2:
             return 'Full House'
-        if (self.is_flush()):
+        if self.is_flush():
             return 'Flush'
-        if (self.is_straight(False)):
+        if self.is_straight(False):
             return 'Straight'
-        if (self.is_3_kind()):
+        if pairs[-1] >= 3:
             return '3 of a Kind'
-        if (self.is_2_pair()):
+        if pairs.count(2) >= 2:
             return 'Two Pair'
-        if (self.is_pair()):
+        if pairs[-1] >= 2:
             return 'Pair'
         return 'High Card'
 
@@ -379,8 +383,6 @@ def main():
     hand_input = Hand(card_values)
     print('\nYour Hand:')
     hand_input.print_hand()
-    print('\nPairs:')
-    print(hand_input.get_pairs())
     print('\nValue:')
     print(hand_input.get_value())
 
