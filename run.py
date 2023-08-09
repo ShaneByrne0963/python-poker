@@ -116,6 +116,43 @@ class Hand:
         consecutive order, and have the same suit if
         specified
         """
+        # The list is copied because values will be removed
+        cards = self.cards_sorted['cards']
+        spare_wildcards = self.cards_sorted['wildcards']
+        # Start at the lowest ranked card and work its way up
+        previous_rank = 0
+        straight_streak = 0
+        straight_suit = ''
+        for card in cards:
+            rank = card.get_rank()
+            # For resetting the straight check algorithm
+            if straight_streak == 0:
+                straight_streak = 1
+                previous_rank = rank
+                straight_suit = card.suit
+                continue
+            # Adding 1 to the streak if conditions are met.
+            # If the rank is the same as the previous rank then
+            # the loop will ignore it
+            if (rank == previous_rank + 1 and
+                    (flush is False or straight_suit == card.suit)):
+                straight_streak += 1
+                previous_rank = rank
+                if straight_streak >= 5:
+                    return True
+                continue
+            # If the hand breaks anyt of the rules
+            # set for the straight
+            if (rank > previous_rank + 1 or
+                    (rank == previous_rank + 1 and
+                        flush is True and straight_suit != card.suit)):
+                if spare_wildcards <= 0:
+                    # Triggering the reset
+                    straight_streak = 0
+                    spare_wildcards = self.cards_sorted['wildcards']
+                    continue
+                else:
+                    spare_wildcards -= 1
         return False
 
 
