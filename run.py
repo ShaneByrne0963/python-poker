@@ -1,4 +1,5 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
+import random
 
 
 class Hand:
@@ -57,11 +58,11 @@ class Hand:
         self.sort()
         pairs = self.get_repeating_values('rank')
         suits = self.get_repeating_values('suit')
-        if pairs[-1] >= 5:
+        if self.get_kind(5, pairs):
             return '5 of a Kind'
         if self.is_straight(True):
             return 'Straight Flush'
-        if pairs[-1] >= 4:
+        if self.get_kind(4, pairs):
             return '4 of a Kind'
         if pairs[-1] >= 3 and pairs[-2] >= 2:
             return 'Full House'
@@ -69,13 +70,16 @@ class Hand:
             return 'Flush'
         if self.is_straight(False):
             return 'Straight'
-        if pairs[-1] >= 3:
+        if self.get_kind(3, pairs):
             return '3 of a Kind'
         if pairs.count(2) >= 2:
             return 'Two Pair'
-        if pairs[-1] >= 2:
+        if self.get_kind(2, pairs):
             return 'Pair'
         return 'High Card'
+
+    def get_kind(self, number, pairs):
+        return pairs[-1] >= number
 
     def get_repeating_values(self, value_type):
         """
@@ -154,6 +158,26 @@ class Hand:
                 else:
                     spare_wildcards -= 1
         return False
+
+    def randomize(self, number):
+        """
+        Sets this hand to a given number of random cards
+        """
+        cards_list = []
+        for i in range(0, number):
+            rank = 0
+            suit = ''
+            card = None
+            while (card is None or
+                    card.is_duplicate(cards_list)):
+                # Picks a random rank between 2 and Ace
+                rank = random.randint(2, 15)
+                suit = random.choice(
+                    ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+                )
+                card = Card(rank, suit)
+            cards_list.append(card)
+        self.cards = cards_list
 
 
 class Card:
@@ -351,7 +375,7 @@ def get_hand_input():
     """
     # Keep requesting an input from the user until a valid hand is entered
     while True:
-        print('Please enter your poker hand.')
+        print('Please enter your poker hand, or "random" for a random hand')
         print(
             '- Your hand must contain at least 5 cards, separated by a comma.'
         )
@@ -359,14 +383,23 @@ def get_hand_input():
         print('- Example: "King of Hearts", "King Heart", "KH"\n')
         hand_input = input('Enter hand here: ')
 
+        # Creates a random hand if the user specifies it
+        hand_lower = hand_input.lower()
+        if 'random' in hand_lower:
+            new_hand = Hand([])
+            new_hand.randomize(5)
+            return new_hand
+
+        # Splits the inputs into separate elements in a list
         hand_list = hand_input.split(',')
         card_objects = []
         for card_text in hand_list:
             card_object = CardType(card_text)
             card_objects.append(card_object)
 
-        new_hand = validate_hand(card_objects)
-        if new_hand is not None:
+        cards = validate_hand(card_objects)
+        if cards is not None:
+            new_hand = Hand(cards)
             return new_hand
 
 
@@ -375,8 +408,7 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
-    card_values = get_hand_input()
-    hand_input = Hand(card_values)
+    hand_input = get_hand_input()
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
