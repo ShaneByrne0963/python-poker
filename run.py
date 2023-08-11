@@ -40,7 +40,7 @@ class Hand:
             lowest_card = None
             lowest_value = 0
             for card in cards_template:
-                card_val = card.get_rank()
+                card_val = card.get_rank_value()
                 if (lowest_card is None or
                         card_val < lowest_value):
                     lowest_card = card
@@ -58,11 +58,11 @@ class Hand:
         self.sort()
         pairs = self.get_repeating_values('rank')
         suits = self.get_repeating_values('suit')
-        if self.get_kind(5, pairs):
+        if self.is_of_kind(5, pairs):
             return '5 of a Kind'
         if self.is_straight(True):
             return 'Straight Flush'
-        if self.get_kind(4, pairs):
+        if self.is_of_kind(4, pairs):
             return '4 of a Kind'
         if pairs[-1] >= 3 and pairs[-2] >= 2:
             return 'Full House'
@@ -70,15 +70,19 @@ class Hand:
             return 'Flush'
         if self.is_straight(False):
             return 'Straight'
-        if self.get_kind(3, pairs):
+        if self.is_of_kind(3, pairs):
             return '3 of a Kind'
         if pairs.count(2) >= 2:
             return 'Two Pair'
-        if self.get_kind(2, pairs):
+        if self.is_of_kind(2, pairs):
             return 'Pair'
         return 'High Card'
 
-    def get_kind(self, number, pairs):
+    def is_of_kind(self, number, pairs):
+        """
+        Returns if the hand has has a certain number
+        of matching card ranks
+        """
         return pairs[-1] >= number
 
     def get_repeating_values(self, value_type):
@@ -128,7 +132,7 @@ class Hand:
         straight_streak = 0
         straight_suit = ''
         for card in cards:
-            rank = card.get_rank()
+            rank = card.get_rank_value()
             # For resetting the straight check algorithm
             if straight_streak == 0:
                 straight_streak = 1
@@ -171,7 +175,8 @@ class Hand:
             while (card is None or
                     card.is_duplicate(cards_list)):
                 # Picks a random rank between 2 and Ace
-                rank = random.randint(2, 15)
+                rank_number = random.randint(2, 14)
+                rank = get_rank_name(rank_number)
                 suit = random.choice(
                     ['Hearts', 'Diamonds', 'Clubs', 'Spades']
                 )
@@ -214,7 +219,7 @@ class Card:
         else:
             return False
 
-    def get_rank(self):
+    def get_rank_value(self):
         """
         Returns the rank of the card as an integer
         """
@@ -401,6 +406,22 @@ def get_hand_input():
         if cards is not None:
             new_hand = Hand(cards)
             return new_hand
+
+
+def get_rank_name(rank_number):
+    """
+    Returns the rank of a given card as a string,
+    consisting of the rank's full name
+    """
+    if rank_number == 14:
+        return 'Ace'
+    if rank_number == 13:
+        return 'King'
+    if rank_number == 12:
+        return 'Queen'
+    if rank_number == 11:
+        return 'Jack'
+    return str(rank_number)
 
 
 def main():
