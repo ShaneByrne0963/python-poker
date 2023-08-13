@@ -2,6 +2,40 @@
 import random
 
 
+class Deck:
+    """
+    Contains all the cards that have not been dealt
+    """
+    def __init__(self):
+        """
+        Creates an instance of Deck
+        """
+        self.cards = self.get_full()
+        self.wildcards = []
+
+    def get_full(self):
+        """
+        Returns a list every card in a deck
+        """
+        cards = []
+        for suit in CardType.type_format['suit']:
+            # Adding the number ranks
+            for rank in range(2, 11):
+                card = Card(rank, suit)
+                cards.append(card)
+            # Adding the worded ranks
+            for rank in CardType.type_format['rank']:
+                card = Card(rank, suit)
+                cards.append(card)
+        return cards
+
+    def shuffle(self):
+        """
+        Shuffles the deck
+        """
+        random.shuffle(self.cards)
+
+
 class Hand:
     """
     Holds a list of cards, and can calculate the hand value
@@ -175,9 +209,9 @@ class Hand:
 
     def is_straight_flush(self):
         """
-        Returns true if 5 cards are ranked in
-        consecutive order, and have the same suit if
-        specified
+        Checks if 5 cards are ranked in consecutive order
+        and of the same suit, if true, returns the highest card
+        in the straight. Returns None if false
         """
         # Sorts each card by its suit into a list of lists
         suits = []
@@ -460,18 +494,11 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
-    # hand_input = get_hand_input()
-    attempts = 1
-    hand_input = Hand([])
-    hand_input.randomize(5)
-    while hand_input.get_value() != 'Royal Flush':
-        hand_input.randomize(5)
-        attempts += 1
+    hand_input = get_hand_input()
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
-    print(f'Attempts: {attempts}')
 
 
 main()
