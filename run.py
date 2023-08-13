@@ -306,7 +306,7 @@ class CardType:
                 card_obj = Card(rank, suit)
                 if not card_obj.is_duplicate(other_cards):
                     return card_obj
-                print()
+                print_error(f'Multiple {rank} of {suit}')
         return None
 
     def find_values(self, values, value_formats):
@@ -445,14 +445,17 @@ def main():
     """
     print('Welcome to Python Poker!\n')
     # hand_input = get_hand_input()
+    attempts = 1
     hand_input = Hand([])
     hand_input.randomize(5)
     while hand_input.get_value() != 'Straight Flush':
         hand_input.randomize(5)
+        attempts += 1
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
+    print(f'Attempts: {attempts}')
 
 
 main()
