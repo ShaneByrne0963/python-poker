@@ -57,25 +57,39 @@ class Hand:
         """
         self.sort()
         pairs = self.get_repeating_values('rank')
-        suits = self.get_repeating_values('suit')
+        # If the hand has 5 cards of the same rank (with wildcards)
         if self.is_of_kind(5, pairs):
             return '5 of a Kind'
-        if self.is_straight_flush():
+        # If the hand has 5 consecutive ranking cards of the same suit
+        straight_high = self.is_straight_flush()
+        if straight_high is not None:
+            if straight_high.rank == 'Ace':
+                return 'Royal Flush'
             return 'Straight Flush'
+        # If the hand has 4 cards of the same rank
         if self.is_of_kind(4, pairs):
             return '4 of a Kind'
+        # If the hand has 3 cards of the same rank and
+        # 2 different cards of the same rank
         if pairs[-1] >= 3 and pairs[-2] >= 2:
             return 'Full House'
+        # If the hand has 5 cards of the same suit
+        suits = self.get_repeating_values('suit')
         if suits[-1] >= 5:
             return 'Flush'
+        # If the hand has 5 consecutive ranking cards
         if self.is_straight(self.cards_sorted['cards']):
             return 'Straight'
+        # If the hand has 3 cards of the same rank
         if self.is_of_kind(3, pairs):
             return '3 of a Kind'
+        # If the hand has 2 pairs of cards of the same rank
         if pairs.count(2) >= 2:
             return 'Two Pair'
+        # If the hand has 2 cards of the same rank
         if self.is_of_kind(2, pairs):
             return 'Pair'
+        # For everything else
         return 'High Card'
 
     def is_of_kind(self, number, pairs):
@@ -179,7 +193,7 @@ class Hand:
             high_card = self.is_straight(hand_suit)
             if high_card is not None:
                 return high_card
-        return False
+        return None
 
     def randomize(self, number):
         """
@@ -450,7 +464,7 @@ def main():
     attempts = 1
     hand_input = Hand([])
     hand_input.randomize(5)
-    while hand_input.get_value() != 'Straight Flush':
+    while hand_input.get_value() != 'Royal Flush':
         hand_input.randomize(5)
         attempts += 1
     print('\nYour Hand:')
