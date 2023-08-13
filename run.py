@@ -60,7 +60,7 @@ class Hand:
         suits = self.get_repeating_values('suit')
         if self.is_of_kind(5, pairs):
             return '5 of a Kind'
-        if self.is_straight(True):
+        if self.is_straight_flush():
             return 'Straight Flush'
         if self.is_of_kind(4, pairs):
             return '4 of a Kind'
@@ -68,7 +68,7 @@ class Hand:
             return 'Full House'
         if suits[-1] >= 5:
             return 'Flush'
-        if self.is_straight(False):
+        if self.is_straight(self.cards_sorted['cards']):
             return 'Straight'
         if self.is_of_kind(3, pairs):
             return '3 of a Kind'
@@ -118,32 +118,29 @@ class Hand:
         value_amount.sort()
         return value_amount
 
-    def is_straight(self, flush):
+    def is_straight(self, hand_checking):
         """
         Returns true if 5 cards are ranked in
         consecutive order, and have the same suit if
         specified
         """
         # The list is copied because values will be removed
-        cards = self.cards_sorted['cards']
+        cards = hand_checking.copy()
         spare_wildcards = self.cards_sorted['wildcards']
         # Start at the lowest ranked card and work its way up
         previous_rank = 0
         straight_streak = 0
-        straight_suit = ''
         for card in cards:
             rank = card.get_rank_value()
             # For resetting the straight check algorithm
             if straight_streak == 0:
                 straight_streak = 1
                 previous_rank = rank
-                straight_suit = card.suit
                 continue
             # Adding 1 to the streak if conditions are met.
             # If the rank is the same as the previous rank then
             # the loop will ignore it
-            if (rank == previous_rank + 1 and
-                    (flush is False or straight_suit == card.suit)):
+            if rank == previous_rank + 1:
                 straight_streak += 1
                 previous_rank = rank
                 if straight_streak >= 5:
@@ -151,9 +148,7 @@ class Hand:
                 continue
             # If the hand breaks anyt of the rules
             # set for the straight
-            if (rank > previous_rank + 1 or
-                    (rank == previous_rank + 1 and
-                        flush is True and straight_suit != card.suit)):
+            if rank > previous_rank + 1 or rank == previous_rank + 1:
                 if spare_wildcards <= 0:
                     # Triggering the reset
                     straight_streak = 0
@@ -161,6 +156,27 @@ class Hand:
                     continue
                 else:
                     spare_wildcards -= 1
+        return False
+
+    def is_straight_flush(self):
+        """
+        Returns true if 5 cards are ranked in
+        consecutive order, and have the same suit if
+        specified
+        """
+        # Sorts each card by its suit into a list of lists
+        suits = []
+        for suit_sorting in CardType.type_format['suit']:
+            # Add an empty list for each suit
+            suits.append([])
+            for card in self.cards_sorted['cards']:
+                if card.suit == suit_sorting:
+                    # Adds the card to the newest list
+                    suits[-1].append(card)
+        # Checking each suit for a straight
+        for hand_suit in suits:
+            if self.is_straight(hand_suit):
+                return True
         return False
 
     def randomize(self, number):
@@ -177,9 +193,7 @@ class Hand:
                 # Picks a random rank between 2 and Ace
                 rank_number = random.randint(2, 14)
                 rank = get_rank_name(rank_number)
-                suit = random.choice(
-                    ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-                )
+                suit = random.choice(CardType.type_format['suit'])
                 card = Card(rank, suit)
             cards_list.append(card)
         self.cards = cards_list
