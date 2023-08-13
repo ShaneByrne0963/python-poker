@@ -220,18 +220,11 @@ class Card:
         """
         Returns if this card already exists in a list of cards
         """
-        try:
-            for card in cards_list:
-                if (self.rank == card.rank and
-                        self.suit == card.suit):
-                    raise ValueError(
-                        f'Multiple {self.description()}'
-                    )
-        except ValueError as e:
-            print(f'Invalid input: {e}. Please try again.\n')
-            return True
-        else:
-            return False
+        for card in cards_list:
+            if (self.rank == card.rank and
+                    self.suit == card.suit):
+                return True
+        return False
 
     def get_rank_value(self):
         """
@@ -313,6 +306,7 @@ class CardType:
                 card_obj = Card(rank, suit)
                 if not card_obj.is_duplicate(other_cards):
                     return card_obj
+                print()
         return None
 
     def find_values(self, values, value_formats):
@@ -381,7 +375,7 @@ def validate_hand(cards_list):
                 f'Need at least 5 cards. You have given {len(cards_list)}'
             )
     except ValueError as e:
-        print(f'Invalid input: {e}. Please try again.\n')
+        print_error(e)
         return None
     else:
         formatted_hand = convert_hand(cards_list)
@@ -438,12 +432,23 @@ def get_rank_name(rank_number):
     return str(rank_number)
 
 
+def print_error(message):
+    """
+    Prints a specific error to the terminal
+    """
+    print(f'Invalid input: {message}. Please try again.\n')
+
+
 def main():
     """
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
-    hand_input = get_hand_input()
+    # hand_input = get_hand_input()
+    hand_input = Hand([])
+    hand_input.randomize(5)
+    while hand_input.get_value() != 'Straight Flush':
+        hand_input.randomize(5)
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
