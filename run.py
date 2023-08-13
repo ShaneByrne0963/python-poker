@@ -120,9 +120,9 @@ class Hand:
 
     def is_straight(self, hand_checking):
         """
-        Returns true if 5 cards are ranked in
-        consecutive order, and have the same suit if
-        specified
+        Checks if 5 cards are ranked in consecutive order
+        and, if true, returns the highest card in the
+        straight. Returns None if false
         """
         # The list is copied because values will be removed
         cards = hand_checking.copy()
@@ -130,6 +130,7 @@ class Hand:
         # Start at the lowest ranked card and work its way up
         previous_rank = 0
         straight_streak = 0
+        high_card = None
         for card in cards:
             rank = card.get_rank_value()
             # For resetting the straight check algorithm
@@ -144,7 +145,7 @@ class Hand:
                 straight_streak += 1
                 previous_rank = rank
                 if straight_streak >= 5:
-                    return True
+                    high_card = card
                 continue
             # If the hand breaks anyt of the rules
             # set for the straight
@@ -156,7 +157,7 @@ class Hand:
                     continue
                 else:
                     spare_wildcards -= 1
-        return False
+        return high_card
 
     def is_straight_flush(self):
         """
@@ -175,8 +176,9 @@ class Hand:
                     suits[-1].append(card)
         # Checking each suit for a straight
         for hand_suit in suits:
-            if self.is_straight(hand_suit):
-                return True
+            high_card = self.is_straight(hand_suit)
+            if high_card is not None:
+                return high_card
         return False
 
     def randomize(self, number):
