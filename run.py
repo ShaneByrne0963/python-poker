@@ -41,9 +41,10 @@ class Deck:
         the card from the deck. Takes the first card from the
         deck if no rank or suit is given
         """
+        # Takes the first card from the deck
+        # if no parameters are given
         if rank is None and suit is None:
             if len(self.cards) > 0:
-                # Taking the first card from the deck
                 found_card = self.cards[0]
                 self.cards.pop(0)
                 return found_card
@@ -51,17 +52,26 @@ class Deck:
             # deck, and returns None
             print('No more cards in the deck!')
             return None
+        found_card = self.get_card(rank, suit)
+        if found_card is not None:
+            self.cards.remove(found_card)
+            return found_card
+        # Creates a card to print an error if the card
+        # does not exist in the deck
         found_card = Card(rank, suit)
-        for card in self.cards:
-            if rank == card.rank and suit == card.suit:
-                self.cards.remove(card)
-                return found_card
-        # Prints an error and returns None if the card does
-        # not exist
         print_error(
             f'No {found_card.description()} in deck'
         )
         return None
+
+    def get_card(self, rank, suit):
+        """
+        Gets a specific card from the deck. Returns
+        None if no card exists
+        """
+        for card in self.cards:
+            if rank == card.rank and suit == card.suit:
+                return card
 
 
 class Hand:
