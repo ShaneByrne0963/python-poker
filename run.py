@@ -35,6 +35,34 @@ class Deck:
         """
         random.shuffle(self.cards)
 
+    def take_card(self, rank=None, suit=None):
+        """
+        Returns a card of a given rank and suit, removing
+        the card from the deck. Takes the first card from the
+        deck if no rank or suit is given
+        """
+        if rank is None and suit is None:
+            if len(self.cards) > 0:
+                # Taking the first card from the deck
+                found_card = self.cards[0]
+                self.cards.pop(0)
+                return found_card
+            # Notifies the user when there are no cards in the
+            # deck, and returns None
+            print('No more cards in the deck!')
+            return None
+        found_card = Card(rank, suit)
+        for card in self.cards:
+            if rank == card.rank and suit == card.suit:
+                self.cards.remove(card)
+                return found_card
+        # Prints an error and returns None if the card does
+        # not exist
+        print_error(
+            f'No {found_card.description()} in deck'
+        )
+        return None
+
 
 class Hand:
     """
@@ -484,7 +512,7 @@ def get_rank_name(rank_number):
 
 def print_error(message):
     """
-    Prints a specific error to the terminal
+    Prints a specific user input error to the terminal
     """
     print(f'Invalid input: {message}. Please try again.\n')
 
