@@ -136,7 +136,7 @@ class Hand:
         # If the hand has 5 consecutive ranking cards of the same suit
         straight_high = self.is_straight_flush()
         if straight_high is not None:
-            if straight_high.rank == 'Ace':
+            if straight_high == 'Ace':
                 return 'Royal Flush'
             return 'Straight Flush'
         # If the hand has 4 cards of the same rank
@@ -212,14 +212,17 @@ class Hand:
         and, if true, returns the highest card in the
         straight. Returns None if false
         """
-        # The list is copied because values will be removed
-        cards = hand_checking.copy()
-        spare_wildcards = self.cards_sorted['wildcards']
+        # Duplicating the wild cards as it will be altered
+        # for this evaluation
+        wildcards = self.cards_sorted['wildcards']
         # Start at the lowest ranked card and work its way up
         previous_rank = 0
         straight_streak = 0
-        high_card = None
-        for card in cards:
+        high_rank = None
+        i = 0
+        while i < len(hand_checking):
+            card = hand_checking[i]
+            i += 1
             rank = card.get_rank_value()
             # For resetting the straight check algorithm
             if straight_streak == 0:
@@ -229,23 +232,29 @@ class Hand:
             # Adding 1 to the streak if conditions are met.
             # If the rank is the same as the previous rank then
             # the loop will ignore it
-            if rank == previous_rank + 1:
+            if (rank == previous_rank + 1 or
+                    (rank > previous_rank + 1 and wildcards > 0)):
+                if rank > previous_rank + 1:
+                    wildcards -= 1
+                    # Starting the next iteration of the loop at the
+                    # same point if a wild card is used
+                    i -= 1
                 straight_streak += 1
-                previous_rank = rank
+                previous_rank += 1
+                # At the end of the evaluation, add any unused
+                # wild cards to the streak
+                if i == len(hand_checking):
+                    straight_streak += wildcards
                 if straight_streak >= 5:
-                    high_card = card
+                    high_rank = get_rank_name(rank)
                 continue
-            # If the hand breaks anyt of the rules
-            # set for the straight
-            if rank > previous_rank + 1 or rank == previous_rank + 1:
-                if spare_wildcards <= 0:
-                    # Triggering the reset
-                    straight_streak = 0
-                    spare_wildcards = self.cards_sorted['wildcards']
-                    continue
-                else:
-                    spare_wildcards -= 1
-        return high_card
+            # If there is a gap in the straight, it is not valid
+            if rank > previous_rank + 1:
+                # Triggering the reset
+                straight_streak = 0
+                wildcards = self.cards_sorted['wildcards']
+                continue
+        return high_rank
 
     def is_straight_flush(self):
         """
@@ -598,11 +607,12 @@ def main():
     # Creates the deck
     global deck
     deck = Deck()
-    deck.wildcards = [2]
 
+    deck.wildcards = [2]
+    deck.shuffle()
     hand_input = Hand([])
     hand_input.take_from_deck(5)
-    while hand_input.get_value() != 'Full House':
+    while hand_input.get_value() != 'Straight Flush':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
