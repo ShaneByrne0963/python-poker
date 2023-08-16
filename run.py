@@ -265,7 +265,7 @@ class Hand:
                 return high_card
         return None
 
-    def take_from_deck(self, deck, number):
+    def take_from_deck(self, number):
         """
         Sets this hand to a given number of random cards
         """
@@ -372,7 +372,7 @@ class CardType:
         else:
             return None
 
-    def convert(self, deck):
+    def convert(self):
         """
         Converts a string into an instance of Card and returns it, if valid
         """
@@ -403,7 +403,7 @@ class CardType:
         return new_values
 
 
-def convert_hand(cards_list, deck):
+def convert_hand(cards_list):
     """
     Converts a list of strings into a list of objects
     containing the rank and the suit
@@ -411,7 +411,7 @@ def convert_hand(cards_list, deck):
     """
     new_cards = []
     for card in cards_list:
-        card_obj = card.convert(deck)
+        card_obj = card.convert()
         if card_obj is not None:
             deck.take_card(card_obj)
             new_cards.append(card_obj)
@@ -442,7 +442,7 @@ def type_is_valid(card, value_type, found_values):
         return True
 
 
-def validate_hand(cards_list, deck):
+def validate_hand(cards_list):
     """
     Checks if a poker hand entered by the user can
     produce a valid set of cards
@@ -458,11 +458,11 @@ def validate_hand(cards_list, deck):
         print_error(e)
         return None
     else:
-        formatted_hand = convert_hand(cards_list, deck)
+        formatted_hand = convert_hand(cards_list)
         return formatted_hand
 
 
-def get_hand_input(deck):
+def get_hand_input():
     """
     Requests a hand to be manually entered by the user, and returns
     an instance of Hand
@@ -481,7 +481,7 @@ def get_hand_input(deck):
         if contains_word(hand_input, 'random'):
             new_hand = Hand([])
             deck.shuffle()
-            new_hand.take_from_deck(deck, 5)
+            new_hand.take_from_deck(5)
             return new_hand
 
         # Splits the inputs into separate elements in a list
@@ -491,7 +491,7 @@ def get_hand_input(deck):
             card_object = CardType(card_text)
             card_objects.append(card_object)
 
-        cards = validate_hand(card_objects, deck)
+        cards = validate_hand(card_objects)
         if cards is not None:
             new_hand = Hand(cards)
             return new_hand
@@ -565,9 +565,13 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
+    global deck
     deck = Deck()
-    hand_input = get_hand_input(deck)
+    hand_input = get_hand_input()
+
     wildcards = get_wildcards()
+    deck.wildcards = wildcards
+
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
