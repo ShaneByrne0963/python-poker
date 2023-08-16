@@ -245,8 +245,12 @@ class Hand:
                 # wild cards to the streak
                 if i == len(hand_checking):
                     straight_streak += wildcards
+                    previous_rank += wildcards
+                    # Limiting the highest rank to 14 (Ace)
+                    if previous_rank > 14:
+                        previous_rank = 14
                 if straight_streak >= 5:
-                    high_rank = get_rank_name(rank)
+                    high_rank = get_rank_name(previous_rank)
                 continue
             # If there is a gap in the straight, it is not valid
             if rank > previous_rank + 1:
@@ -628,6 +632,8 @@ def main():
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
+    highest_card = hand_input.is_straight(hand_input.cards_sorted['cards'])
+    print(f'Highest Card: {highest_card}')
 
 
 main()
