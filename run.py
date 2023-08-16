@@ -122,7 +122,7 @@ class Hand:
                 self.cards_sorted['cards'].append(lowest_card)
             cards_template.remove(lowest_card)
 
-    def get_value(self, *wildcards):
+    def get_value(self):
         """
         Checks if the hand has a certain card combination,
         starting with the highest value and working its way
@@ -170,7 +170,8 @@ class Hand:
         Returns if the hand has has a certain number
         of matching card ranks
         """
-        return pairs[-1] >= number
+        wildcards = self.cards_sorted['wildcards']
+        return pairs[-1] + wildcards >= number
 
     def get_repeating_values(self, value_type):
         """
