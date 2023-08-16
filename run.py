@@ -372,7 +372,7 @@ class CardType:
         else:
             return None
 
-    def convert(self, other_cards):
+    def convert(self, deck):
         """
         Converts a string into an instance of Card and returns it, if valid
         """
@@ -380,10 +380,12 @@ class CardType:
         if rank is not None:
             suit = self.get('suit')
             if suit is not None:
-                card_obj = Card(rank, suit)
-                if not card_obj.is_duplicate(other_cards):
-                    return card_obj
-                print_error(f'Multiple {rank} of {suit}')
+                card_obj = deck.get_card(rank, suit)
+                # If the card doesn't exist in the deck, then the card
+                # exists somewhere else
+                if card_obj is None:
+                    print_error(f'Multiple {rank} of {suit}')
+                return card_obj
         return None
 
     def find_values(self, values, value_formats):
@@ -401,7 +403,7 @@ class CardType:
         return new_values
 
 
-def convert_hand(cards_list):
+def convert_hand(cards_list, deck):
     """
     Converts a list of strings into a list of objects
     containing the rank and the suit
@@ -409,8 +411,9 @@ def convert_hand(cards_list):
     """
     new_cards = []
     for card in cards_list:
-        card_obj = card.convert(new_cards)
+        card_obj = card.convert(deck)
         if card_obj is not None:
+            deck.take_card(card_obj)
             new_cards.append(card_obj)
             continue
         return None
@@ -439,7 +442,7 @@ def type_is_valid(card, value_type, found_values):
         return True
 
 
-def validate_hand(cards_list):
+def validate_hand(cards_list, deck):
     """
     Checks if a poker hand entered by the user can
     produce a valid set of cards
@@ -455,7 +458,7 @@ def validate_hand(cards_list):
         print_error(e)
         return None
     else:
-        formatted_hand = convert_hand(cards_list)
+        formatted_hand = convert_hand(cards_list, deck)
         return formatted_hand
 
 
@@ -487,7 +490,7 @@ def get_hand_input(deck):
             card_object = CardType(card_text)
             card_objects.append(card_object)
 
-        cards = validate_hand(card_objects)
+        cards = validate_hand(card_objects, deck)
         if cards is not None:
             new_hand = Hand(cards)
             return new_hand
@@ -533,9 +536,6 @@ def main():
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
-
-    for card in deck.cards:
-        print(card.description())
 
 
 main()
