@@ -143,8 +143,8 @@ class Hand:
         if self.is_of_kind(4, pairs):
             return '4 of a Kind'
         # If the hand has 3 cards of the same rank and
-        # 2 different cards of the same rank
-        if pairs[-1] >= 3 and pairs[-2] >= 2:
+        # a pair of a different rank
+        if self.is_full_house(pairs):
             return 'Full House'
         # If the hand has 5 cards of the same suit
         suits = self.get_repeating_values('suit')
@@ -268,6 +268,22 @@ class Hand:
             if high_card is not None:
                 return high_card
         return None
+
+    def is_full_house(self, pairs):
+        """
+        Returns True if the hand has 3 ranks of the same
+        kind, and a pair of a different rank
+        """
+        wildcards = self.cards_sorted['wildcards']
+        # Checking for the 3 of a Kind part of the Full House
+        if not self.is_of_kind(3, pairs):
+            return False
+        # Removing any wildcards that were used for the first part
+        # so they cannot be used again
+        if pairs[-1] < 3:
+            wildcards -= 3 - pairs[-1]
+        # Checking for the pair
+        return pairs[-2] + wildcards >= 2
 
     def take_from_deck(self, number):
         """
@@ -586,7 +602,7 @@ def main():
 
     hand_input = Hand([])
     hand_input.take_from_deck(5)
-    while hand_input.get_value() != '5 of a Kind':
+    while hand_input.get_value() != 'Full House':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
