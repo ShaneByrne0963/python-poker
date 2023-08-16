@@ -464,7 +464,8 @@ def validate_hand(cards_list, deck):
 
 def get_hand_input(deck):
     """
-    Requests a hand to be manually entered by the user
+    Requests a hand to be manually entered by the user, and returns
+    an instance of Hand
     """
     # Keep requesting an input from the user until a valid hand is entered
     while True:
@@ -494,6 +495,40 @@ def get_hand_input(deck):
         if cards is not None:
             new_hand = Hand(cards)
             return new_hand
+
+
+def get_wildcards():
+    """
+    Requests the user to enter a set of wild cards that
+    can affect the hand
+    """
+    while True:
+        print('\nPlease enter any wild cards,')
+        print('or press Enter if there are none\n')
+        print('- Only enter the rank of the card, i.e. 2 - Ace')
+        print('- Wild cards are cards that can take form of any')
+        print('  rank or suit to make the best possible hand.\n')
+        wildcards = input('Wild Cards: ')
+        if wildcards == '':
+            return []
+        cards_list = wildcards.split(',')
+        wildcard_ranks = []
+        is_valid = True
+        # Checking each input for a valid rank
+        for card_text in cards_list:
+            card = CardType(card_text)
+            rank = card.get('rank')
+            if rank is not None:
+                wildcard_ranks.append(rank)
+            else:
+                # Exits the for loop if one of the inputs
+                # is not valid
+                is_valid = False
+                break
+        # Only return the wild cards once all of them are valid.
+        # Repeat the while loop if there are invalid wild cards
+        if is_valid:
+            return wildcard_ranks
 
 
 def get_rank_name(rank_number):
@@ -532,6 +567,7 @@ def main():
     print('Welcome to Python Poker!\n')
     deck = Deck()
     hand_input = get_hand_input(deck)
+    wildcards = get_wildcards()
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
