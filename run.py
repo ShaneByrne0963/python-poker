@@ -183,7 +183,7 @@ class Hand:
         # appears in the hand
         values = []
         value_amount = []
-        for card in self.cards:
+        for card in self.cards_sorted['cards']:
             # Checking if this rank already exists in ranks
             found_value = False
             # Getting what property of the card will be checked
@@ -582,11 +582,21 @@ def main():
     # Creates the deck
     global deck
     deck = Deck()
-    # Instructs the user to enter their hand
-    hand_input = get_hand_input()
+    deck.wildcards = [2]
 
-    wildcards = get_wildcards()
-    deck.wildcards = wildcards
+    hand_input = Hand([])
+    hand_input.take_from_deck(5)
+    while hand_input.get_value() != '5 of a Kind':
+        deck.cards = deck.get_full()
+        deck.shuffle()
+        hand_input.cards = []
+        hand_input.take_from_deck(5)
+
+    # Instructs the user to enter their hand
+    # hand_input = get_hand_input()
+
+    # wildcards = get_wildcards()
+    # deck.wildcards = wildcards
 
     print('\nYour Hand:')
     hand_input.print_hand()
