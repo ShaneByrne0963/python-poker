@@ -506,14 +506,12 @@ def get_rank_name(rank_number):
     Returns the rank of a given card as a string,
     consisting of the rank's full name
     """
-    if rank_number == 14:
-        return 'Ace'
-    if rank_number == 13:
-        return 'King'
-    if rank_number == 12:
-        return 'Queen'
-    if rank_number == 11:
-        return 'Jack'
+    # For cards greater than 10
+    if rank_number > 10:
+        worded_ranks = CardType.type_format['rank']
+        # The 11th rank will be a Jack, which is the first
+        # element in CardType.type_format
+        return worded_ranks[rank_number - 11]
     return str(rank_number)
 
 
