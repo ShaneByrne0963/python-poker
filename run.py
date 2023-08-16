@@ -58,7 +58,7 @@ class Deck:
         # Creates a card to print an error if the card
         # does not exist in the deck
         print_error(
-            f'No {card.description()} in deck'
+            f'No {card.description(False)} in deck'
         )
         return None
 
@@ -92,7 +92,7 @@ class Hand:
         Prints each card in this hand to the terminal
         """
         for card in self.cards:
-            print(card.description())
+            print(card.description(True))
 
     def sort(self):
         """
@@ -290,11 +290,15 @@ class Card:
         self.rank = rank
         self.suit = suit
 
-    def description(self):
+    def description(self, extra_details):
         """
-        Returns the cards rank and suit as a readable string
+        Returns the cards rank and suit as a readable string,
+        and if it is a wild card if specified
         """
-        return f'{self.rank} of {self.suit}'
+        desc_text = f'{self.rank} of {self.suit}'
+        if extra_details and self.is_wild():
+            desc_text += ' (Wild)'
+        return desc_text
 
     def is_duplicate(self, cards_list):
         """
