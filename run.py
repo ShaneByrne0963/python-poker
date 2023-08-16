@@ -35,7 +35,7 @@ class Deck:
         """
         random.shuffle(self.cards)
 
-    def take_card(self, rank=None, suit=None):
+    def take_card(self, card=None):
         """
         Returns a card of a given rank and suit, removing
         the card from the deck. Takes the first card from the
@@ -43,7 +43,7 @@ class Deck:
         """
         # Takes the first card from the deck
         # if no parameters are given
-        if rank is None and suit is None:
+        if card is None:
             if len(self.cards) > 0:
                 found_card = self.cards[0]
                 self.cards.pop(0)
@@ -52,15 +52,13 @@ class Deck:
             # deck, and returns None
             print('No more cards in the deck!')
             return None
-        found_card = self.get_card(rank, suit)
-        if found_card is not None:
-            self.cards.remove(found_card)
-            return found_card
+        if self.cards.count(card) > 0:
+            self.cards.remove(card)
+            return card
         # Creates a card to print an error if the card
         # does not exist in the deck
-        found_card = Card(rank, suit)
         print_error(
-            f'No {found_card.description()} in deck'
+            f'No {card.description()} in deck'
         )
         return None
 
