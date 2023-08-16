@@ -468,7 +468,7 @@ def validate_hand(cards_list):
         return formatted_hand
 
 
-def get_hand_input():
+def get_hand_input(deck):
     """
     Requests a hand to be manually entered by the user
     """
@@ -483,8 +483,7 @@ def get_hand_input():
         hand_input = input('Enter hand here: ')
 
         # Creates a random hand if the user specifies it
-        hand_lower = hand_input.lower()
-        if 'random' in hand_lower:
+        if contains_word(hand_input, 'random'):
             new_hand = Hand([])
             new_hand.randomize(5)
             return new_hand
@@ -525,12 +524,21 @@ def print_error(message):
     print(f'Invalid input: {message}. Please try again.\n')
 
 
+def contains_word(input, word):
+    """
+    Returns true if a player input contains a given word
+    """
+    input_lower = input.lower()
+    return word in input_lower
+
+
 def main():
     """
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
-    hand_input = get_hand_input()
+    deck = Deck()
+    hand_input = get_hand_input(deck)
     print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
