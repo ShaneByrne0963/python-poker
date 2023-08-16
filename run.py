@@ -148,7 +148,7 @@ class Hand:
             return 'Full House'
         # If the hand has 5 cards of the same suit
         suits = self.get_repeating_values('suit')
-        if suits[-1] >= 5:
+        if suits[-1] + self.cards_sorted['wildcards'] >= 5:
             return 'Flush'
         # If the hand has 5 consecutive ranking cards
         if self.is_straight(self.cards_sorted['cards']):
