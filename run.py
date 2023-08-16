@@ -115,8 +115,11 @@ class Hand:
                         card_val < lowest_value):
                     lowest_card = card
                     lowest_value = card_val
-            # Moving the lowest card to the sorted cards dict
-            self.cards_sorted['cards'].append(lowest_card)
+            if lowest_card.is_wild():
+                self.cards_sorted['wildcards'] += 1
+            else:
+                # Moving the lowest card to the sorted cards dict
+                self.cards_sorted['cards'].append(lowest_card)
             cards_template.remove(lowest_card)
 
     def get_value(self, *wildcards):
@@ -316,6 +319,12 @@ class Card:
         if self.rank == 'Ace':
             return 14
         return int(self.rank)
+
+    def is_wild(self):
+        """
+        Returns if this card is a wild card
+        """
+        return self.rank in deck.wildcards
 
 
 class CardType:
@@ -565,8 +574,10 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
+    # Creates the deck
     global deck
     deck = Deck()
+    # Instructs the user to enter their hand
     hand_input = get_hand_input()
 
     wildcards = get_wildcards()
