@@ -265,22 +265,13 @@ class Hand:
                 return high_card
         return None
 
-    def randomize(self, number):
+    def take_from_deck(self, deck, number):
         """
         Sets this hand to a given number of random cards
         """
         cards_list = []
         for i in range(0, number):
-            rank = 0
-            suit = ''
-            card = None
-            while (card is None or
-                    card.is_duplicate(cards_list)):
-                # Picks a random rank between 2 and Ace
-                rank_number = random.randint(2, 14)
-                rank = get_rank_name(rank_number)
-                suit = random.choice(CardType.type_format['suit'])
-                card = Card(rank, suit)
+            card = deck.take_card()
             cards_list.append(card)
         self.cards = cards_list
 
@@ -485,7 +476,8 @@ def get_hand_input(deck):
         # Creates a random hand if the user specifies it
         if contains_word(hand_input, 'random'):
             new_hand = Hand([])
-            new_hand.randomize(5)
+            deck.shuffle()
+            new_hand.take_from_deck(deck, 5)
             return new_hand
 
         # Splits the inputs into separate elements in a list
@@ -509,8 +501,8 @@ def get_rank_name(rank_number):
     # For cards greater than 10
     if rank_number > 10:
         worded_ranks = CardType.type_format['rank']
-        # The 11th rank will be a Jack, which is the first
-        # element in CardType.type_format
+        # The 11th rank will be "Jack", which is the first
+        # element [0] in CardType.type_format
         return worded_ranks[rank_number - 11]
     return str(rank_number)
 
@@ -541,6 +533,9 @@ def main():
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
+
+    for card in deck.cards:
+        print(card.description())
 
 
 main()
