@@ -383,15 +383,6 @@ class CardType:
             return found_values[0]
         else:
             return None
-    
-    def get_new(self):
-        """
-        Gets the rank and suit of the card,
-        raising an error if the type is not valid
-        """
-        card_str = self.text
-        possible_cards = []
-
 
     def convert(self):
         """
@@ -588,10 +579,46 @@ def print_error(message):
 
 def contains_word(input, word):
     """
-    Returns true if a player input contains a given word
+    Returns True if an input is similar to a given word
     """
     input_lower = input.lower()
-    return word in input_lower
+    word_lower = word.lower()
+
+    input_list = string_to_list(input_lower)
+    word_list = string_to_list(word_lower)
+
+    # The first letters have to be the same for them to match
+    if input_list[0] != word_list[0]:
+        return 0
+    # We start with one matching word as at this
+    # point the first letter matches the word
+    matching_letters = 1
+    total_letters = 1
+    # Removing the first letter from the input and the word
+    input_list = input_list[1:]
+    word_list = word_list[1:]
+    # Going through each of the characters in the input to
+    # check if it exists in the word
+    for char in input_list:
+        total_letters += 1
+        if char in word_list:
+            matching_letters += 1
+            # Removing the character from the word to
+            # avoid duplicates
+            word_list.remove(char)
+    match = (matching_letters / total_letters) * 100
+    return match >= 90
+
+
+def string_to_list(text):
+    """
+    Converts a string into a list, with each character being an
+    individual element.
+    """
+    new_list = []
+    for char in text:
+        new_list.append(char)
+    return new_list
 
 
 def main():
