@@ -96,7 +96,7 @@ class Hand:
 
     def sort(self):
         """
-        Sorts the cards in ascending order, removing
+        Sorts the cards in descending order, removing
         any wildcards and storing them in an integer
         """
         # Resetting the sorted hand if previously sorted
@@ -106,21 +106,20 @@ class Hand:
         }
         cards_template = self.cards.copy()
         while len(cards_template) > 0:
-            # Finding the lowest card in the list
-            lowest_card = None
-            lowest_value = 0
+            # Finding the highest card in the list
+            highest_card = None
+            highest_value = 0
             for card in cards_template:
                 card_val = card.get_rank_value()
-                if (lowest_card is None or
-                        card_val < lowest_value):
-                    lowest_card = card
-                    lowest_value = card_val
-            if lowest_card.is_wild():
+                if card_val > highest_value:
+                    highest_card = card
+                    highest_value = card_val
+            if highest_card.is_wild():
                 self.cards_sorted['wildcards'] += 1
             else:
-                # Moving the lowest card to the sorted cards dict
-                self.cards_sorted['cards'].append(lowest_card)
-            cards_template.remove(lowest_card)
+                # Moving the highest card to the sorted cards dict
+                self.cards_sorted['cards'].append(highest_card)
+            cards_template.remove(highest_card)
 
     def get_value(self):
         """
@@ -220,41 +219,32 @@ class Hand:
             card = hand_checking[i]
             i += 1
             rank = card.get_rank_value()
-            # For resetting the straight check algorithm
-            if straight_streak == 0:
+            # Restarting the straight evaluation
+            if (straight_streak == 0 or
+                    rank < previous_rank - 1 and wildcards <= 0):
                 straight_streak = 1
                 previous_rank = rank
+                high_rank = rank
+                wildcards = self.cards_sorted['wildcards']
                 continue
-            # Adding 1 to the streak if conditions are met.
             # If the rank is the same as the previous rank then
             # the loop will ignore it
-            if (rank == previous_rank + 1 or
-                    (rank > previous_rank + 1 and wildcards > 0)):
-                if rank > previous_rank + 1:
+            if rank < previous_rank:
+                if rank < previous_rank - 1:
                     wildcards -= 1
                     # Starting the next iteration of the loop at the
-                    # same point if a wild card is used
+                    # same card if a wild card is used in its place
                     i -= 1
                 straight_streak += 1
-                previous_rank += 1
+                previous_rank -= 1
                 # At the end of the evaluation, add any unused
                 # wild cards to the streak
                 if i == len(hand_checking):
                     straight_streak += wildcards
-                    previous_rank += wildcards
-                    # Limiting the highest rank to 14 (Ace)
-                    if previous_rank > 14:
-                        previous_rank = 14
                 if straight_streak >= 5:
-                    high_rank = get_rank_name(previous_rank)
+                    return high_rank
                 continue
-            # If there is a gap in the straight, it is not valid
-            if rank > previous_rank + 1:
-                # Triggering the reset
-                straight_streak = 0
-                wildcards = self.cards_sorted['wildcards']
-                continue
-        return high_rank
+        return None
 
     def is_straight_flush(self):
         """
@@ -612,7 +602,7 @@ def main():
     deck.shuffle()
     hand_input = Hand([])
     hand_input.take_from_deck(5)
-    while hand_input.get_value() != '5 of a Kind':
+    while hand_input.get_value() != 'Straight':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
