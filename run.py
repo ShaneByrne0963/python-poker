@@ -221,7 +221,7 @@ class Hand:
             rank = card.get_rank_value()
             # Restarting the straight evaluation
             if (straight_streak == 0 or
-                    rank < previous_rank - 1 and wildcards <= 0):
+                    (rank < previous_rank - 1 and wildcards <= 0)):
                 straight_streak = 1
                 previous_rank = rank
                 high_rank = rank
@@ -237,13 +237,13 @@ class Hand:
                     i -= 1
                 straight_streak += 1
                 previous_rank -= 1
-                # At the end of the evaluation, add any unused
-                # wild cards to the streak
-                if i == len(hand_checking):
-                    straight_streak += wildcards
-                if straight_streak >= 5:
-                    return high_rank
-                continue
+                if straight_streak >= 5 - wildcards:
+                    # Adding any spare wild cards to the high end
+                    # of the straight
+                    high_rank += wildcards
+                    if high_rank > 14:
+                        high_rank = 14
+                    return get_rank_name(high_rank)
         return None
 
     def is_straight_flush(self):
@@ -598,15 +598,15 @@ def main():
     global deck
     deck = Deck()
 
-    # deck.wildcards = [2]
+    deck.wildcards = [2]
     deck.shuffle()
     hand_input = Hand([])
-    hand_input.take_from_deck(5)
-    while hand_input.get_value() != 'Straight':
+    hand_input.take_from_deck(9)
+    while hand_input.get_value() != 'Royal Flush':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
-        hand_input.take_from_deck(5)
+        hand_input.take_from_deck(9)
 
     # Instructs the user to enter their hand
     # hand_input = get_hand_input()
@@ -618,7 +618,7 @@ def main():
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
-    highest_card = hand_input.is_straight(hand_input.cards_sorted['cards'])
+    highest_card = hand_input.is_straight_flush()
     print(f'Highest Card: {highest_card}')
 
 
