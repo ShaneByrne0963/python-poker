@@ -401,7 +401,9 @@ class CardType:
         if rank is not None:
             suit = self.get('suit')
             if suit is not None:
-                card_obj = deck.get_card(rank, suit)
+                # Converting the text
+                rank_num = get_rank_value(rank)
+                card_obj = deck.get_card(rank_num, suit)
                 # If the card doesn't exist in the deck, then the card
                 # exists somewhere else
                 if card_obj is None:
@@ -572,9 +574,9 @@ def get_rank_value(rank_name):
     """
     Returns the rank of the card as an integer
     """
-    if rank_name in CardType.type_format:
-        return CardType.type_format.index(rank_name) - 11
-    return self.rank
+    if rank_name in CardType.type_format['rank']:
+        return CardType.type_format['rank'].index(rank_name) + 11
+    return int(rank_name)
 
 
 def print_error(message):
@@ -601,21 +603,21 @@ def main():
     global deck
     deck = Deck()
 
-    deck.wildcards = [2]
-    deck.shuffle()
-    hand_input = Hand([])
-    hand_input.take_from_deck(5)
-    while hand_input.get_value() != 'Royal Flush':
-        deck.cards = deck.get_full()
-        deck.shuffle()
-        hand_input.cards = []
-        hand_input.take_from_deck(5)
+    # deck.wildcards = [2]
+    # deck.shuffle()
+    # hand_input = Hand([])
+    # hand_input.take_from_deck(5)
+    # while hand_input.get_value() != 'Royal Flush':
+    #     deck.cards = deck.get_full()
+    #     deck.shuffle()
+    #     hand_input.cards = []
+    #     hand_input.take_from_deck(5)
 
     # Instructs the user to enter their hand
-    # hand_input = get_hand_input()
+    hand_input = get_hand_input()
 
-    # wildcards = get_wildcards()
-    # deck.wildcards = wildcards
+    wildcards = get_wildcards()
+    deck.wildcards = wildcards
 
     print('\nYour Hand:')
     hand_input.print_hand()
