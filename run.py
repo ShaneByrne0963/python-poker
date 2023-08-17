@@ -19,12 +19,7 @@ class Deck:
         """
         cards = []
         for suit in CardType.type_format['suit']:
-            # Adding the number ranks
-            for rank in range(2, 11):
-                card = Card(rank, suit)
-                cards.append(card)
-            # Adding the worded ranks
-            for rank in CardType.type_format['rank']:
+            for rank in range(2, 15):
                 card = Card(rank, suit)
                 cards.append(card)
         return cards
@@ -110,7 +105,7 @@ class Hand:
             highest_card = None
             highest_value = 0
             for card in cards_template:
-                card_val = card.get_rank_value()
+                card_val = card.rank
                 if card_val > highest_value:
                     highest_card = card
                     highest_value = card_val
@@ -218,7 +213,7 @@ class Hand:
         while i < len(hand_checking):
             card = hand_checking[i]
             i += 1
-            rank = card.get_rank_value()
+            rank = card.rank
             # Restarting the straight evaluation
             if (straight_streak == 0 or
                     (rank < previous_rank - 1 and wildcards <= 0)):
@@ -241,6 +236,7 @@ class Hand:
                     # Adding any spare wild cards to the high end
                     # of the straight
                     high_rank += wildcards
+                    # Capping the rank value at 14 (Ace)
                     if high_rank > 14:
                         high_rank = 14
                     return get_rank_name(high_rank)
@@ -326,20 +322,6 @@ class Card:
                 return True
         return False
 
-    def get_rank_value(self):
-        """
-        Returns the rank of the card as an integer
-        """
-        if self.rank == 'Jack':
-            return 11
-        if self.rank == 'Queen':
-            return 12
-        if self.rank == 'King':
-            return 13
-        if self.rank == 'Ace':
-            return 14
-        return int(self.rank)
-
     def is_wild(self):
         """
         Returns if this card is a wild card
@@ -400,6 +382,15 @@ class CardType:
             return found_values[0]
         else:
             return None
+    
+    def get_new(self):
+        """
+        Gets the rank and suit of the card,
+        raising an error if the type is not valid
+        """
+        card_str = self.text
+        possible_cards = []
+
 
     def convert(self):
         """
@@ -465,7 +456,7 @@ def type_is_valid(card, value_type, found_values):
                 f'Multiple {value_type}s {found_values} found in "{card}"'
             )
     except ValueError as e:
-        print(f'Invalid input: {e}. Please try again.\n')
+        print_error(e)
         return False
     else:
         return True
@@ -517,7 +508,9 @@ def get_hand_input():
         hand_list = hand_input.split(',')
         card_objects = []
         for card_text in hand_list:
-            card_object = CardType(card_text)
+            # Removing any white space from the edge of each card input
+            text_stripped = card_text.strip()
+            card_object = CardType(text_stripped)
             card_objects.append(card_object)
 
         cards = validate_hand(card_objects)
@@ -574,6 +567,15 @@ def get_rank_name(rank_number):
     return str(rank_number)
 
 
+def get_rank_value(rank_name):
+    """
+    Returns the rank of the card as an integer
+    """
+    if rank_name > 10:
+        return CardType.type_format.index(rank_name) - 11
+    return self.rank
+
+
 def print_error(message):
     """
     Prints a specific user input error to the terminal
@@ -601,12 +603,12 @@ def main():
     deck.wildcards = [2]
     deck.shuffle()
     hand_input = Hand([])
-    hand_input.take_from_deck(9)
-    while hand_input.get_value() != 'Royal Flush':
+    hand_input.take_from_deck(5)
+    while hand_input.get_value() != '5 of a Kind':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
-        hand_input.take_from_deck(9)
+        hand_input.take_from_deck(5)
 
     # Instructs the user to enter their hand
     # hand_input = get_hand_input()
@@ -618,8 +620,6 @@ def main():
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
-    highest_card = hand_input.is_straight_flush()
-    print(f'Highest Card: {highest_card}')
 
 
 main()
