@@ -307,7 +307,8 @@ class Card:
         Returns the cards rank and suit as a readable string,
         and if it is a wild card if specified
         """
-        desc_text = f'{self.rank} of {self.suit}'
+        rank_name = get_rank_name(self.rank)
+        desc_text = f'{rank_name} of {self.suit}'
         if extra_details and self.is_wild():
             desc_text += ' (Wild)'
         return desc_text
@@ -604,7 +605,7 @@ def main():
     deck.shuffle()
     hand_input = Hand([])
     hand_input.take_from_deck(5)
-    while hand_input.get_value() != '5 of a Kind':
+    while hand_input.get_value() != 'Royal Flush':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
