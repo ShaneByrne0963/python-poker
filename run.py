@@ -589,7 +589,7 @@ def contains_word(input, word):
 
     # The first letters have to be the same for them to match
     if input_list[0] != word_list[0]:
-        return 0
+        return False
     # We start with one matching word as at this
     # point the first letter matches the word
     matching_letters = 1
@@ -608,6 +608,40 @@ def contains_word(input, word):
             word_list.remove(char)
     match = (matching_letters / total_letters) * 100
     return match >= 90
+
+
+def extract_word(input, word):
+    """
+    Returns part of an input string that contains a given word
+    """
+    input_lower = input.lower()
+    word_lower = word.lower()
+
+    input_list = string_to_list(input_lower)
+    word_list = string_to_list(word_lower)
+
+    # Searching the input for the first letter of the word
+    index = 0
+    while input_list[index] != word_list[0]:
+        index += 1
+        if index >= len(input_list):
+            return None
+    final_string = input_list[index]
+
+    index += 1
+    matching_letters = 1
+    total_letters = 1
+    # Keep iterating through the input until the end is
+    # reached, or the word stops being similar
+    while (index < len(input_list) and
+            (matching_letters / total_letters) * 100 >= 90):
+        total_letters += 1
+        char = input_list[index]
+        if char in word_list:
+            matching_letters += 1
+            final_string += char
+        index += 1
+    return final_string
 
 
 def string_to_list(text):
@@ -652,4 +686,6 @@ def main():
     print(hand_input.get_value())
 
 
-main()
+# main()
+
+print(extract_word('jckofspds', 'king'))
