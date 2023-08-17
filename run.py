@@ -572,7 +572,7 @@ def get_rank_value(rank_name):
     """
     Returns the rank of the card as an integer
     """
-    if rank_name > 10:
+    if rank_name in CardType.type_format:
         return CardType.type_format.index(rank_name) - 11
     return self.rank
 
