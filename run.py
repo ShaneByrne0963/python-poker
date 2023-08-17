@@ -184,21 +184,17 @@ class Hand:
         values = []
         value_amount = []
         for card in self.cards_sorted['cards']:
-            # Checking if this rank already exists in ranks
-            found_value = False
             # Getting what property of the card will be checked
             # for repeats
             card_value = card.rank
             if value_type == 'suit':
                 card_value = card.suit
 
-            for i in range(len(values)):
-                if card_value == values[i]:
-                    found_value = True
-                    value_amount[i] += 1
-                    break
-            # Add the value to the list if it does not exist
-            if not found_value:
+            if card_value in values:
+                index = values.index(card_value)
+                value_amount[index] += 1
+            else:
+                # Add the value to the list if it does not exist
                 values.append(card_value)
                 value_amount.append(1)
         # Sorts the pairs in ascending order, so the largest
@@ -612,11 +608,11 @@ def main():
     global deck
     deck = Deck()
 
-    deck.wildcards = [2]
+    # deck.wildcards = [2]
     deck.shuffle()
     hand_input = Hand([])
     hand_input.take_from_deck(5)
-    while hand_input.get_value() != 'Straight Flush':
+    while hand_input.get_value() != '5 of a Kind':
         deck.cards = deck.get_full()
         deck.shuffle()
         hand_input.cards = []
