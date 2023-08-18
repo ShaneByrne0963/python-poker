@@ -741,7 +741,7 @@ def string_to_list(text):
     text_lower = text.lower()
     text_lower = text_lower.strip()
     new_list = []
-    for char in text:
+    for char in text_lower:
         new_list.append(char)
     return new_list
 
@@ -790,4 +790,4 @@ card_input = input('Enter a card: ')
 new_card = CardType(card_input)
 card_type = new_card.to_replace_get()
 for element in card_type:
-    print(card_type[element])
+    print(f'Strength {element}: {card_type[element]}')
