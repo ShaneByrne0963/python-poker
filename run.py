@@ -597,6 +597,14 @@ def contains_word(input, word):
     # Removing the first letter from the input and the word
     input_list = input_list[1:]
     word_list = word_list[1:]
+    # If the input has 3 or less characters, then the last
+    # letter has to match the last letter of the word
+    if len(input_list) > 0 and len(input_list) < 3:
+        if input_list[-1] != word_list[-1]:
+            return False
+        # Remove the last letter from each of the words
+        input_list = input_list[:-1]
+        word_list = word_list[:-1]
     # Going through each of the characters in the input to
     # check if it exists in the word
     for char in input_list:
@@ -607,7 +615,9 @@ def contains_word(input, word):
             # avoid duplicates
             word_list.remove(char)
     match = (matching_letters / total_letters) * 100
-    return match >= 90
+    # If the amount of characters that match the word is at
+    # least 80%, then the word is considered a match
+    return match >= 80
 
 
 def extract_word(input, word):
@@ -634,12 +644,13 @@ def extract_word(input, word):
     # Keep iterating through the input until the end is
     # reached, or the word stops being similar
     while (index < len(input_list) and
-            (matching_letters / total_letters) * 100 >= 90):
+            (matching_letters / total_letters) * 100 >= 80):
         total_letters += 1
         char = input_list[index]
         if char in word_list:
             matching_letters += 1
             final_string += char
+            word_list.remove(char)
         index += 1
     return final_string
 
@@ -688,4 +699,4 @@ def main():
 
 # main()
 
-print(extract_word('jckofspds', 'king'))
+print(contains_word('rm', 'random'))
