@@ -577,15 +577,12 @@ def print_error(message):
     print(f'Invalid input: {message}. Please try again.\n')
 
 
-def contains_word(input, word):
+def contains_word(input_word, word):
     """
     Returns True if an input is similar to a given word
     """
-    input_lower = input.lower()
-    word_lower = word.lower()
-
-    input_list = string_to_list(input_lower)
-    word_list = string_to_list(word_lower)
+    input_list = string_to_list(input_word)
+    word_list = string_to_list(word)
 
     # The first letters have to be the same for them to match
     if input_list[0] != word_list[0]:
@@ -620,15 +617,12 @@ def contains_word(input, word):
     return match >= 80
 
 
-def extract_word(input, word):
+def extract_word(input_word, word):
     """
     Returns part of an input string that contains a given word
     """
-    input_lower = input.lower()
-    word_lower = word.lower()
-
-    input_list = string_to_list(input_lower)
-    word_list = string_to_list(word_lower)
+    input_list = string_to_list(input_word)
+    word_list = string_to_list(word)
 
     # Searching the input for the first letter of the word
     index = 0
@@ -660,6 +654,8 @@ def string_to_list(text):
     Converts a string into a list, with each character being an
     individual element.
     """
+    text_lower = text.lower()
+    text_lower = text_lower.strip()
     new_list = []
     for char in text:
         new_list.append(char)
