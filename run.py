@@ -411,7 +411,7 @@ class CardType:
             rank_word = get_rank_name(rank)
             match_rank = ''
 
-            if len(input_words) > 0:
+            if len(input_words) > 1:
                 # If there are multiple words in the input,
                 # iterate through all of them
                 for word in temp_words:
@@ -421,7 +421,7 @@ class CardType:
                         temp_words.remove(word)
                         break
             else:
-                found_rank = extract_word(temp_words[0], str(rank_word))
+                found_rank = extract_word(temp_words[0], rank_word)
                 if found_rank is not None:
                     match_rank = word_strength(found_rank)
                     # Removes the found word from the string
@@ -430,7 +430,7 @@ class CardType:
                 # Finding a suit in the input
                 for suit in CardType.type_format['suit']:
                     match_suit = ''
-                    if len(input_words) > 0:
+                    if len(input_words) > 1:
                         for word in temp_words:
                             if contains_word(word, suit):
                                 match_suit = word_strength(word)
