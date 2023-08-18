@@ -724,13 +724,19 @@ def extract_word(input_word, word):
 
 def word_strength(word):
     """
-    Returns a string: "strong" if the word has 3 or
-    more characters or "weak" it it doesn't
+    Returns a string: "strong" if the word is a number or
+    has 3 or more characters or "weak" it it isn't
     """
-    if len(word) > 2:
+    # If the word is a number (for ranks), then it will
+    # always be strong
+    try:
+        int(word)
         return 'strong'
-    else:
-        return 'weak'
+    except ValueError:
+        if len(word) > 2:
+            return 'strong'
+        else:
+            return 'weak'
 
 
 def string_to_list(text):
