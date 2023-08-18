@@ -409,43 +409,22 @@ class CardType:
             # Creating a copy of the input words to delete elements from
             temp_words = input_words.copy()
             rank_word = get_rank_name(rank)
-            match_rank = ''
 
-            if len(input_words) > 1:
-                # If there are multiple words in the input,
-                # iterate through all of them
-                for word in temp_words:
-                    if contains_word(word, rank_word):
-                        match_rank = word_strength(word)
-                        # Removing the word so it cant be used by the suit
-                        temp_words.remove(word)
-                        break
-            else:
-                found_rank = extract_word(temp_words[0], rank_word)
-                if found_rank is not None:
-                    match_rank = word_strength(found_rank)
-                    # Removes the found word from the string
-                    temp_words[0] = temp_words[0].replace(found_rank, '')
-            if match_rank != '':
+            found_rank = self.find_value(temp_words, rank_word)
+            if found_rank is not None:
+                match_rank = word_strength(found_rank)
+                temp_words = self.remove_value(temp_words, found_rank)
                 # Finding a suit in the input
                 for suit in CardType.type_format['suit']:
-                    match_suit = ''
-                    if len(input_words) > 1:
-                        for word in temp_words:
-                            if contains_word(word, suit):
-                                match_suit = word_strength(word)
-                    else:
-                        found_suit = extract_word(temp_words[0], suit)
-                        if found_suit is not None:
-                            match_suit = word_strength(found_suit)
-                    if match_suit != '':
-                        # If this code is reached, then both the rank and
-                        # suit has been found in the input
+                    found_suit = self.find_value(temp_words, suit)
+                    if found_suit is not None:
+                        # Creating the card dictionary
                         found_card = {
                             'rank': rank,
                             'suit': suit
                         }
                         # Determining how strong of a match it is to this card
+                        match_suit = word_strength(found_suit)
                         card_strength = 1
                         if match_rank == 'strong':
                             card_strength += 1
@@ -455,7 +434,34 @@ class CardType:
                             found_card
                         )
         return match_strength
-                        
+    
+    def find_value(self, words, value):
+        """
+        Finds a given value in a list of words. Returns None if
+        no value is found
+        """
+        if len(words) > 1:
+            # If there are multiple words in the input,
+            # iterate through all of them
+            for word in words:
+                if contains_word(word, value):
+                    return word
+            return None
+        else:
+            # If the input is simply one string, only the
+            # part of the string that contains the word will be
+            # returned
+            return extract_word(words[0], value)
+
+    def remove_value(self, words, value):
+        """
+        Removes a given value from a list of words
+        """
+        if len(words) > 1:
+            words.remove(value)
+            return words
+        else:
+            return words[0].replace(value, '')
 
     def convert(self):
         """
