@@ -425,7 +425,7 @@ class CardType:
                 if found_rank is not None:
                     match_rank = word_strength(found_rank)
                     # Removes the found word from the string
-                    temp_words[0].replace(found_rank, '')
+                    temp_words[0] = temp_words[0].replace(found_rank, '')
             if match_rank != '':
                 # Finding a suit in the input
                 for suit in CardType.type_format['suit']:
@@ -703,7 +703,7 @@ def extract_word(input_word, word):
         index += 1
         if index >= len(input_list):
             return None
-    final_string = input_list[index]
+    final_string = input_word[index]
 
     index += 1
     matching_letters = 1
@@ -716,7 +716,7 @@ def extract_word(input_word, word):
         char = input_list[index]
         if char in word_list:
             matching_letters += 1
-            final_string += char
+            final_string += input_word[index]
             word_list.remove(char)
         index += 1
     return final_string
