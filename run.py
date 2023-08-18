@@ -383,6 +383,79 @@ class CardType:
             return found_values[0]
         else:
             return None
+    
+    def to_replace_get(self):
+        """
+        Gets the rank or suit of the card,
+        raising an error if the type is not valid
+        """
+        match_strength = {
+            # For weakly matched cards, i.e. if both the rank and
+            # suit found only matched by 2 or less letters
+            's1': [],
+            # For medium matched cards, i.e. if only the rank or
+            # the suit only matched by 2 letters or less
+            's2': [],
+            # For strongly matched cards, i.e. if the input matches
+            # both the rank and suit with 3 or more letters
+            's3': []
+        }
+
+        # Divides the input into words if there are spaces in it
+        input_words = self.text.split(' ')
+
+        # Iterating through all the ranks a card can have
+        for rank in range(2, 15):
+            # Creating a copy of the input words to delete elements from
+            temp_words = input_words.copy()
+            rank_word = get_rank_name(rank)
+            match_rank = ''
+
+            if len(input_words) > 0:
+                # If there are multiple words in the input,
+                # iterate through all of them
+                for word in temp_words:
+                    if contains_word(word, rank_word):
+                        match_rank = word_strength(word)
+                        # Removing the word so it cant be used by the suit
+                        temp_words.remove(word)
+                        break
+            else:
+                found_rank = extract_word(temp_words[0], str(rank_word))
+                if found_rank is not None:
+                    match_rank = word_strength(found_rank)
+                    # Removes the found word from the string
+                    temp_words[0].replace(found_rank, '')
+            if match_rank != '':
+                # Finding a suit in the input
+                for suit in CardType.type_format['suit']:
+                    match_suit = ''
+                    if len(input_words) > 0:
+                        for word in temp_words:
+                            if contains_word(word, suit):
+                                match_suit = word_strength(word)
+                    else:
+                        found_suit = extract_word(temp_words[0], suit)
+                        if found_suit is not None:
+                            match_suit = word_strength(found_suit)
+                    if match_suit != '':
+                        # If this code is reached, then both the rank and
+                        # suit has been found in the input
+                        found_card = {
+                            'rank': rank,
+                            'suit': suit
+                        }
+                        # Determining how strong of a match it is to this card
+                        card_strength = 1
+                        if match_rank == 'strong':
+                            card_strength += 1
+                        if match_suit == 'strong':
+                            card_strength += 1
+                        match_strength[f's{card_strength}'].append(
+                            found_card
+                        )
+        return match_strength
+                        
 
     def convert(self):
         """
@@ -649,6 +722,17 @@ def extract_word(input_word, word):
     return final_string
 
 
+def word_strength(word):
+    """
+    Returns a string: "strong" if the word has 3 or
+    more characters or "weak" it it doesn't
+    """
+    if len(word) > 2:
+        return 'strong'
+    else:
+        return 'weak'
+
+
 def string_to_list(text):
     """
     Converts a string into a list, with each character being an
@@ -702,4 +786,8 @@ def main():
 
 # main()
 
-print(contains_word('rm', 'random'))
+card_input = input('Enter a card: ')
+new_card = CardType(card_input)
+card_type = new_card.to_replace_get()
+for element in card_type:
+    print(card_type[element])
