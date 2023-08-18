@@ -611,7 +611,7 @@ def contains_word(input_word, word):
             # Removing the character from the word to
             # avoid duplicates
             word_list.remove(char)
-    match = (matching_letters / total_letters) * 100
+    match = get_percent(matching_letters, total_letters)
     # If the amount of characters that match the word is at
     # least 80%, then the word is considered a match
     return match >= 80
@@ -638,7 +638,7 @@ def extract_word(input_word, word):
     # Keep iterating through the input until the end is
     # reached, or the word stops being similar
     while (index < len(input_list) and
-            (matching_letters / total_letters) * 100 >= 80):
+            get_percent(matching_letters, total_letters) >= 80):
         total_letters += 1
         char = input_list[index]
         if char in word_list:
@@ -660,6 +660,13 @@ def string_to_list(text):
     for char in text:
         new_list.append(char)
     return new_list
+
+
+def get_percent(value, total):
+    """
+    Returns what percentage value is of total
+    """
+    return (value / total) * 100
 
 
 def main():
