@@ -389,17 +389,10 @@ class CardType:
         Gets the rank or suit of the card,
         raising an error if the type is not valid
         """
-        match_strength = {
-            # For weakly matched cards, i.e. if both the rank and
-            # suit found only matched by 2 or less letters
-            's1': [],
-            # For medium matched cards, i.e. if only the rank or
-            # the suit only matched by 2 letters or less
-            's2': [],
-            # For strongly matched cards, i.e. if the input matches
-            # both the rank and suit with 3 or more letters
-            's3': []
-        }
+        # Stores the found cards that consist of
+        # the most letters of the input
+        best_matches = []
+        match_score = 0
 
         # Divides the input into words if there are spaces in it
         input_words = self.text.split(' ')
@@ -413,36 +406,28 @@ class CardType:
 
             found_rank = self.find_value(temp_words, rank_word)
             if found_rank is not None:
-                match_rank = word_strength(found_rank)
+                # Removing the found rank so it can't also be used by the suit
                 temp_words = self.remove_value(temp_words, found_rank)
-                print(found_rank)
-                # Finding a suit in the input
+
                 for suit in CardType.type_format['suit']:
-                    print(temp_words)
                     found_suit = self.find_value(temp_words, suit)
                     if found_suit is not None:
-                        print(found_suit)
-                        # Creating the card dictionary
-                        found_card = {
-                            'rank': rank,
-                            'suit': suit,
-                            'match': 0
-                        }
-                        # Determining how strong of a match it is to this card
-                        match_suit = word_strength(found_suit)
-                        card_strength = 1
-                        if match_rank == 'strong':
-                            card_strength += 1
-                        if match_suit == 'strong':
-                            card_strength += 1
+                        # The amount of letters of both the found rank and suit
                         content_length = len(found_rank) + len(found_suit)
-                        found_card['match'] = get_percent(
+                        # What percent of the input consists of those letters
+                        content_percent = get_percent(
                             content_length, len(self.text)
                         )
-                        match_strength[f's{card_strength}'].append(
-                            found_card
-                        )
-        return match_strength
+                        if content_percent >= match_score:
+                            if content_percent > match_score:
+                                match_score = content_percent
+                                best_matches.clear()
+                            found_card = {
+                                'rank': rank,
+                                'suit': suit,
+                            }
+                            best_matches.append(found_card)
+        return best_matches
 
     def find_value(self, words, value):
         """
