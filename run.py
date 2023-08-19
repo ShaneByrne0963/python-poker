@@ -673,9 +673,9 @@ def contains_word(input_word, word):
     # Removing the first letter from the input and the word
     input_list = input_list[1:]
     word_list = word_list[1:]
-    # If the input has 3 or less characters, then the last
+    # If input_word has 2 or 3 characters, then the last
     # letter has to match the last letter of the word
-    if len(input_list) > 0 and len(input_list) < 3:
+    if len(input_list) == 1 or len(input_list) == 2:
         if input_list[-1] != word_list[-1]:
             return False
         # Remove the last letter from each of the words
@@ -725,6 +725,9 @@ def extract_word(input_word, word):
             final_string += input_word[index]
             word_list.remove(char)
         index += 1
+    if len(final_string) == 2 or len(final_string) == 3:
+        if final_string[-1] != word[-1]:
+            return None
     return final_string
 
 
@@ -735,14 +738,9 @@ def word_strength(word):
     """
     # If the word is a number (for ranks), then it will
     # always be strong
-    try:
-        int(word)
+    if word.isdigit() or len(word) > 2:
         return 'strong'
-    except ValueError:
-        if len(word) > 2:
-            return 'strong'
-        else:
-            return 'weak'
+    return 'weak'
 
 
 def string_to_list(text):
