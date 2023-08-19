@@ -383,7 +383,7 @@ class CardType:
             return found_values[0]
         else:
             return None
-    
+
     def to_replace_get(self):
         """
         Gets the rank or suit of the card,
@@ -403,6 +403,7 @@ class CardType:
 
         # Divides the input into words if there are spaces in it
         input_words = self.text.split(' ')
+        print(input_words)
 
         # Iterating through all the ranks a card can have
         for rank in range(2, 15):
@@ -414,14 +415,18 @@ class CardType:
             if found_rank is not None:
                 match_rank = word_strength(found_rank)
                 temp_words = self.remove_value(temp_words, found_rank)
+                print(found_rank)
                 # Finding a suit in the input
                 for suit in CardType.type_format['suit']:
+                    print(temp_words)
                     found_suit = self.find_value(temp_words, suit)
                     if found_suit is not None:
+                        print(found_suit)
                         # Creating the card dictionary
                         found_card = {
                             'rank': rank,
-                            'suit': suit
+                            'suit': suit,
+                            'match': 0
                         }
                         # Determining how strong of a match it is to this card
                         match_suit = word_strength(found_suit)
@@ -430,11 +435,15 @@ class CardType:
                             card_strength += 1
                         if match_suit == 'strong':
                             card_strength += 1
+                        content_length = len(found_rank) + len(found_suit)
+                        found_card['match'] = get_percent(
+                            content_length, len(self.text)
+                        )
                         match_strength[f's{card_strength}'].append(
                             found_card
                         )
         return match_strength
-    
+
     def find_value(self, words, value):
         """
         Finds a given value in a list of words. Returns None if
@@ -455,13 +464,15 @@ class CardType:
 
     def remove_value(self, words, value):
         """
-        Removes a given value from a list of words
+        Removes a given value from a list of words, and returns
+        a list of remaining words
         """
         if len(words) > 1:
             words.remove(value)
             return words
         else:
-            return words[0].replace(value, '')
+            reduced_word = words[0].replace(value, '')
+            return [reduced_word]
 
     def convert(self):
         """
