@@ -683,7 +683,8 @@ def contains_word(input_word, word):
     word_list = word_list[1:]
     # If input_word has 2 or 3 characters, then the last
     # letter has to match the last letter of the word
-    if len(input_list) == 1 or len(input_list) == 2:
+    if ((len(input_list) == 1 or len(input_list) == 2) and
+            len(word) > 1):
         if input_list[-1] != word_list[-1]:
             return False
         # Remove the last letter from each of the words
