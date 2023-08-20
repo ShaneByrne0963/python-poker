@@ -354,37 +354,7 @@ class CardType:
         """
         self.text = text
 
-    def get(self, value_type):
-        """
-        Gets the rank or suit of the card,
-        raising an error if the type is not valid
-        """
-        found_values = []
-        simple_types = CardType.simple_type[value_type]
-        complex_types = CardType.complex_type[value_type]
-        # The value for these ranks will be stored in the card object like this
-        type_format = CardType.type_format[value_type]
-
-        found_simple_types = self.find_values(simple_types, type_format)
-        found_complex_types = self.find_values(complex_types, type_format)
-        # Checking if the rank of the card is a number (2-10)
-        if value_type == 'rank':
-            found_values = self.find_values(range(2, 11), range(2, 11))
-
-        # Adding any of the complex worded values if any were found
-        found_values.extend(found_complex_types)
-
-        # Only add the simple values if there are no
-        # other values found in the string
-        if len(found_values) == 0:
-            found_values.extend(found_simple_types)
-
-        if (type_is_valid(self.text, value_type, found_values)):
-            return found_values[0]
-        else:
-            return None
-
-    def to_replace_get(self):
+    def get(self):
         """
         Reads the card input and returns a list of ranks and
         suits that best match the input
@@ -471,7 +441,7 @@ class CardType:
         """
         Converts a string into an instance of Card and returns it, if valid
         """
-        card_objects = self.to_replace_get()
+        card_objects = self.get()
         if len(card_objects) > 1:
             print_error(f'Multiple cards detected in "{self.text}"')
         if len(card_objects) == 1:
@@ -798,11 +768,11 @@ def main():
     print(hand_input.get_value())
 
 
-main()
+# main()
 
-# card_input = input('Enter a card: ')
-# new_card = CardType(card_input)
-# card_type = new_card.to_replace_get()
-# for element in card_type:
-#     card = Card(element['rank'], element['suit'])
-#     print(card.description(False))
+card_input = input('Enter a card: ')
+new_card = CardType(card_input)
+card_type = new_card.to_replace_get()
+for element in card_type:
+    card = Card(element['rank'], element['suit'])
+    print(card.description(False))
