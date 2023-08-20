@@ -353,45 +353,62 @@ class CardType:
         # the most letters of the input
         best_matches = []
         match_score = 0
-
         # Divides the input into words if there are spaces in it
         input_words = self.text.split(' ')
 
-        # Iterating through all the ranks a card can have
-        for rank in range(2, 15):
-            # Creating a copy of the input words to delete elements from
+        ranks = self.find_values(input_words, 'rank')
+        for rank in ranks:
             temp_words = input_words.copy()
-            rank_word = get_rank_name(rank)
+            self.remove_value(temp_words, rank['found'])
 
-            found_rank = self.find_value(temp_words, rank_word)
-            if found_rank is not None:
-                # Removing the found rank so it can't also be used by the suit
-                temp_words = self.remove_value(temp_words, found_rank)
-
-                for suit in CardType.suits:
-                    found_suit = self.find_value(temp_words, suit)
-                    if found_suit is not None:
-                        # The amount of letters of both the found rank and suit
-                        content_length = len(found_rank) + len(found_suit)
-                        # What percent of the input consists of those letters
-                        content_percent = get_percent(
-                            content_length, len(self.text)
-                        )
-                        if content_percent >= match_score:
-                            if content_percent > match_score:
-                                match_score = content_percent
-                                best_matches.clear()
-                            found_card = {
-                                'rank': rank,
-                                'suit': suit,
-                            }
-                            best_matches.append(found_card)
+            suits = self.find_values(temp_words, 'suit')
+            for suit in suits:
+                # The amount of letters of both the found rank and suit
+                content_length = len(rank['found']) + len(suit['found'])
+                # What percent of the input consists of those letters
+                content_percent = get_percent(
+                    content_length, len(self.text)
+                )
+                if content_percent >= match_score:
+                    if content_percent > match_score:
+                        match_score = content_percent
+                        best_matches.clear()
+                    found_card = {
+                        'rank': rank['value'],
+                        'suit': suit['value'],
+                    }
+                    best_matches.append(found_card)
         return best_matches
 
-    def find_value(self, words, value):
+    def find_values(self, words, value_type):
         """
-        Finds a given value in a list of words. Returns None if
-        no value is found
+        Gets all the ranks or suits found in an input
+        """
+        found_values = []
+        checking_values = (
+            range(2, 15) if value_type == 'rank' else CardType.suits
+        )
+        for value in checking_values:
+            # Converting rank numbers to string format when necessary
+            value_to_check = (
+                get_rank_name(value) if value_type == 'rank' else value
+            )
+            found_value = self.find_single_value(words, value_to_check)
+
+            if found_value is not None:
+                # Returns both the word that was found and the word that
+                # it could be referring to
+                val_object = {
+                    'value': value,
+                    'found': found_value
+                }
+                found_values.append(val_object)
+        return found_values
+
+    def find_single_value(self, words, value):
+        """
+        Finds a given rank or suit in a list of words. Returns
+        None if no value is found
         """
         if len(words) > 1:
             # If there are multiple words in the input,
@@ -647,8 +664,8 @@ def contains_word(input_word, word):
             word_list.remove(char)
     match = get_percent(matching_letters, total_letters)
     # If the amount of characters that match the word is at
-    # least 80%, then the word is considered a match
-    return match >= 80
+    # least 75%, then the word is considered a match
+    return match >= 75
 
 
 def extract_word(input_word, word):
