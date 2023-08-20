@@ -18,7 +18,7 @@ class Deck:
         Returns a list every card in a deck
         """
         cards = []
-        for suit in CardType.type_format['suit']:
+        for suit in CardType.suits:
             for rank in range(2, 15):
                 card = Card(rank, suit)
                 cards.append(card)
@@ -250,7 +250,7 @@ class Hand:
         """
         # Sorts each card by its suit into a list of lists
         suits = []
-        for suit_sorting in CardType.type_format['suit']:
+        for suit_sorting in CardType.suits:
             # Add an empty list for each suit
             suits.append([])
             for card in self.cards_sorted['cards']:
@@ -335,18 +335,8 @@ class CardType:
     Stores a single card input by the user, and contains
     functions to convert that string into a card dictionary
     """
-    simple_type = {
-        'rank': ['j', 'q', 'k', 'a'],
-        'suit': ['h', 'd', 'c', 's']
-    }
-    complex_type = {
-        'rank': ['jack', 'queen', 'king', 'ace'],
-        'suit': ['heart', 'diamond', 'club', 'spade']
-    }
-    type_format = {
-        'rank': ['Jack', 'Queen', 'King', 'Ace'],
-        'suit': ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-    }
+    ranks = ['Jack', 'Queen', 'King', 'Ace']
+    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 
     def __init__(self, text):
         """
@@ -378,7 +368,7 @@ class CardType:
                 # Removing the found rank so it can't also be used by the suit
                 temp_words = self.remove_value(temp_words, found_rank)
 
-                for suit in CardType.type_format['suit']:
+                for suit in CardType.suits:
                     found_suit = self.find_value(temp_words, suit)
                     if found_suit is not None:
                         # The amount of letters of both the found rank and suit
@@ -595,9 +585,9 @@ def get_rank_name(rank_number):
     """
     # For cards greater than 10
     if rank_number > 10:
-        worded_ranks = CardType.type_format['rank']
+        worded_ranks = CardType.ranks
         # The 11th rank will be "Jack", which is the first
-        # element [0] in CardType.type_format
+        # element [0] in CardType.ranks
         return worded_ranks[rank_number - 11]
     return str(rank_number)
 
@@ -606,8 +596,8 @@ def get_rank_value(rank_name):
     """
     Returns the rank of the card as an integer
     """
-    if rank_name in CardType.type_format['rank']:
-        return CardType.type_format['rank'].index(rank_name) + 11
+    if rank_name in CardType.ranks:
+        return CardType.ranks.index(rank_name) + 11
     return int(rank_name)
 
 
