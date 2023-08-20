@@ -386,8 +386,7 @@ class CardType:
 
     def to_replace_get(self):
         """
-        Gets the rank or suit of the card,
-        raising an error if the type is not valid
+        Reads the card input and returns 
         """
         # Stores the found cards that consist of
         # the most letters of the input
@@ -457,6 +456,14 @@ class CardType:
         else:
             reduced_word = words[0].replace(value, '')
             return [reduced_word]
+
+    def has_word(self, words):
+        """
+        Returns if an input contains 
+        """
+        if len(words) == 1 and words[0] == '':
+            return False
+        return True
 
     def convert(self):
         """
@@ -655,6 +662,8 @@ def contains_word(input_word, word):
     """
     Returns True if an input is similar to a given word
     """
+    if len(input_word) == 0:
+        return False
     input_list = string_to_list(input_word)
     word_list = string_to_list(word)
 
@@ -695,6 +704,8 @@ def extract_word(input_word, word):
     """
     Returns part of an input string that contains a given word
     """
+    if len(input_word) == 0:
+        return None
     input_list = string_to_list(input_word)
     word_list = string_to_list(word)
 
