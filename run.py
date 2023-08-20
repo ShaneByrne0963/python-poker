@@ -386,7 +386,8 @@ class CardType:
 
     def to_replace_get(self):
         """
-        Reads the card input and returns 
+        Reads the card input and returns a list of ranks and
+        suits that best match the input
         """
         # Stores the found cards that consist of
         # the most letters of the input
@@ -457,30 +458,33 @@ class CardType:
             reduced_word = words[0].replace(value, '')
             return [reduced_word]
 
-    def has_word(self, words):
+    def has_input(self, input_words):
         """
-        Returns if an input contains 
+        Returns if an input contains any text to be evaluated
         """
-        if len(words) == 1 and words[0] == '':
-            return False
-        return True
+        for word in input_words:
+            if len(word) > 0:
+                return True
+        return False
 
     def convert(self):
         """
         Converts a string into an instance of Card and returns it, if valid
         """
-        rank = self.get('rank')
-        if rank is not None:
-            suit = self.get('suit')
-            if suit is not None:
-                # Converting the text
-                rank_num = get_rank_value(rank)
-                card_obj = deck.get_card(rank_num, suit)
-                # If the card doesn't exist in the deck, then the card
-                # exists somewhere else
-                if card_obj is None:
-                    print_error(f'Multiple {rank} of {suit}')
-                return card_obj
+        card_objects = self.to_replace_get()
+        if len(card_objects) > 1:
+            print_error(f'Multiple cards detected in "{self.text}"')
+        if len(card_objects) == 1:
+            rank = card_objects[0]['rank']
+            suit = card_objects[0]['suit']
+            # Converting the rank number into text that is readable by the user
+            rank_num = get_rank_value(rank)
+            card_obj = deck.get_card(rank_num, suit)
+            # If the card doesn't exist in the deck, then the card
+            # exists somewhere else
+            if card_obj is None:
+                print_error(f'Multiple {rank} of {suit}')
+            return card_obj
         return None
 
     def find_values(self, values, value_formats):
@@ -793,11 +797,11 @@ def main():
     print(hand_input.get_value())
 
 
-# main()
+main()
 
-card_input = input('Enter a card: ')
-new_card = CardType(card_input)
-card_type = new_card.to_replace_get()
-for element in card_type:
-    card = Card(element['rank'], element['suit'])
-    print(card.description(False))
+# card_input = input('Enter a card: ')
+# new_card = CardType(card_input)
+# card_type = new_card.to_replace_get()
+# for element in card_type:
+#     card = Card(element['rank'], element['suit'])
+#     print(card.description(False))
