@@ -396,7 +396,6 @@ class CardType:
 
         # Divides the input into words if there are spaces in it
         input_words = self.text.split(' ')
-        print(input_words)
 
         # Iterating through all the ranks a card can have
         for rank in range(2, 15):
@@ -707,6 +706,11 @@ def extract_word(input_word, word):
             return None
     final_string = input_word[index]
 
+    # Only returning the first character if the input
+    # has 3 or less characters
+    if len(input_word) <= 3:
+        return final_string
+
     index += 1
     matching_letters = 1
     total_letters = 1
@@ -725,18 +729,6 @@ def extract_word(input_word, word):
         if final_string[-1] != word[-1]:
             return None
     return final_string
-
-
-def word_strength(word):
-    """
-    Returns a string: "strong" if the word is a number or
-    has 3 or more characters or "weak" it it isn't
-    """
-    # If the word is a number (for ranks), then it will
-    # always be strong
-    if word.isdigit() or len(word) > 2:
-        return 'strong'
-    return 'weak'
 
 
 def string_to_list(text):
@@ -796,4 +788,5 @@ card_input = input('Enter a card: ')
 new_card = CardType(card_input)
 card_type = new_card.to_replace_get()
 for element in card_type:
-    print(f'Strength {element}: {card_type[element]}')
+    card = Card(element['rank'], element['suit'])
+    print(card.description(False))
