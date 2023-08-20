@@ -457,20 +457,6 @@ class CardType:
             return card_obj
         return None
 
-    def find_values(self, values, value_formats):
-        """
-        Scans the card string to check if it contains any of
-        the specified values, and returns a list of all values found
-        as their formatted versions
-        """
-        new_values = []
-        card_lower = self.text.lower()
-        for value, string_format in zip(values, value_formats):
-            value_str = str(value)
-            if value_str in card_lower:
-                new_values.append(string_format)
-        return new_values
-
 
 def convert_hand(cards_list):
     """
@@ -588,7 +574,7 @@ def get_wildcards():
         # Checking each input for a valid rank
         for card_text in cards_list:
             card = CardType(card_text)
-            rank = card.get('rank')
+            rank = card.get()
             if rank is not None:
                 wildcard_ranks.append(rank)
             else:
@@ -772,7 +758,7 @@ def main():
 
 card_input = input('Enter a card: ')
 new_card = CardType(card_input)
-card_type = new_card.to_replace_get()
+card_type = new_card.get()
 for element in card_type:
     card = Card(element['rank'], element['suit'])
     print(card.description(False))
