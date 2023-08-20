@@ -385,6 +385,7 @@ class CardType:
         Gets all the ranks or suits found in an input
         """
         found_values = []
+        # Finding out what to compare the words to
         checking_values = (
             range(2, 15) if value_type == 'rank' else CardType.suits
         )
@@ -451,6 +452,7 @@ class CardType:
         card_objects = self.get()
         if len(card_objects) > 1:
             print_error(f'Multiple cards detected in "{self.text}"')
+            return None
         if len(card_objects) == 1:
             rank = card_objects[0]['rank']
             suit = card_objects[0]['suit']
@@ -581,9 +583,9 @@ def get_wildcards():
         # Checking each input for a valid rank
         for card_text in cards_list:
             card = CardType(card_text)
-            rank = card.get()
-            if rank is not None:
-                wildcard_ranks.append(rank)
+            ranks = card.find_values(card_text.split(' '), 'rank')
+            if len(ranks) == 1:
+                wildcard_ranks.append(ranks[0]['value'])
             else:
                 # Exits the for loop if one of the inputs
                 # is not valid
@@ -761,11 +763,11 @@ def main():
     print(hand_input.get_value())
 
 
-# main()
+main()
 
-card_input = input('Enter a card: ')
-new_card = CardType(card_input)
-card_type = new_card.get()
-for element in card_type:
-    card = Card(element['rank'], element['suit'])
-    print(card.description(False))
+# card_input = input('Enter a card: ')
+# new_card = CardType(card_input)
+# card_type = new_card.get()
+# for element in card_type:
+#     card = Card(element['rank'], element['suit'])
+#     print(card.description(False))
