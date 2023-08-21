@@ -364,7 +364,7 @@ class CardType:
             return None
         for rank in ranks:
             temp_words = input_words.copy()
-            self.remove_value(temp_words, rank['found'])
+            temp_words = self.remove_value(temp_words, rank['found'])
             # If any rank takes up the entire input,
             # then there are no suits in it
             if not self.has_input(temp_words):
