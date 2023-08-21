@@ -579,14 +579,13 @@ def get_wildcards():
     Requests the user to enter a set of wild cards that
     can affect the hand
     """
-    request_message = 'Do you wish to include wildcards in your game?'
+    request_message = 'Do you wish to include wildcards in your game?\n'
+    request_message += '- Wild cards are cards that can take form of any\n'
+    request_message += '  rank or suit to make the best possible hand.'
     if user_allows(request_message):
         while True:
             print('Please enter any wild cards,')
-            print('or press Enter if there are none\n')
             print('- Only enter the rank of the card, i.e. 2 - Ace')
-            print('- Wild cards are cards that can take form of any')
-            print('  rank or suit to make the best possible hand.\n')
             wildcards = input('Wild Cards: ')
             if wildcards == '':
                 return []
@@ -608,6 +607,8 @@ def get_wildcards():
             # Repeat the while loop if there are invalid wild cards
             if is_valid:
                 return wildcard_ranks
+    else:
+        return []
 
 
 def get_rank_name(rank_number):
@@ -739,8 +740,8 @@ def user_allows(message):
     False depending on what the user entered
     """
     while True:
-        print(f'{message} (Y/N)')
-        answer = input('Your answer: ')
+        print(message)
+        answer = input('Your answer (Y/N): ')
         print('')
         if contains_word(answer, 'Yes'):
             return True
