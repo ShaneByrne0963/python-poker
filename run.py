@@ -86,7 +86,7 @@ class Hand:
         """
         Prints each card in this hand to the terminal
         """
-        print('\nYour Hand:')
+        print('Your Hand:')
         for card in self.cards:
             print(f'- {card.description()}')
 
@@ -584,11 +584,14 @@ def get_wildcards():
     request_message += '  rank or suit to make the best possible hand.'
     if user_allows(request_message):
         while True:
-            print('Please enter any wild cards,')
+            print('Please enter any wild cards')
             print('- Only enter the rank of the card, i.e. 2 - Ace')
             wildcards = input('Wild Cards: ')
+            # Adds a gap between the input and the next print
+            print('')
             if wildcards == '':
-                return []
+                if user_allows('No cards entered. Continue?'):
+                    return []
             cards_list = wildcards.split(',')
             wildcard_ranks = []
             is_valid = True
@@ -596,13 +599,13 @@ def get_wildcards():
             for card_text in cards_list:
                 card = CardType(card_text)
                 ranks = card.find_values(card_text.split(' '), 'rank')
-                if len(ranks) == 1:
-                    wildcard_ranks.append(ranks[0]['value'])
-                else:
-                    # Exits the for loop if one of the inputs
-                    # is not valid
+                if len(ranks) == 0:
+                    print_error(f'No ranks found in {card_text}')
                     is_valid = False
+                    # Exiting the for loop
                     break
+                for rank in ranks:
+                    wildcard_ranks.append(ranks)
             # Only return the wild cards once all of them are valid.
             # Repeat the while loop if there are invalid wild cards
             if is_valid:
@@ -776,6 +779,9 @@ def main():
     Initializes the game.
     """
     print('Welcome to Python Poker!\n')
+    print('Python Poker allows you to enter a poker hand,')
+    print('including optional wild cards, and will tell you')
+    print('the value of the hand you have.\n')
     # Creates the deck
     global deck
     deck = Deck()
