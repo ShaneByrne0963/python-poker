@@ -53,7 +53,7 @@ class Deck:
         # Creates a card to print an error if the card
         # does not exist in the deck
         print_error(
-            f'No {card.description(False)} in deck'
+            f'No {get_card_description(card.rank, card.suit)} in deck'
         )
         return None
 
@@ -88,7 +88,7 @@ class Hand:
         """
         print('\nYour Hand:')
         for card in self.cards:
-            print(f'- {card.description(True)}')
+            print(f'- {card.description()}')
 
     def sort(self):
         """
@@ -303,14 +303,13 @@ class Card:
         self.rank = rank
         self.suit = suit
 
-    def description(self, extra_details):
+    def description(self):
         """
         Returns the cards rank and suit as a readable string,
-        and if it is a wild card if specified
+        and if it is a wild card
         """
-        rank_name = get_rank_name(self.rank)
-        desc_text = f'{rank_name} of {self.suit}'
-        if extra_details and self.is_wild():
+        desc_text = get_card_description(self.rank, self.suit)
+        if self.is_wild():
             desc_text += ' (Wild)'
         return desc_text
 
@@ -480,7 +479,8 @@ class CardType:
                 # If the card doesn't exist in the deck, then the card
                 # exists somewhere else
                 if card_obj is None:
-                    print_error(f'Multiple {rank_name} of {suit}')
+                    card_desc = get_card_description(rank, suit)
+                    print_error(f'Multiple {card_desc}')
                 return card_obj
         return None
 
@@ -554,6 +554,14 @@ def get_hand_input():
         if cards is not None:
             new_hand = Hand(cards)
             return new_hand
+
+
+def get_card_description(rank, suit):
+    """
+    Returns the cards rank and suit as a readable string
+    """
+    rank_name = get_rank_name(rank)
+    return f'{rank_name} of {suit}'
 
 
 def get_wildcards():
