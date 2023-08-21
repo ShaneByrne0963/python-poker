@@ -529,7 +529,7 @@ def get_hand_input():
         print(
             '- Your hand must contain at least 5 cards, separated by a comma.'
         )
-        print('- Each card must clearly indicate its rank and its suit.')
+        print('- Each card must contain a rank and a suit.')
         print('- Example: "King of Hearts", "King Heart", "KH"\n')
         hand_input = input('Enter hand here: ')
         print('')
@@ -613,11 +613,19 @@ def get_rank_value(rank_name):
     return int(rank_name)
 
 
-def print_error(message):
+def print_error(message, bullet_points=None):
     """
     Prints a specific user input error to the terminal
     """
-    print(f'Invalid input: {message}. Please try again.')
+    error_message = f'Invalid input: {message}'
+    if bullet_points is not None:
+        error_message += ':\n'
+        for point in bullet_points:
+            error_message += f'- {point}\n'
+    else:
+        error_message += '. '
+    error_message += 'Please try again.'
+    print(error_message)
 
 
 def contains_word(input_word, word):
