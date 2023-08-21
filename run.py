@@ -467,8 +467,18 @@ class CardType:
             return None
         card_objects = self.get()
         if card_objects is not None:
+            # If the evaluation finds more than one card in an input
             if len(card_objects) > 1:
-                print_error(f'Multiple cards detected in "{self.text}"')
+                # Printing out each card found in the error
+                found_cards = []
+                for card in card_objects:
+                    card_desc = get_card_description(
+                        card['rank'], card['suit']
+                    )
+                    found_cards.append(card_desc)
+                print_error(
+                    f'Multiple cards detected in "{self.text}"', found_cards
+                )
                 return None
             if len(card_objects) == 1:
                 rank = card_objects[0]['rank']
@@ -632,7 +642,7 @@ def print_error(message, bullet_points=None):
             error_message += f'- {point}\n'
     else:
         error_message += '. '
-    error_message += 'Please try again.'
+    error_message += 'Please try again.\n'
     print(error_message)
 
 
