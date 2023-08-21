@@ -590,8 +590,10 @@ def get_wildcards():
             # Adds a gap between the input and the next print
             print('')
             if wildcards == '':
-                if user_allows('No cards entered. Continue?'):
+                if user_allows('No wild cards entered. Continue?'):
                     return []
+                else:
+                    continue
             cards_list = wildcards.split(',')
             wildcard_ranks = []
             is_valid = True
