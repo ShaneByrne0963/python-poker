@@ -599,12 +599,17 @@ def get_wildcards():
             is_valid = True
             # Checking each input for a valid rank
             for card_text in cards_list:
+                # Printing an error if an empty input is detected
+                if card_text == '':
+                    print_error('Blank card detected')
+                    is_valid = False
+                    # Exiting the for loop
+                    break
                 card = CardType(card_text)
                 ranks = card.find_values(card_text.split(' '), 'rank')
                 if len(ranks) == 0:
-                    print_error(f'No ranks found in {card_text}')
+                    print_error(f'No ranks found in "{card_text}"')
                     is_valid = False
-                    # Exiting the for loop
                     break
                 for rank in ranks:
                     wildcard_ranks.append(ranks)
@@ -715,8 +720,8 @@ def extract_word(input_word, word):
     final_string = input_word[index]
 
     # Only returning the first character if the input
-    # has 3 or less characters
-    if len(input_word) <= 3:
+    # has 2 or less characters
+    if len(input_word) <= 2:
         return final_string
 
     index += 1
