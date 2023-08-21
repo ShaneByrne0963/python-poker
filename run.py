@@ -460,8 +460,13 @@ class CardType:
 
     def convert(self):
         """
-        Converts a string into an instance of Card and returns it, if valid
+        Converts a string into an instance of Card and, if valid,
+        takes the card from the deck and returns it
         """
+        # Returns an error if an input contains no text
+        if self.text == '':
+            print_error('Blank card detected')
+            return None
         card_objects = self.get()
         if card_objects is not None:
             if len(card_objects) > 1:
