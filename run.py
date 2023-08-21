@@ -579,33 +579,35 @@ def get_wildcards():
     Requests the user to enter a set of wild cards that
     can affect the hand
     """
-    while True:
-        print('Please enter any wild cards,')
-        print('or press Enter if there are none\n')
-        print('- Only enter the rank of the card, i.e. 2 - Ace')
-        print('- Wild cards are cards that can take form of any')
-        print('  rank or suit to make the best possible hand.\n')
-        wildcards = input('Wild Cards: ')
-        if wildcards == '':
-            return []
-        cards_list = wildcards.split(',')
-        wildcard_ranks = []
-        is_valid = True
-        # Checking each input for a valid rank
-        for card_text in cards_list:
-            card = CardType(card_text)
-            ranks = card.find_values(card_text.split(' '), 'rank')
-            if len(ranks) == 1:
-                wildcard_ranks.append(ranks[0]['value'])
-            else:
-                # Exits the for loop if one of the inputs
-                # is not valid
-                is_valid = False
-                break
-        # Only return the wild cards once all of them are valid.
-        # Repeat the while loop if there are invalid wild cards
-        if is_valid:
-            return wildcard_ranks
+    request_message = 'Do you wish to include wildcards in your game?'
+    if user_allows(request_message):
+        while True:
+            print('Please enter any wild cards,')
+            print('or press Enter if there are none\n')
+            print('- Only enter the rank of the card, i.e. 2 - Ace')
+            print('- Wild cards are cards that can take form of any')
+            print('  rank or suit to make the best possible hand.\n')
+            wildcards = input('Wild Cards: ')
+            if wildcards == '':
+                return []
+            cards_list = wildcards.split(',')
+            wildcard_ranks = []
+            is_valid = True
+            # Checking each input for a valid rank
+            for card_text in cards_list:
+                card = CardType(card_text)
+                ranks = card.find_values(card_text.split(' '), 'rank')
+                if len(ranks) == 1:
+                    wildcard_ranks.append(ranks[0]['value'])
+                else:
+                    # Exits the for loop if one of the inputs
+                    # is not valid
+                    is_valid = False
+                    break
+            # Only return the wild cards once all of them are valid.
+            # Repeat the while loop if there are invalid wild cards
+            if is_valid:
+                return wildcard_ranks
 
 
 def get_rank_name(rank_number):
@@ -729,6 +731,23 @@ def extract_word(input_word, word):
         if final_string[-1] != word[-1]:
             return None
     return final_string
+
+
+def user_allows(message):
+    """
+    Asks a user a yes/no question, and returns True or
+    False depending on what the user entered
+    """
+    while True:
+        print(f'{message} (Y/N)')
+        answer = input('Your answer: ')
+        print('')
+        if contains_word(answer, 'Yes'):
+            return True
+        elif contains_word(answer, 'No'):
+            return False
+        else:
+            print('Please enter Yes (Y) or No (N)')
 
 
 def string_to_list(text):
