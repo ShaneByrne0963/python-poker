@@ -86,8 +86,9 @@ class Hand:
         """
         Prints each card in this hand to the terminal
         """
+        print('\nYour Hand:')
         for card in self.cards:
-            print(card.description(True))
+            print(f'- {card.description(True)}')
 
     def sort(self):
         """
@@ -353,16 +354,25 @@ class CardType:
         # the most letters of the input
         best_matches = []
         match_score = 0
+        has_suits = False
         # Divides the input into words if there are spaces in it
         input_words = self.text.split(' ')
 
         ranks = self.find_values(input_words, 'rank')
+        if len(ranks) == 0:
+            print_error(f'No ranks found in "{self.text}"')
+            return None
         for rank in ranks:
             temp_words = input_words.copy()
             self.remove_value(temp_words, rank['found'])
-
+            # If any rank takes up the entire input,
+            # then there are no suits in it
+            if not self.has_input(temp_words):
+                has_suits = False
+                break
             suits = self.find_values(temp_words, 'suit')
             for suit in suits:
+                has_suits = True
                 # The amount of letters of both the found rank and suit
                 content_length = len(rank['found']) + len(suit['found'])
                 # What percent of the input consists of those letters
@@ -378,6 +388,9 @@ class CardType:
                         'suit': suit['value'],
                     }
                     best_matches.append(found_card)
+        if not has_suits:
+            print_error(f'No suits found in "{self.text}"')
+            return None
         return best_matches
 
     def find_values(self, words, value_type):
@@ -450,20 +463,21 @@ class CardType:
         Converts a string into an instance of Card and returns it, if valid
         """
         card_objects = self.get()
-        if len(card_objects) > 1:
-            print_error(f'Multiple cards detected in "{self.text}"')
-            return None
-        if len(card_objects) == 1:
-            rank = card_objects[0]['rank']
-            suit = card_objects[0]['suit']
-            # Converting the rank number into text that is readable by the user
-            rank_num = get_rank_value(rank)
-            card_obj = deck.get_card(rank_num, suit)
-            # If the card doesn't exist in the deck, then the card
-            # exists somewhere else
-            if card_obj is None:
-                print_error(f'Multiple {rank} of {suit}')
-            return card_obj
+        if card_objects is not None:
+            if len(card_objects) > 1:
+                print_error(f'Multiple cards detected in "{self.text}"')
+                return None
+            if len(card_objects) == 1:
+                rank = card_objects[0]['rank']
+                suit = card_objects[0]['suit']
+                # Converting the rank number into text that is readable by the user
+                rank_num = get_rank_value(rank)
+                card_obj = deck.get_card(rank_num, suit)
+                # If the card doesn't exist in the deck, then the card
+                # exists somewhere else
+                if card_obj is None:
+                    print_error(f'Multiple {rank} of {suit}')
+                return card_obj
         return None
 
 
@@ -512,15 +526,11 @@ def validate_hand(cards_list):
     produce a valid set of cards
     """
     formatted_hand = []
-    try:
-        # Each hand must contain at least 5 cards
-        if len(cards_list) < 5:
-            raise ValueError(
-                f'Need at least 5 cards. You have given {len(cards_list)}'
-            )
-    except ValueError as e:
-        print_error(e)
-        return None
+    # Each hand must contain at least 5 cards
+    if len(cards_list) < 5:
+        print_error(
+            f'Need at least 5 cards. You have given {len(cards_list)}'
+        )
     else:
         formatted_hand = convert_hand(cards_list)
         return formatted_hand
@@ -531,15 +541,16 @@ def get_hand_input():
     Requests a hand to be manually entered by the user, and returns
     an instance of Hand
     """
+    print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
     while True:
-        print('Please enter your poker hand, or "random" for a random hand')
         print(
             '- Your hand must contain at least 5 cards, separated by a comma.'
         )
         print('- Each card must clearly indicate its rank and its suit.')
         print('- Example: "King of Hearts", "King Heart", "KH"\n')
         hand_input = input('Enter hand here: ')
+        print('')
 
         # Creates a random hand if the user specifies it
         if contains_word(hand_input, 'random'):
@@ -569,7 +580,7 @@ def get_wildcards():
     can affect the hand
     """
     while True:
-        print('\nPlease enter any wild cards,')
+        print('Please enter any wild cards,')
         print('or press Enter if there are none\n')
         print('- Only enter the rank of the card, i.e. 2 - Ace')
         print('- Wild cards are cards that can take form of any')
@@ -624,7 +635,7 @@ def print_error(message):
     """
     Prints a specific user input error to the terminal
     """
-    print(f'Invalid input: {message}. Please try again.\n')
+    print(f'Invalid input: {message}. Please try again.')
 
 
 def contains_word(input_word, word):
@@ -740,34 +751,15 @@ def main():
     # Creates the deck
     global deck
     deck = Deck()
-
-    # deck.wildcards = [2]
-    # deck.shuffle()
-    # hand_input = Hand([])
-    # hand_input.take_from_deck(5)
-    # while hand_input.get_value() != 'Royal Flush':
-    #     deck.cards = deck.get_full()
-    #     deck.shuffle()
-    #     hand_input.cards = []
-    #     hand_input.take_from_deck(5)
-
     # Instructs the user to enter their hand
     hand_input = get_hand_input()
 
     wildcards = get_wildcards()
     deck.wildcards = wildcards
 
-    print('\nYour Hand:')
     hand_input.print_hand()
     print('\nValue:')
     print(hand_input.get_value())
 
 
 main()
-
-# card_input = input('Enter a card: ')
-# new_card = CardType(card_input)
-# card_type = new_card.get()
-# for element in card_type:
-#     card = Card(element['rank'], element['suit'])
-#     print(card.description(False))
