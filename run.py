@@ -503,28 +503,6 @@ def convert_hand(cards_list):
     return new_cards
 
 
-def type_is_valid(card, value_type, found_values):
-    """
-    Checks if any ranks or suits found in a card string is
-    valid. Will raise an error if there is not exactly one
-    value found
-    """
-    try:
-        if found_values == []:
-            raise ValueError(
-                f'No {value_type}s found in "{card}"'
-            )
-        if len(found_values) > 1:
-            raise ValueError(
-                f'Multiple {value_type}s {found_values} found in "{card}"'
-            )
-    except ValueError as e:
-        print_error(e)
-        return False
-    else:
-        return True
-
-
 def validate_hand(cards_list):
     """
     Checks if a poker hand entered by the user can
