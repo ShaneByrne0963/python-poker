@@ -460,8 +460,7 @@ class CardType:
 
     def convert(self):
         """
-        Converts a string into an instance of Card and, if valid,
-        takes the card from the deck and returns it
+        Converts a string into an instance of Card
         """
         # Returns an error if an input contains no text
         if self.text == '':
@@ -476,12 +475,12 @@ class CardType:
                 rank = card_objects[0]['rank']
                 suit = card_objects[0]['suit']
                 # Converting the rank number into text that is readable by the user
-                rank_num = get_rank_value(rank)
-                card_obj = deck.get_card(rank_num, suit)
+                rank_name = get_rank_name(rank)
+                card_obj = deck.get_card(rank, suit)
                 # If the card doesn't exist in the deck, then the card
                 # exists somewhere else
                 if card_obj is None:
-                    print_error(f'Multiple {rank} of {suit}')
+                    print_error(f'Multiple {rank_name} of {suit}')
                 return card_obj
         return None
 
