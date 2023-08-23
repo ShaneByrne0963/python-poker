@@ -861,6 +861,7 @@ def main():
     while True:
         hand_input = get_hand_input()
         player_hands.append(hand_input)
+        print('Name:\t\tCards:\t\t\t\t\tValue:')
         for hand in player_hands:
             hand.print_hand()
         if not user_allows('\nDo you wish to add another hand?'):
