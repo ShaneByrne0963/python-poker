@@ -628,7 +628,7 @@ def get_wildcards():
                     is_valid = False
                     break
                 for rank in ranks:
-                    wildcard_ranks.append(ranks)
+                    wildcard_ranks.append(rank['value'])
             # Only return the wild cards once all of them are valid.
             # Repeat the while loop if there are invalid wild cards
             if is_valid:
