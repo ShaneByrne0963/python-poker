@@ -362,7 +362,6 @@ class CardType:
             print_error(f'No ranks found in "{self.text}"')
             return None
         for rank in ranks:
-            print(rank)
             temp_words = input_words.copy()
             temp_words = self.remove_value(temp_words, rank['found'])
             # If any rank takes up the entire input,
@@ -669,16 +668,12 @@ def contains_word(input_word, word):
      1. The function begins by checking if the first letter of
         the input is the same as the first of the word. This is
         required for the input to match the word
-     2. If the input consists of 3 characters or less, then the
-        last character of the input will be compared to that of
-        the word. They are required to match under these
-        conditions
-     3. Then the amount of characters that exist in both the
+     2. Then the amount of characters that exist in both the
         input and the word will be counted
-     4. If this count is at least 75% of the total letters in the
+     3. If this count is at least 75% of the total letters in the
         input, then the words are considered a match and the
         function will return True
-     5. The function will return False in every other case
+     4. The function will return False in every other case
     """
     # endregion
 
@@ -696,13 +691,6 @@ def contains_word(input_word, word):
 
     input_list = input_list[1:]
     word_list = word_list[1:]
-    # Smaller word inputs require the last letters to match
-    if ((len(input_list) == 1 or len(input_list) == 2) and
-            len(word) > 1):
-        if input_list[-1] != word_list[-1]:
-            return False
-        input_list = input_list[:-1]
-        word_list = word_list[:-1]
     # Checking if each letter in the input is in the word
     for char in input_list:
         total_letters += 1
@@ -727,7 +715,7 @@ def extract_word(input_word, word):
         the input until the first character of the word is found.
         If this character isn't found the function will return None
      2. If the input is 2 characters or less, the function will
-        return this first character
+        return this first character on its own
      3. If not, the character will be added to a string,
         final_string, which will be returned at the end of the
         function.
@@ -777,9 +765,8 @@ def extract_word(input_word, word):
             final_string += unmatching_letters
             unmatching_letters = ''
         else:
+            # Storing the unmatch in case it's a spelling error
             unmatching_letters += char
-        # Stop the loop if the input match is under 75%, or all
-        # of the characters in the word have been found
         if (get_percent(matching_letters, total_letters) < 75 or
                 len(word_list) == 0):
             break
@@ -787,10 +774,6 @@ def extract_word(input_word, word):
     # For numbers, the extraced word must contain the full number
     if word.isdigit() and len(word_list) > 0:
         return None
-    elif ((len(final_string) == 2 or len(final_string) == 3) and
-            len(word) > 1):
-        if final_string[-1] != word[-1]:
-            return None
     return final_string
 
 
