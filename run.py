@@ -832,18 +832,18 @@ def main():
     """
     Initializes the game.
     """
-    print('Welcome to Python Poker!\n')
-    print('Python Poker allows you to enter a poker hand,')
-    print('including optional wild cards, and will tell you')
-    print('the value of the hand you have.\n')
     # Creates the deck
     global deck
     deck = Deck()
-    # Instructs the user to enter their hand
-    hand_input = get_hand_input()
-
+    print('Welcome to Python Poker!\n')
+    print('Python Poker will read one or more poker hands,')
+    print('taking wild cards into consideration, and will')
+    print('the values of each hand, as well as the winner.\n')
     wildcards = get_wildcards()
     deck.wildcards = wildcards
+
+    # Instructs the user to enter their hand
+    hand_input = get_hand_input()
 
     hand_input.print_hand()
     print('\nValue:')
