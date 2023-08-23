@@ -1,6 +1,5 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 import random
-from pprint import pprint
 
 
 class Deck:
@@ -94,7 +93,7 @@ class Hand:
             print_text += '\t\t'
         for card in self.cards:
             print_text += f'{card.description()}\t'
-        print_text += self.get_value() + '\n'
+        print_text += self.get_value()
         print(print_text)
 
     def sort(self):
@@ -314,12 +313,20 @@ class Card:
         """
         Returns the cards rank and suit as a single word,
         only giving the first letter of worded ranks and suits
+        and highlighting wild cards with **
         """
+        wild = self.is_wild()
+        desc_text = ''
+        if wild:
+            desc_text = '*'
         rank_name = get_rank_name(self.rank)
         simple_rank = self.rank
         if self.rank > 10:
             simple_rank = rank_name[0]
-        return f'{simple_rank}{self.suit[0]}'
+        desc_text += f'{simple_rank}{self.suit[0]}'
+        if wild:
+            desc_text += '*'
+        return desc_text
 
     def is_duplicate(self, cards_list):
         """
@@ -850,10 +857,13 @@ def main():
     deck.wildcards = wildcards
 
     # Adding different player hands
+    player_hands = []
     while True:
         hand_input = get_hand_input()
-        hand_input.print_hand()
-        if not user_allows('Do you wish to add another hand?'):
+        player_hands.append(hand_input)
+        for hand in player_hands:
+            hand.print_hand()
+        if not user_allows('\nDo you wish to add another hand?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
 
