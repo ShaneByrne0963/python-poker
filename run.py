@@ -753,7 +753,10 @@ def extract_word(input_word, word):
             final_string += input_word[index]
             word_list.remove(char)
         index += 1
-    if len(final_string) == 2 or len(final_string) == 3:
+    # For numbers, the extraced word must contain the full number
+    if word.isdigit() and len(word_list) > 0:
+        return None
+    elif len(final_string) == 2 or len(final_string) == 3:
         if final_string[-1] != word[-1]:
             return None
     return final_string
