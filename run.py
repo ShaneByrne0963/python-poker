@@ -532,8 +532,8 @@ def get_hand_input():
     Requests a hand to be manually entered by the user, and returns
     an instance of Hand
     """
-    player_name = input('Please enter your name: ')
-    print()
+    player_name = get_required_input('Name', 'Please enter your name: ')
+    print(f'Welcome {player_name}!\n')
     print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
     while True:
@@ -567,6 +567,19 @@ def get_hand_input():
         if cards is not None:
             new_hand = Hand(player_name, cards)
             return new_hand
+
+
+def get_required_input(type, message):
+    """
+    Requests an input from the user continuously until
+    an input is given
+    """
+    user_input = ''
+    while user_input == '':
+        user_input = input(message)
+        if user_input == '':
+            print_error(f'{type} is blank')
+    return user_input
 
 
 def get_card_description(rank, suit):
