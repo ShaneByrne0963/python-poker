@@ -1,5 +1,6 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 import random
+from pprint import pprint
 
 
 class Deck:
@@ -52,9 +53,8 @@ class Deck:
             return card
         # Creates a card to print an error if the card
         # does not exist in the deck
-        print_error(
-            f'No {get_card_description(card.rank, card.suit)} in deck'
-        )
+        card_desc = get_card_description(card.rank, card.suit)
+        print_error(f'No {card_desc} in deck')
         return None
 
     def get_card(self, rank, suit):
@@ -87,9 +87,15 @@ class Hand:
         """
         Prints each card in this hand to the terminal
         """
-        print('Your Hand:')
+        print_text = f'{self.name}:'
+        if len(self.name) > 8:
+            print_text += '\t'
+        else:
+            print_text += '\t\t'
         for card in self.cards:
-            print(f'- {card.description()}')
+            print_text += f'{card.description()}\t'
+        print_text += self.get_value() + '\n'
+        print(print_text)
 
     def sort(self):
         """
@@ -306,13 +312,14 @@ class Card:
 
     def description(self):
         """
-        Returns the cards rank and suit as a readable string,
-        and if it is a wild card
+        Returns the cards rank and suit as a single word,
+        only giving the first letter of worded ranks and suits
         """
-        desc_text = get_card_description(self.rank, self.suit)
-        if self.is_wild():
-            desc_text += ' (Wild)'
-        return desc_text
+        rank_name = get_rank_name(self.rank)
+        simple_rank = self.rank
+        if self.rank > 10:
+            simple_rank = rank_name[0]
+        return f'{simple_rank}{self.suit[0]}'
 
     def is_duplicate(self, cards_list):
         """
@@ -846,9 +853,6 @@ def main():
     while True:
         hand_input = get_hand_input()
         hand_input.print_hand()
-
-        print('\nValue:')
-        print(hand_input.get_value())
         if not user_allows('Do you wish to add another hand?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
