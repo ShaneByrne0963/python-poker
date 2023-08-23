@@ -87,7 +87,7 @@ class Hand:
         Prints each card in this hand to the terminal
         """
         print_text = f'{self.name}:'
-        if len(self.name) > 8:
+        if len(print_text) >= 8:
             print_text += '\t'
         else:
             print_text += '\t\t'
