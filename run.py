@@ -842,12 +842,16 @@ def main():
     wildcards = get_wildcards()
     deck.wildcards = wildcards
 
-    # Instructs the user to enter their hand
-    hand_input = get_hand_input()
+    # Adding different player hands
+    while True:
+        hand_input = get_hand_input()
+        hand_input.print_hand()
 
-    hand_input.print_hand()
-    print('\nValue:')
-    print(hand_input.get_value())
+        print('\nValue:')
+        print(hand_input.get_value())
+        if not user_allows('Do you wish to add another hand?'):
+            break
+    print('Thank you for using Python Poker! Goodbye!')
 
 
 main()
