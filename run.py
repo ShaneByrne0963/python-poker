@@ -362,6 +362,7 @@ class CardType:
             print_error(f'No ranks found in "{self.text}"')
             return None
         for rank in ranks:
+            print(rank)
             temp_words = input_words.copy()
             temp_words = self.remove_value(temp_words, rank['found'])
             # If any rank takes up the entire input,
@@ -762,16 +763,26 @@ def extract_word(input_word, word):
     index += 1
     matching_letters = 1
     total_letters = 1
-    # Keep iterating through the input until the end is
-    # reached, or the word stops being similar
-    while (index < len(input_list) and
-            get_percent(matching_letters, total_letters) >= 75):
+    # If there is a misspelling in the word, the mistake is
+    # stored here, and will be added if the word continues
+    unmatching_letters = ''
+    while index < len(input_list):
         total_letters += 1
         char = input_list[index]
         if char in word_list:
             matching_letters += 1
+            final_string += input_word[index]
             word_list.remove(char)
-        final_string += input_word[index]
+            # Adding the previous characters that didn't match
+            final_string += unmatching_letters
+            unmatching_letters = ''
+        else:
+            unmatching_letters += char
+        # Stop the loop if the input match is under 75%, or all
+        # of the characters in the word have been found
+        if (get_percent(matching_letters, total_letters) < 75 or
+                len(word_list) == 0):
+            break
         index += 1
     # For numbers, the extraced word must contain the full number
     if word.isdigit() and len(word_list) > 0:
@@ -842,4 +853,11 @@ def main():
     print(hand_input.get_value())
 
 
-main()
+# main()
+
+deck = Deck()
+card = input('Enter a card: ')
+cardstr = CardType(card)
+cardobj = cardstr.convert()
+if cardobj is not None:
+    print(cardobj.description())
