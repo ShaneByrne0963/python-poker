@@ -663,6 +663,24 @@ def contains_word(input_word, word):
     """
     Returns True if an input is similar to a given word
     """
+    # region How this function works
+    """
+     1. The function begins by checking if the first letter of
+        the input is the same as the first of the word. This is
+        required for the input to match the word
+     2. If the input consists of 3 characters or less, then the
+        last character of the input will be compared to that of
+        the word. They are required to match under these
+        conditions
+     3. Then the amount of characters that exist in both the
+        input and the word will be counted
+     4. If this count is at least 75% of the total letters in the
+        input, then the words are considered a match and the
+        function will return True
+     5. The function will return False in every other case
+    """
+    # endregion
+
     if len(input_word) == 0:
         return False
     input_list = string_to_list(input_word)
@@ -671,34 +689,27 @@ def contains_word(input_word, word):
     # The first letters have to be the same for them to match
     if input_list[0] != word_list[0]:
         return False
-    # We start with one matching word as at this
-    # point the first letter matches the word
     matching_letters = 1
     total_letters = 1
-    # Removing the first letter from the input and the word
+
     input_list = input_list[1:]
     word_list = word_list[1:]
-    # If input_word has 2 or 3 characters, then the last
-    # letter has to match the last letter of the word
+    # Smaller word inputs require the last letters to match
     if ((len(input_list) == 1 or len(input_list) == 2) and
             len(word) > 1):
         if input_list[-1] != word_list[-1]:
             return False
-        # Remove the last letter from each of the words
         input_list = input_list[:-1]
         word_list = word_list[:-1]
-    # Going through each of the characters in the input to
-    # check if it exists in the word
+    # Checking if each letter in the input is in the word
     for char in input_list:
         total_letters += 1
         if char in word_list:
             matching_letters += 1
-            # Removing the character from the word to
-            # avoid duplicates
+            # Each letter in the word cannot be used twice
             word_list.remove(char)
     match = get_percent(matching_letters, total_letters)
-    # If the amount of characters that match the word is at
-    # least 75%, then the word is considered a match
+    # 75% of the input's characters must exist in the word
     return match >= 75
 
 
@@ -730,7 +741,7 @@ def extract_word(input_word, word):
     # Keep iterating through the input until the end is
     # reached, or the word stops being similar
     while (index < len(input_list) and
-            get_percent(matching_letters, total_letters) >= 80):
+            get_percent(matching_letters, total_letters) >= 75):
         total_letters += 1
         char = input_list[index]
         if char in word_list:
