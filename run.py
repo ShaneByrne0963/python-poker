@@ -521,6 +521,9 @@ def convert_hand(cards_list):
             deck.take_card(card_obj)
             new_cards.append(card_obj)
             continue
+        # Returning any cards taken from this hand
+        # if one is invalid
+        deck.cards.extend(new_cards)
         return None
     return new_cards
 
@@ -551,8 +554,6 @@ def get_hand_input():
     print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
     while True:
-        # Returning all of the cards to the deck
-        deck.cards = deck.get_full()
         print(
             '- Your hand must contain at least 5 cards, separated by a comma.'
         )
@@ -658,10 +659,9 @@ def get_rank_name(rank_number):
     """
     # For cards greater than 10
     if rank_number > 10:
-        worded_ranks = CardType.ranks
         # The 11th rank will be "Jack", which is the first
         # element [0] in CardType.ranks
-        return worded_ranks[rank_number - 11]
+        return CardType.ranks[rank_number - 11]
     return str(rank_number)
 
 
@@ -679,6 +679,7 @@ def print_error(message, bullet_points=None):
     Prints a specific user input error to the terminal
     """
     error_message = f'Invalid input: {message}'
+    # Support for bullet points
     if bullet_points is not None:
         error_message += ':\n'
         for point in bullet_points:
