@@ -708,6 +708,8 @@ def contains_word(input_word, word):
             matching_letters += 1
             # Each letter in the word cannot be used twice
             word_list.remove(char)
+    if word.isdigit() and len(word_list) > 0:
+        return False
     match = get_percent(matching_letters, total_letters)
     # 75% of the input's characters must exist in the word
     return match >= 75
