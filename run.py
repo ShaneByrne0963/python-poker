@@ -483,8 +483,6 @@ class CardType:
             if len(card_objects) == 1:
                 rank = card_objects[0]['rank']
                 suit = card_objects[0]['suit']
-                # Converting the rank number into text that is readable by the user
-                rank_name = get_rank_name(rank)
                 card_obj = deck.get_card(rank, suit)
                 # If the card doesn't exist in the deck, then the card
                 # exists somewhere else
@@ -665,7 +663,7 @@ def contains_word(input_word, word):
     """
     Returns True if an input is similar to a given word
     """
-    # region How this function works
+    # region How this function works:
     """
      1. The function begins by checking if the first letter of
         the input is the same as the first of the word. This is
@@ -685,6 +683,7 @@ def contains_word(input_word, word):
 
     if len(input_word) == 0:
         return False
+    # Lists have more functions that are useful for this evaluation
     input_list = string_to_list(input_word)
     word_list = string_to_list(word)
 
@@ -721,8 +720,28 @@ def extract_word(input_word, word):
     """
     Returns part of an input string that contains a given word
     """
+    # region How this function works:
+    """
+     1. The function starts by iterating through each character of
+        the input until the first character of the word is found.
+        If this character isn't found the function will return None
+     2. If the input is 2 characters or less, the function will
+        return this first character
+     3. If not, the character will be added to a string,
+        final_string, which will be returned at the end of the
+        function.
+     4. Then the function will iterate through the rest of the
+        characters and check if they exist in the word. If the
+        percentage of characters that match the word is at least
+        75%, the character will be added to final_string
+     5. Once the loop reaches the end of the input, or the total
+        match falls below 75%, final_string will be returned
+    """
+    # endregion
+
     if len(input_word) == 0:
         return None
+    # Lists have more functions that are useful for this evaluation
     input_list = string_to_list(input_word)
     word_list = string_to_list(word)
 
@@ -733,6 +752,7 @@ def extract_word(input_word, word):
         if index >= len(input_list):
             return None
     final_string = input_word[index]
+    word_list.pop(0)
 
     # Only returning the first character if the input
     # has 2 or less characters
@@ -750,13 +770,14 @@ def extract_word(input_word, word):
         char = input_list[index]
         if char in word_list:
             matching_letters += 1
-            final_string += input_word[index]
             word_list.remove(char)
+        final_string += input_word[index]
         index += 1
     # For numbers, the extraced word must contain the full number
     if word.isdigit() and len(word_list) > 0:
         return None
-    elif len(final_string) == 2 or len(final_string) == 3:
+    elif ((len(final_string) == 2 or len(final_string) == 3) and
+            len(word) > 1):
         if final_string[-1] != word[-1]:
             return None
     return final_string
