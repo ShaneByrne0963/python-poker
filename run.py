@@ -536,6 +536,8 @@ def get_hand_input():
     print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
     while True:
+        # Returning all of the cards to the deck
+        deck.cards = deck.get_full()
         print(
             '- Your hand must contain at least 5 cards, separated by a comma.'
         )
