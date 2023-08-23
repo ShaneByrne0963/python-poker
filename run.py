@@ -72,10 +72,11 @@ class Hand:
     Holds a list of cards, and can calculate the hand value
     based on these cards
     """
-    def __init__(self, cards):
+    def __init__(self, name, cards):
         """
         Creates an instance of Hand
         """
+        self.name = name
         self.cards = cards
         self.cards_sorted = {
             'cards': [],
@@ -531,6 +532,8 @@ def get_hand_input():
     Requests a hand to be manually entered by the user, and returns
     an instance of Hand
     """
+    player_name = input('Please enter your name: ')
+    print()
     print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
     while True:
@@ -546,7 +549,7 @@ def get_hand_input():
 
         # Creates a random hand if the user specifies it
         if contains_word(hand_input, 'random'):
-            new_hand = Hand([])
+            new_hand = Hand(player_name, [])
             deck.shuffle()
             new_hand.take_from_deck(5)
             return new_hand
@@ -562,7 +565,7 @@ def get_hand_input():
 
         cards = validate_hand(card_objects)
         if cards is not None:
-            new_hand = Hand(cards)
+            new_hand = Hand(player_name, cards)
             return new_hand
 
 
@@ -742,18 +745,16 @@ def extract_word(input_word, word):
             return None
     final_string = input_word[index]
     word_list.pop(0)
-
-    # Only returning the first character if the input
-    # has 2 or less characters
+    # Returning the first letter for small inputs
     if len(input_word) <= 2:
         return final_string
-
     index += 1
     matching_letters = 1
     total_letters = 1
     # If there is a misspelling in the word, the mistake is
     # stored here, and will be added if the word continues
     unmatching_letters = ''
+
     while index < len(input_list):
         total_letters += 1
         char = input_list[index]
@@ -836,11 +837,4 @@ def main():
     print(hand_input.get_value())
 
 
-# main()
-
-deck = Deck()
-card = input('Enter a card: ')
-cardstr = CardType(card)
-cardobj = cardstr.convert()
-if cardobj is not None:
-    print(cardobj.description())
+main()
