@@ -761,6 +761,11 @@ def get_best_hand(hands):
         best_score = best_hand.value['score']
         if hand_score > best_score:
             best_hand = hand
+        if hand_score == best_score:
+            hand_sub = hand.value['subscore']
+            best_sub = best_hand.value['subscore']
+            if hand_sub > best_sub:
+                best_hand = hand
     return best_hand
 
 
