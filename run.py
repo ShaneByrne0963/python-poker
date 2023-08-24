@@ -825,11 +825,17 @@ def get_best_hand(hands):
             best_hand.append(hand)
             continue
         # Flush subscores contain the suit, which is a string
-        hand_cards = hand.cards_sorted['cards']
-        best_cards = best_hand[0].cards_sorted['cards']
+        hand_cards = hand.get_ranks()
+        best_cards = best_hand[0].get_ranks()
         if isinstance(hand_sub, str):
             hand_cards = hand.get_ranks_of_suit(hand_sub)
             best_cards = best_hand[0].get_ranks_of_suit(best_sub)
+        comparison = compare_high_cards(hand_cards, best_cards)
+        if comparison == '>':
+            best_hand = [hand]
+        elif comparison == '=':
+            best_hand.append(hand)
+        # We do nothing if the hand in the loop is less than the best
     return best_hand
 
 
@@ -850,6 +856,33 @@ def compare_subclasses(sub1, sub2):
             if comparison != '=':
                 return comparison
     return '='
+
+
+def compare_high_cards(cards1, cards2):
+    """
+    Compares the high cards of 2 hands and returns
+    ">" if hand1 has higher cards, "<" if hand2 has
+    higher cards, or "=" if they are equal
+    """
+    index = 0
+    # Loops through all the cards until a difference is found,
+    # or no cards are left
+    while True:
+        highcard1 = 0
+        highcard2 = 0
+        if index < len(cards1):
+            highcard1 = cards1[index]
+        if index < len(cards2):
+            highcard2 = cards2[index]
+        # If both hands went through all their cards without finding
+        # a difference, then they are identical
+        if highcard1 == 0 and highcard2 == 0:
+            return '='
+        comparison = compare_numbers(highcard1, highcard2)
+        # End the function once a difference is found
+        if comparison != '=':
+            return comparison
+        index += 1
 
 
 def compare_numbers(num1, num2):
@@ -1094,7 +1127,7 @@ def main():
             hand.print_hand()
         if len(player_hands) > 1:
             best_hand = get_best_hand(player_hands)
-            print(f'Winning hand: {best_hand.name}')
+            print(f'Winning hand: {best_hand[0].name}')
         if not user_allows('\nDo you wish to add another hand?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
