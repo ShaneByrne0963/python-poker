@@ -148,7 +148,7 @@ class Hand:
             'high_card': 0
         }
         self.sort()
-        found_value['high_card'] = self.cards_sorted['cards'][-1]
+        found_value['high_card'] = self.cards_sorted['cards'][0]
 
         pairs = self.get_repeating_values('rank')
         straight_flush = self.is_straight_flush()
@@ -176,7 +176,7 @@ class Hand:
             found_value['name'] = 'Full House'
             found_value['score'] = 7
         # If the hand has 5 cards of the same suit
-        elif suits[-1] + self.cards_sorted['wildcards'] >= 5:
+        elif suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
             found_value['name'] = 'Flush'
             found_value['score'] = 6
         # If the hand has 5 consecutive ranking cards
@@ -207,7 +207,7 @@ class Hand:
         of matching card ranks
         """
         wildcards = self.cards_sorted['wildcards']
-        return pairs[-1] + wildcards >= number
+        return pairs[0]['amount'] + wildcards >= number
 
     def get_repeating_values(self, value_type):
         """
@@ -233,10 +233,29 @@ class Hand:
                 # Add the value to the list if it does not exist
                 values.append(card_value)
                 value_amount.append(1)
-        # Sorts the pairs in ascending order, so the largest
-        # is at the end
-        value_amount.sort()
-        return value_amount
+        # Sorts the pairs in descending order by amount of ranks
+        final_values = []
+        while len(values) > 0:
+            highest_dict = None
+            highest_amount = 0
+            highest_value = 0
+            highest_index = 0
+            for index in range(len(values)):
+                if (value_amount[index] > highest_amount or
+                        (value_amount[index] == highest_amount and
+                        values[index] > highest_value)):
+                    highest_amount = value_amount[index]
+                    highest_value = values[index]
+                    highest_index = index
+            values.pop(highest_index)
+            value_amount.pop(highest_index)
+            highest_dict = {
+                'value': highest_value,
+                'amount': highest_amount
+            }
+            final_values.append(highest_dict)
+        print(final_values)
+        return final_values
 
     def is_straight(self, hand_checking):
         """
@@ -317,10 +336,10 @@ class Hand:
             return False
         # Removing any wildcards that were used for the first part
         # so they cannot be used again
-        if pairs[-1] < 3:
+        if pairs[0]['amount'] < 3:
             wildcards -= 3 - pairs[-1]
         # Checking for the pair
-        return pairs[-2] + wildcards >= 2
+        return pairs[1]['amount'] + wildcards >= 2
 
     def take_from_deck(self, number):
         """
