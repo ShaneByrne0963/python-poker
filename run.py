@@ -142,7 +142,6 @@ class Hand:
         down until a match is found
         """
         self.sort()
-        high_card = self.cards_sorted['cards'][0]
 
         pairs = self.get_repeating_values('rank')
         suits = self.get_repeating_values('suit')
@@ -177,8 +176,9 @@ class Hand:
         if current_kind is not None:
             return self.create_value_dict('3 of a Kind', current_kind)
         # If the hand has 2 pairs of cards of the same rank
-        if self.count_repeating_values(pairs, 2) >= 2:
-            return self.create_value_dict('Two Pair', 0)
+        pair_groups = self.count_repeating_values(pairs, 2)
+        if len(pair_groups) >= 2:
+            return self.create_value_dict('Two Pair', pair_groups)
         # If the hand has 2 cards of the same rank
         current_kind = self.is_of_kind(2, pairs)
         if current_kind is not None:
@@ -270,11 +270,11 @@ class Hand:
         Returns how many groups of (rank * number) the
         hand has
         """
-        value_count = 0
+        value_counts = []
         for value in values:
             if value['amount'] == number:
-                value_count += 1
-        return value_count
+                value_counts.append(value['value'])
+        return value_counts
 
     def is_straight(self, hand_checking):
         """
@@ -759,13 +759,34 @@ def get_best_hand(hands):
             continue
         hand_score = hand.value['score']
         best_score = best_hand.value['score']
+        if hand_score < best_score:
+            continue
         if hand_score > best_score:
             best_hand = hand
-        if hand_score == best_score:
-            hand_sub = hand.value['subscore']
-            best_sub = best_hand.value['subscore']
+            continue
+        # If 2 hands have the same value, the hand with the
+        # greater subscore will prevail
+        hand_sub = hand.value['subscore']
+        best_sub = best_hand.value['subscore']
+        print(f'{hand_sub} => {best_sub}')
+        if isinstance(hand_sub, int):
             if hand_sub > best_sub:
                 best_hand = hand
+                continue
+        # Two Pair hand values have subscores of type list
+        elif isinstance(hand_sub, list):
+            is_equal = True
+            # Only comparing the best 2 pairs, if more than 2
+            for i in range(0, 2):
+                is_equal = False
+                if hand_sub[i] < best_sub[i]:
+                    break
+                if hand_sub[i] > best_sub[i]:
+                    best_hand = hand
+                    break
+                is_equal = True
+            if not is_equal:
+                continue
     return best_hand
 
 
