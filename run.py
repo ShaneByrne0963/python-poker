@@ -152,7 +152,8 @@ class Hand:
         straight_high = self.is_straight_flush()
         if straight_high is not None:
             name = 'Straight Flush'
-            if straight_high == 'Ace':
+            # Rank 14 = Ace
+            if straight_high == 14:
                 name = 'Royal Flush'
             return self.create_value_dict(name, straight_high)
         # If the hand has 4 cards of the same rank
@@ -330,7 +331,7 @@ class Hand:
                     # Capping the rank value at 14 (Ace)
                     if high_rank > 14:
                         high_rank = 14
-                    return get_rank_name(high_rank)
+                    return high_rank
         return None
 
     def is_straight_flush(self):
