@@ -787,27 +787,43 @@ def get_best_hand(hands):
         # greater subscore will prevail
         hand_sub = hand.value['subscore']
         best_sub = best_hand.value['subscore']
-        # For "of Kind" and Straight hand values
-        if isinstance(hand_sub, int):
-            if hand_sub > best_sub:
+        comparison = compare_subclasses(hand_sub, best_sub)
+        if comparison != '=':
+            if comparison == '>':
                 best_hand = hand
-                continue
-        # Two Pair and Full House hand values have
-        # subscores of type list
-        elif isinstance(hand_sub, list):
-            is_equal = True
-            # Only comparing the best 2 pairs, if more than 2
-            for i in range(0, 2):
-                is_equal = False
-                if hand_sub[i] < best_sub[i]:
-                    break
-                if hand_sub[i] > best_sub[i]:
-                    best_hand = hand
-                    break
-                is_equal = True
-            if not is_equal:
-                continue
+            continue
     return best_hand
+
+
+def compare_subclasses(sub1, sub2):
+    """
+    Compares 2 subclasses and returns a string
+    '<', '>' or '='
+    """
+    # For "of Kind" and Straight hand values
+    if isinstance(sub1, int):
+        return compare_numbers(sub1, sub2)
+    # Two Pair and Full House hand values have
+    # subscores of type list
+    elif isinstance(sub1, list):
+        # Only comparing the first 2 pairs, if more than 2
+        for i in range(0, 2):
+            comparison = compare_numbers(sub1[i], sub2[i])
+            if comparison != '=':
+                return comparison
+    return '='
+
+
+def compare_numbers(num1, num2):
+    """
+    Compares 2 values and returns a string
+    '<', '>' or '='
+    """
+    if num1 > num2:
+        return '>'
+    if num1 < num2:
+        return '<'
+    return '='
 
 
 def print_error(message, bullet_points=None):
