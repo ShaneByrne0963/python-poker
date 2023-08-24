@@ -667,7 +667,10 @@ def get_hand_input():
     Requests a hand to be manually entered by the user, and returns
     an instance of Hand
     """
-    player_name = get_required_input('Name', 'Please enter your name: ')
+    player_name = get_required_input(
+        'Name', 'Please enter your name: ', 12, names
+    )
+    names.append(player_name)
     print(f'Welcome {player_name}!\n')
     print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
@@ -702,16 +705,35 @@ def get_hand_input():
             return new_hand
 
 
-def get_required_input(type, message):
+def get_required_input(
+    input_type, message, max_chars=0, duplicates=[]
+):
     """
     Requests an input from the user continuously until
-    an input is given
+    a valid input is given
     """
     user_input = ''
-    while user_input == '':
+    valid = False
+    while not valid:
         user_input = input(message)
         if user_input == '':
-            print_error(f'{type} is blank')
+            print_error(f'{input_type} is blank')
+            continue
+        # Checking if the input length is within a limit
+        if max_chars > 0 and len(user_input) > max_chars:
+            print_error(
+                f'{input_type} can only be {max_chars} characters'
+            )
+            continue
+        # For inputs that must be unique
+        has_duplicate = False
+        for duplicate in duplicates:
+            if user_input == duplicate:
+                print_error(f'{input_type} already exists')
+                has_duplicate = True
+                continue
+        if not has_duplicate:
+            valid = True
     return user_input
 
 
@@ -1138,6 +1160,9 @@ def main():
     # Creates the deck
     global deck
     deck = Deck()
+    # For storing all the player names
+    global names
+    names = []
     print('Welcome to Python Poker!\n')
     print('Python Poker will read one or more poker hands,')
     print('taking wild cards into consideration, and will')
