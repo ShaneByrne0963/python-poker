@@ -646,23 +646,35 @@ def convert_hand(cards_list):
     return new_cards
 
 
-def validate_hand(cards_list):
+def validate_hand(cards_list, card_number):
     """
     Checks if a poker hand entered by the user can
     produce a valid set of cards
     """
     formatted_hand = []
     # Each hand must contain at least 5 cards
-    if len(cards_list) < 5:
+    enough_cards = True
+    card_len = len(cards_list)
+    # All hands must have the same length once one is entered
+    if card_number == 0:
+        enough_cards = card_len >= 5 and card_len <= 8
+    else:
+        enough_cards = card_len == card_number
+
+    # Prints an error if the length does not meet the requirements
+    if not enough_cards:
+        card_text = 'between 5 and 8'
+        if card_number > 0:
+            card_text = str(card_number)
         print_error(
-            f'Need at least 5 cards. You have given {len(cards_list)}'
+            f'Need {card_text} cards. You have given {card_len}'
         )
     else:
         formatted_hand = convert_hand(cards_list)
         return formatted_hand
 
 
-def get_hand_input():
+def get_hand_input(card_number):
     """
     Requests a hand to be manually entered by the user, and returns
     an instance of Hand
@@ -675,8 +687,12 @@ def get_hand_input():
     print('Please enter your poker hand, or "random" for a random hand.')
     # Keep requesting an input from the user until a valid hand is entered
     while True:
+        # Telling the user the correct amount of cards they need to enter
+        text = 'between 5 and 8'
+        if card_number > 0:
+            text = str(card_number)
         print(
-            '- Your hand must contain at least 5 cards, separated by a comma.'
+            f'- Your hand must contain {text} cards, separated by a comma.'
         )
         print('- Each card must contain a rank and a suit.')
         print('- Example: "King of Hearts", "King Heart", "KH"\n')
@@ -699,7 +715,7 @@ def get_hand_input():
             card_object = CardType(text_stripped)
             card_objects.append(card_object)
 
-        cards = validate_hand(card_objects)
+        cards = validate_hand(card_objects, card_number)
         if cards is not None:
             new_hand = Hand(player_name, cards)
             return new_hand
@@ -1178,7 +1194,7 @@ def main():
     player_hands = []
     card_number = 0
     while True:
-        hand_input = get_hand_input()
+        hand_input = get_hand_input(card_number)
         player_hands.append(hand_input)
         if card_number == 0:
             card_number = len(hand_input.cards)
