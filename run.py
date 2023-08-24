@@ -230,6 +230,17 @@ class Hand:
             return pairs[0]['value']
         return None
 
+    def get_suit(self, suit):
+        """
+        Returns all the non wild cards in this hand
+        that are of a given suit
+        """
+        suited_hand = []
+        for card in self.cards_sorted['cards']:
+            if card.suit == suit:
+                suited_hand.append(card)
+        return suited_hand
+
     def is_flush(self):
         """
         Evaluates if the hand has 5 cards of the same suit,
@@ -771,27 +782,38 @@ def get_best_hand(hands):
     Returns the hand with the best value out of a
     given list of hands
     """
-    best_hand = None
+    best_hand = []
     for hand in hands:
-        if best_hand is None:
-            best_hand = hand
+        if len(best_hand) == 0:
+            best_hand = [hand]
             continue
         hand_score = hand.value['score']
-        best_score = best_hand.value['score']
+        best_score = best_hand[0].value['score']
         if hand_score < best_score:
             continue
         if hand_score > best_score:
-            best_hand = hand
+            best_hand = [hand]
             continue
         # If 2 hands have the same value, the hand with the
         # greater subscore will prevail
         hand_sub = hand.value['subscore']
-        best_sub = best_hand.value['subscore']
+        best_sub = best_hand[0].value['subscore']
         comparison = compare_subclasses(hand_sub, best_sub)
         if comparison != '=':
             if comparison == '>':
-                best_hand = hand
+                best_hand = [hand]
             continue
+        # If a straight gets to this point, then the ranks
+        # of the hands are the exact same, so it's a draw
+        hand_name = hand.value['name']
+        if 'Straight' in hand_name or 'Royal' in hand_name:
+            best_hand.append(hand)
+            continue
+        # Flush subscores contain the suit, which is a string
+        hand_cards = hand.cards_sorted['cards']
+        best_cards = best_hand.cards_sorted['cards']
+        if isinstance(hand_sub, str):
+            return True
     return best_hand
 
 
