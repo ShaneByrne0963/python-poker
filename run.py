@@ -230,6 +230,16 @@ class Hand:
             return pairs[0]['value']
         return None
 
+    def get_ranks(self):
+        """
+        Gets all ranks of cards in this hand, excluding
+        wild cards
+        """
+        ranks = []
+        for card in self.cards_sorted['cards']:
+            ranks.append(card.rank)
+        return ranks
+
     def get_ranks_of_suit(self, suit):
         """
         Returns all the ranks of cards in this hand
