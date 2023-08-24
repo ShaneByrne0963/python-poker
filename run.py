@@ -911,6 +911,9 @@ def sort_dict_list(dict_list, ascending, *keys):
             is_best = True
             for key in keys:
                 current_key = dict_list[index][key]
+                # Skip this iteration if the value is a string
+                if isinstance(current_key, str):
+                    continue
                 # Determining whether this index has the best
                 # value depending on the order of the list
                 if current_key < best_value[key]:
