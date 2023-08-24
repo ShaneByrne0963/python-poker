@@ -919,12 +919,16 @@ def compare_numbers(num1, num2):
     return '='
 
 
-def print_hand_table(hands):
+def print_hand_table(hands, card_number):
     """
     Prints all the hands along with their name and value
     in a table
     """
-    print('Name:\t\tCards:\t\t\t\t\tValue:')
+    heading = 'Name:\t\tCards:'
+    for i in range(card_number):
+        heading += '\t'
+    heading += 'Value:'
+    print(heading)
     for hand in hands:
         hand.set_value()
         hand.print_hand()
@@ -1172,10 +1176,13 @@ def main():
 
     # Adding different player hands
     player_hands = []
+    card_number = 0
     while True:
         hand_input = get_hand_input()
         player_hands.append(hand_input)
-        print_hand_table(player_hands)
+        if card_number == 0:
+            card_number = len(hand_input.cards)
+        print_hand_table(player_hands, card_number)
         if not user_allows('\nDo you wish to add another hand?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
