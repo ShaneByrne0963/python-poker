@@ -235,25 +235,15 @@ class Hand:
                 value_amount.append(1)
         # Sorts the pairs in descending order by amount of ranks
         final_values = []
-        while len(values) > 0:
-            highest_dict = None
-            highest_amount = 0
-            highest_value = 0
-            highest_index = 0
-            for index in range(len(values)):
-                if (value_amount[index] > highest_amount or
-                        (value_amount[index] == highest_amount and
-                        values[index] > highest_value)):
-                    highest_amount = value_amount[index]
-                    highest_value = values[index]
-                    highest_index = index
-            values.pop(highest_index)
-            value_amount.pop(highest_index)
-            highest_dict = {
-                'value': highest_value,
-                'amount': highest_amount
+        for index in range(len(values)):
+            value_dict = {
+                'value': values[index],
+                'amount': value_amount[index]
             }
-            final_values.append(highest_dict)
+            final_values.append(value_dict)
+        final_values = sort_dict_list(
+            final_values, False, 'amount', 'value'
+        )
         print(final_values)
         return final_values
 
@@ -905,6 +895,39 @@ def string_to_list(text):
     for char in text_lower:
         new_list.append(char)
     return new_list
+
+
+def sort_dict_list(dict_list, ascending, *keys):
+    """
+    Sorts a list of dictionaries in ascending/descending
+    order in terms of it's given keys, with the first
+    given key taking precedence
+    """
+    sorted_list = []
+    while len(dict_list) > 0:
+        best_value = dict_list[0]
+        best_index = 0
+        for index in range(1, len(dict_list)):
+            is_best = True
+            for key in keys:
+                current_key = dict_list[index][key]
+                # Determining whether this index has the best
+                # value depending on the order of the list
+                if current_key < best_value[key]:
+                    is_best = ascending
+                    break
+                if current_key > best_value[key]:
+                    is_best = not ascending
+                    break
+                # The for loop only continues if the values at
+                # this key are equal. Then the loop will move
+                # to a lower priority key
+            if is_best:
+                best_value = dict_list[index]
+                best_index = index
+        sorted_list.append(best_value)
+        dict_list.pop(best_index)
+    return sorted_list
 
 
 def get_percent(value, total):
