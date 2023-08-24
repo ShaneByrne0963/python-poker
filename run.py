@@ -201,36 +201,6 @@ class Hand:
             found_value['score'] = 1
         return found_value
 
-    def get_score(self, val=None):
-        """
-        Returns how valuable a hand is in terms of an
-        integer score
-        """
-        value = val
-        if val is None:
-            value = self.value
-        if value == '5 of a Kind':
-            return 11
-        if value == 'Royal Flush':
-            return 10
-        if value == 'Straight Flush':
-            return 9
-        if value == '4 of a Kind':
-            return 8
-        if value == 'Full House':
-            return 7
-        if value == 'Flush':
-            return 6
-        if value == 'Straight':
-            return 5
-        if value == '3 of a Kind':
-            return 4
-        if value == 'Two Pair':
-            return 3
-        if value == 'Pair':
-            return 2
-        return 1
-
     def is_of_kind(self, number, pairs):
         """
         Returns if the hand has has a certain number
