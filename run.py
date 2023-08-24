@@ -151,55 +151,74 @@ class Hand:
         found_value['high_card'] = self.cards_sorted['cards'][0]
 
         pairs = self.get_repeating_values('rank')
-        straight_flush = self.is_straight_flush()
-        straight = self.is_straight(self.cards_sorted['cards'])
         suits = self.get_repeating_values('suit')
         # If the hand has 5 cards of the same rank (with wildcards)
         if self.is_of_kind(5, pairs):
-            found_value['name'] = '5 of a Kind'
-            found_value['score'] = 11
+            return self.create_value_dict('5 of a Kind')
         # If the hand has 5 consecutive ranking cards of the same suit
-        elif straight_flush is not None:
-            if straight_high == 'Ace':
-                found_value['name'] = 'Royal Flush'
-                found_value['score'] = 10
+        straight_high = self.is_straight_flush()
+        if straight_high is not None:
+            if straight_flush == 'Ace':
+                return self.create_value_dict('Royal Flush')
             else:
-                found_value['name'] = 'Straight Flush'
-                found_value['score'] = 9
+                return self.create_value_dict('Straight Flush')
+            return found_value
         # If the hand has 4 cards of the same rank
-        elif self.is_of_kind(4, pairs):
-            found_value['name'] = '4 of a Kind'
-            found_value['score'] = 8
+        if self.is_of_kind(4, pairs):
+            return self.create_value_dict('4 of a Kind')
         # If the hand has 3 cards of the same rank and
         # a pair of a different rank
-        elif self.is_full_house(pairs):
-            found_value['name'] = 'Full House'
-            found_value['score'] = 7
+        if self.is_full_house(pairs):
+            return self.create_value_dict('Full House')
         # If the hand has 5 cards of the same suit
-        elif suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
-            found_value['name'] = 'Flush'
-            found_value['score'] = 6
+        if suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
+            return self.create_value_dict('Flush')
         # If the hand has 5 consecutive ranking cards
-        elif straight is not None:
-            found_value['name'] = 'Straight'
-            found_value['score'] = 5
+        straight_high = self.is_straight(self.cards_sorted['cards'])
+        if straight_high is not None:
+            return self.create_value_dict('Straight')
         # If the hand has 3 cards of the same rank
-        elif self.is_of_kind(3, pairs):
-            found_value['name'] = '3 of a Kind'
-            found_value['score'] = 4
+        if self.is_of_kind(3, pairs):
+            return self.create_value_dict('3 of a Kind')
         # If the hand has 2 pairs of cards of the same rank
-        elif self.count_repeating_values(pairs, 2) >= 2:
-            found_value['name'] = 'Two Pair'
-            found_value['score'] = 3
+        if self.count_repeating_values(pairs, 2) >= 2:
+            return self.create_value_dict('Two Pair')
         # If the hand has 2 cards of the same rank
-        elif self.is_of_kind(2, pairs):
-            found_value['name'] = 'Pair'
-            found_value['score'] = 2
+        if self.is_of_kind(2, pairs):
+            return self.create_value_dict('Pair')
         # For everything else
-        else:
-            found_value['name'] = 'High Card'
-            found_value['score'] = 1
-        return found_value
+        return self.create_value_dict('High Card')
+    
+    def create_value_dict(self, name):
+        """
+        Creates a dictionary containing all the information
+        about the value of the hand and returns it
+        """
+        value_info = {}
+        value_info['name'] = name
+        if name == 'High Card':
+            value_info['score'] = 1
+        elif name == 'Pair':
+            value_info['score'] = 2
+        elif name == 'Two Pair':
+            value_info['score'] = 3
+        elif name == '3 of a Kind':
+            value_info['score'] = 4
+        elif name == 'Straight':
+            value_info['score'] = 5
+        elif name == 'Flush':
+            value_info['score'] = 6
+        elif name == 'Full House':
+            value_info['score'] = 7
+        elif name == '4 of a Kind':
+            value_info['score'] = 8
+        elif name == 'Straight Flush':
+            value_info['score'] = 9
+        elif name == 'Royal Flush':
+            value_info['score'] = 10
+        elif name == '5 of a Kind':
+            value_info['score'] = 11
+        return value_info
 
     def is_of_kind(self, number, pairs):
         """
@@ -207,7 +226,9 @@ class Hand:
         of matching card ranks
         """
         wildcards = self.cards_sorted['wildcards']
-        return pairs[0]['amount'] + wildcards >= number
+        if pairs[0]['amount'] + wildcards >= number:
+            return pairs[0]['value']
+        return None
 
     def get_repeating_values(self, value_type):
         """
