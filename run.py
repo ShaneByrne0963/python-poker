@@ -897,6 +897,35 @@ def compare_numbers(num1, num2):
     return '='
 
 
+def print_hand_table(hands):
+    """
+    Prints all the hands along with their name and value
+    in a table
+    """
+    print('Name:\t\tCards:\t\t\t\t\tValue:')
+    for hand in hands:
+        hand.set_value()
+        hand.print_hand()
+    if len(hands) > 1:
+        best_hand = get_best_hand(hands)
+        winner = ''
+        if len(best_hand) == 1:
+            winner = best_hand[0].name
+        else:
+            # Building the sentence that displays each winner
+            winner = 'Draw between '
+            length = len(best_hand)
+            for i in range(length):
+                if i == length - 1:
+                    winner += 'and '
+                winner += best_hand[i].name
+                if i < length - 2:
+                    winner += ','
+                if i < length - 1:
+                    winner += ' '
+        print(f'Winning hand: {winner}')
+
+
 def print_error(message, bullet_points=None):
     """
     Prints a specific user input error to the terminal
@@ -1121,13 +1150,7 @@ def main():
     while True:
         hand_input = get_hand_input()
         player_hands.append(hand_input)
-        print('Name:\t\tCards:\t\t\t\t\tValue:')
-        for hand in player_hands:
-            hand.set_value()
-            hand.print_hand()
-        if len(player_hands) > 1:
-            best_hand = get_best_hand(player_hands)
-            print(f'Winning hand: {best_hand[0].name}')
+        print_hand_table(player_hands)
         if not user_allows('\nDo you wish to add another hand?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
