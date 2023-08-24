@@ -188,7 +188,7 @@ class Hand:
             found_value['name'] = '3 of a Kind'
             found_value['score'] = 4
         # If the hand has 2 pairs of cards of the same rank
-        elif pairs.count(2) >= 2:
+        elif self.count_repeating_values(pairs, 2) >= 2:
             found_value['name'] = 'Two Pair'
             found_value['score'] = 3
         # If the hand has 2 cards of the same rank
@@ -244,8 +244,18 @@ class Hand:
         final_values = sort_dict_list(
             final_values, False, 'amount', 'value'
         )
-        print(final_values)
         return final_values
+
+    def count_repeating_values(self, values, number):
+        """
+        Returns how many groups of (rank * number) the
+        hand has
+        """
+        value_count = 0
+        for value in values:
+            if value['amount'] == number:
+                value_count += 1
+        return value_count
 
     def is_straight(self, hand_checking):
         """
