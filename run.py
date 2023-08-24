@@ -144,7 +144,6 @@ class Hand:
         self.sort()
 
         pairs = self.get_repeating_values('rank')
-        suits = self.get_repeating_values('suit')
         # If the hand has 5 cards of the same rank (with wildcards)
         current_kind = self.is_of_kind(5, pairs)
         if current_kind is not None:
@@ -166,8 +165,9 @@ class Hand:
         if house_ranks is not None:
             return self.create_value_dict('Full House', house_ranks)
         # If the hand has 5 cards of the same suit
-        if suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
-            return self.create_value_dict('Flush', 0)
+        flush_suit = self.is_flush()
+        if flush_suit is not None:
+            return self.create_value_dict('Flush', flush_suit)
         # If the hand has 5 consecutive ranking cards
         straight_high = self.is_straight(self.cards_sorted['cards'])
         if straight_high is not None:
@@ -227,6 +227,16 @@ class Hand:
         wildcards = self.cards_sorted['wildcards']
         if pairs[0]['amount'] + wildcards >= number:
             return pairs[0]['value']
+        return None
+
+    def is_flush(self):
+        """
+        Evaluates if the hand has 5 cards of the same suit,
+        returns the suit if it does, and None if it doesn't
+        """
+        suits = self.get_repeating_values('suit')
+        if suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
+            return suits[0]['value']
         return None
 
     def get_repeating_values(self, value_type):
