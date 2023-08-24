@@ -148,7 +148,7 @@ class Hand:
         # If the hand has 5 cards of the same rank (with wildcards)
         current_kind = self.is_of_kind(5, pairs)
         if current_kind is not None:
-            return self.create_value_dict('5 of a Kind')
+            return self.create_value_dict('5 of a Kind', current_kind)
         # If the hand has 5 consecutive ranking cards of the same suit
         straight_high = self.is_straight_flush()
         if straight_high is not None:
@@ -162,8 +162,9 @@ class Hand:
             return self.create_value_dict('4 of a Kind', current_kind)
         # If the hand has 3 cards of the same rank and
         # a pair of a different rank
-        if self.is_full_house(pairs):
-            return self.create_value_dict('Full House')
+        house_ranks = self.is_full_house(pairs)
+        if house_ranks is not None:
+            return self.create_value_dict('Full House', house_ranks)
         # If the hand has 5 cards of the same suit
         if suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
             return self.create_value_dict('Flush', 0)
@@ -185,7 +186,7 @@ class Hand:
             return self.create_value_dict('Pair', current_kind)
         # For everything else
         return self.create_value_dict('High Card', 0)
-    
+
     def create_value_dict(self, name, subscore):
         """
         Creates a dictionary containing all the information
@@ -349,16 +350,23 @@ class Hand:
         Returns True if the hand has 3 ranks of the same
         kind, and a pair of a different rank
         """
+        # Stores the ranks of the full house
+        house_ranks = []
         wildcards = self.cards_sorted['wildcards']
         # Checking for the 3 of a Kind part of the Full House
-        if not self.is_of_kind(3, pairs):
-            return False
+        three_pair = self.is_of_kind(3, pairs)
+        if three_pair is None:
+            return None
+        house_ranks.append(three_pair)
         # Removing any wildcards that were used for the first part
         # so they cannot be used again
         if pairs[0]['amount'] < 3:
-            wildcards -= 3 - pairs[-1]
+            wildcards -= 3 - pairs[0]['amount']
         # Checking for the pair
-        return pairs[1]['amount'] + wildcards >= 2
+        if pairs[1]['amount'] + wildcards < 2:
+            return None
+        house_ranks.append(pairs[1]['value'])
+        return house_ranks
 
     def take_from_deck(self, number):
         """
@@ -768,12 +776,13 @@ def get_best_hand(hands):
         # greater subscore will prevail
         hand_sub = hand.value['subscore']
         best_sub = best_hand.value['subscore']
-        print(f'{hand_sub} => {best_sub}')
+        # For "of Kind" and Straight hand values
         if isinstance(hand_sub, int):
             if hand_sub > best_sub:
                 best_hand = hand
                 continue
-        # Two Pair hand values have subscores of type list
+        # Two Pair and Full House hand values have
+        # subscores of type list
         elif isinstance(hand_sub, list):
             is_equal = True
             # Only comparing the best 2 pairs, if more than 2
