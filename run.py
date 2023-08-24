@@ -230,15 +230,20 @@ class Hand:
             return pairs[0]['value']
         return None
 
-    def get_suit(self, suit):
+    def get_ranks_of_suit(self, suit):
         """
-        Returns all the non wild cards in this hand
-        that are of a given suit
+        Returns all the ranks of cards in this hand
+        that are of a given suit, including wildcards
         """
         suited_hand = []
+        # Adding the best card (Ace) for wild cards
+        wildcards = self.cards_sorted['wildcards']
+        while wildcards > 0:
+            suited_hand.append(14)
+            wildcards -= 1
         for card in self.cards_sorted['cards']:
             if card.suit == suit:
-                suited_hand.append(card)
+                suited_hand.append(card.rank)
         return suited_hand
 
     def is_flush(self):
@@ -811,9 +816,10 @@ def get_best_hand(hands):
             continue
         # Flush subscores contain the suit, which is a string
         hand_cards = hand.cards_sorted['cards']
-        best_cards = best_hand.cards_sorted['cards']
+        best_cards = best_hand[0].cards_sorted['cards']
         if isinstance(hand_sub, str):
-            return True
+            hand_cards = hand.get_ranks_of_suit(hand_sub)
+            best_cards = best_hand[0].get_ranks_of_suit(best_sub)
     return best_hand
 
 
