@@ -81,8 +81,12 @@ class Hand:
             'cards': [],
             'wildcards': 0
         }
-        self.value = ''
-        self.high_card = 0
+        self.value = {
+            'name': '',
+            'score': 0,
+            'subscore': 0,
+            'high_card': 0
+        }
 
     def print_hand(self):
         """
@@ -95,7 +99,7 @@ class Hand:
             print_text += '\t\t'
         for card in self.cards:
             print_text += f'{card.description()}\t'
-        print_text += self.value
+        print_text += self.value['name']
         print(print_text)
 
     def sort(self):
@@ -137,42 +141,65 @@ class Hand:
         starting with the highest value and working its way
         down until a match is found
         """
+        found_value = {
+            'name': '',
+            'score': 0,
+            'subscore': 0,
+            'high_card': 0
+        }
         self.sort()
+        found_value['high_card'] = self.cards_sorted['cards'][-1]
+
         pairs = self.get_repeating_values('rank')
+        straight_flush = self.is_straight_flush()
+        straight = self.is_straight(self.cards_sorted['cards'])
+        suits = self.get_repeating_values('suit')
         # If the hand has 5 cards of the same rank (with wildcards)
         if self.is_of_kind(5, pairs):
-            return '5 of a Kind'
+            found_value['name'] = '5 of a Kind'
+            found_value['score'] = 11
         # If the hand has 5 consecutive ranking cards of the same suit
-        straight_high = self.is_straight_flush()
-        if straight_high is not None:
+        elif straight_flush is not None:
             if straight_high == 'Ace':
-                return 'Royal Flush'
-            return 'Straight Flush'
+                found_value['name'] = 'Royal Flush'
+                found_value['score'] = 10
+            else:
+                found_value['name'] = 'Straight Flush'
+                found_value['score'] = 9
         # If the hand has 4 cards of the same rank
-        if self.is_of_kind(4, pairs):
-            return '4 of a Kind'
+        elif self.is_of_kind(4, pairs):
+            found_value['name'] = '4 of a Kind'
+            found_value['score'] = 8
         # If the hand has 3 cards of the same rank and
         # a pair of a different rank
-        if self.is_full_house(pairs):
-            return 'Full House'
+        elif self.is_full_house(pairs):
+            found_value['name'] = 'Full House'
+            found_value['score'] = 7
         # If the hand has 5 cards of the same suit
-        suits = self.get_repeating_values('suit')
-        if suits[-1] + self.cards_sorted['wildcards'] >= 5:
-            return 'Flush'
+        elif suits[-1] + self.cards_sorted['wildcards'] >= 5:
+            found_value['name'] = 'Flush'
+            found_value['score'] = 6
         # If the hand has 5 consecutive ranking cards
-        if self.is_straight(self.cards_sorted['cards']):
-            return 'Straight'
+        elif straight is not None:
+            found_value['name'] = 'Straight'
+            found_value['score'] = 5
         # If the hand has 3 cards of the same rank
-        if self.is_of_kind(3, pairs):
-            return '3 of a Kind'
+        elif self.is_of_kind(3, pairs):
+            found_value['name'] = '3 of a Kind'
+            found_value['score'] = 4
         # If the hand has 2 pairs of cards of the same rank
-        if pairs.count(2) >= 2:
-            return 'Two Pair'
+        elif pairs.count(2) >= 2:
+            found_value['name'] = 'Two Pair'
+            found_value['score'] = 3
         # If the hand has 2 cards of the same rank
-        if self.is_of_kind(2, pairs):
-            return 'Pair'
+        elif self.is_of_kind(2, pairs):
+            found_value['name'] = 'Pair'
+            found_value['score'] = 2
         # For everything else
-        return 'High Card'
+        else:
+            found_value['name'] = 'High Card'
+            found_value['score'] = 1
+        return found_value
 
     def get_score(self, val=None):
         """
@@ -722,8 +749,8 @@ def get_best_hand(hands):
         if best_hand is None:
             best_hand = hand
             continue
-        hand_score = hand.get_score()
-        best_score = best_hand.get_score()
+        hand_score = hand.value['score']
+        best_score = best_hand.value['score']
         if hand_score > best_score:
             best_hand = hand
     return best_hand
