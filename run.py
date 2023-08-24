@@ -82,7 +82,7 @@ class Hand:
             'wildcards': 0
         }
         self.value = ''
-        self.high_card = None
+        self.high_card = 0
 
     def print_hand(self):
         """
@@ -173,6 +173,36 @@ class Hand:
             return 'Pair'
         # For everything else
         return 'High Card'
+
+    def get_score(self, val=None):
+        """
+        Returns how valuable a hand is in terms of an
+        integer score
+        """
+        value = val
+        if val is None:
+            value = self.value
+        if value == '5 of a Kind':
+            return 11
+        if value == 'Royal Flush':
+            return 10
+        if value == 'Straight Flush':
+            return 9
+        if value == '4 of a Kind':
+            return 8
+        if value == 'Full House':
+            return 7
+        if value == 'Flush':
+            return 6
+        if value == 'Straight':
+            return 5
+        if value == '3 of a Kind':
+            return 4
+        if value == 'Two Pair':
+            return 3
+        if value == 'Pair':
+            return 2
+        return 1
 
     def is_of_kind(self, number, pairs):
         """
@@ -682,6 +712,23 @@ def get_rank_value(rank_name):
     return int(rank_name)
 
 
+def get_best_hand(hands):
+    """
+    Returns the hand with the best value out of a
+    given list of hands
+    """
+    best_hand = None
+    for hand in hands:
+        if best_hand is None:
+            best_hand = hand
+            continue
+        hand_score = hand.get_score()
+        best_score = best_hand.get_score()
+        if hand_score > best_score:
+            best_hand = hand
+    return best_hand
+
+
 def print_error(message, bullet_points=None):
     """
     Prints a specific user input error to the terminal
@@ -874,6 +921,9 @@ def main():
         for hand in player_hands:
             hand.set_value()
             hand.print_hand()
+        if len(player_hands) > 1:
+            best_hand = get_best_hand(player_hands)
+            print(f'Winning hand: {best_hand.name}')
         if not user_allows('\nDo you wish to add another hand?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
