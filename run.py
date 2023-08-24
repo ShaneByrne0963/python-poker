@@ -81,6 +81,8 @@ class Hand:
             'cards': [],
             'wildcards': 0
         }
+        self.value = ''
+        self.high_card = None
 
     def print_hand(self):
         """
@@ -93,7 +95,7 @@ class Hand:
             print_text += '\t\t'
         for card in self.cards:
             print_text += f'{card.description()}\t'
-        print_text += self.get_value()
+        print_text += self.value
         print(print_text)
 
     def sort(self):
@@ -122,6 +124,12 @@ class Hand:
                 # Moving the highest card to the sorted cards dict
                 self.cards_sorted['cards'].append(highest_card)
             cards_template.remove(highest_card)
+
+    def set_value(self):
+        """
+        Stores the value of the hand in its instance
+        """
+        self.value = self.get_value()
 
     def get_value(self):
         """
@@ -559,7 +567,7 @@ def get_hand_input():
         )
         print('- Each card must contain a rank and a suit.')
         print('- Example: "King of Hearts", "King Heart", "KH"\n')
-        hand_input = input('Enter hand here: ')
+        hand_input = get_required_input('Hand', 'Enter hand here: ')
         print('')
 
         # Creates a random hand if the user specifies it
@@ -864,6 +872,7 @@ def main():
         player_hands.append(hand_input)
         print('Name:\t\tCards:\t\t\t\t\tValue:')
         for hand in player_hands:
+            hand.set_value()
             hand.print_hand()
         if not user_allows('\nDo you wish to add another hand?'):
             break
