@@ -102,6 +102,14 @@ class Hand:
             print_text += f'{card.description()}\t'
         print_text += self.value['name']
         print(print_text)
+        # For debugging
+        for key in self.cards_sorted:
+            desc_list = [key]
+            for card in self.cards_sorted[key]:
+                desc_list.append(get_card_description(
+                    card.rank, card.suit
+                ))
+            print(desc_list)
 
     def format_hand(self):
         """
@@ -139,6 +147,19 @@ class Hand:
                 cards_sorted.append(highest_card)
             cards_temp.remove(highest_card)
         return cards_sorted
+
+    def add_phantom_card(self, rank, suit):
+        """
+        Adds a card that does not belong to the deck to
+        cards_sorted, and then sorts the new hand. Used
+        to simulate wild cards
+        """
+        simulated_card = Card(rank, suit)
+        self.cards_sorted['with_wild'].append(simulated_card)
+        new_sorted_hand = self.sort(
+            self.cards_sorted['with_wild'], False
+        )
+        self.cards_sorted['with_wild'] = new_sorted_hand
 
     def set_value(self):
         """
