@@ -478,16 +478,6 @@ class Card:
             desc_text += '*'
         return desc_text
 
-    def is_duplicate(self, cards_list):
-        """
-        Returns if this card already exists in a list of cards
-        """
-        for card in cards_list:
-            if (self.rank == card.rank and
-                    self.suit == card.suit):
-                return True
-        return False
-
     def is_wild(self):
         """
         Returns if this card is a wild card
