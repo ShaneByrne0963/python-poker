@@ -941,6 +941,9 @@ def print_hand_table(hands, card_number):
     Prints all the hands along with their name and value
     in a table
     """
+    # Displaying wild cards first, if any
+    print_wildcards()
+
     heading = 'Name:\t\tCards:'
     for i in range(card_number):
         heading += '\t'
@@ -949,9 +952,6 @@ def print_hand_table(hands, card_number):
     for hand in hands:
         hand.set_value()
         hand.print_hand()
-
-    # Displaying wild cards, if any
-    print_wildcards()
 
     # Displaying the winner for more than one hand
     print_winning_hands(hands)
@@ -1224,6 +1224,9 @@ def start_round():
         if card_number == 0:
             card_number = len(hand_input.cards)
         print_hand_table(player_hands, card_number)
+        if len(deck.cards) < card_number:
+            print('\nNot enough cards for another hand!')
+            break
         if not user_allows('\nDo you wish to add another hand?'):
             break
 
