@@ -1173,24 +1173,18 @@ def get_percent(value, total):
     return (value / total) * 100
 
 
-def main():
+def start_round():
     """
-    Initializes the game.
+    Initiates a round of poker, collecting one or more
+    hands and displaying the winner if more than one
     """
-    # Creates the deck
-    global deck
+    # Resetting the player names and deck each round
     deck = Deck()
-    # For storing all the player names
-    global names
-    names = []
-    print('Welcome to Python Poker!\n')
-    print('Python Poker will read one or more poker hands,')
-    print('taking wild cards into consideration, and will')
-    print('the values of each hand, as well as the winner.\n')
+    names.clear()
+
     wildcards = get_wildcards()
     deck.wildcards = wildcards
 
-    # Adding different player hands
     player_hands = []
     card_number = 0
     while True:
@@ -1200,6 +1194,28 @@ def main():
             card_number = len(hand_input.cards)
         print_hand_table(player_hands, card_number)
         if not user_allows('\nDo you wish to add another hand?'):
+            break
+
+
+def main():
+    """
+    Initializes the game.
+    """
+    # Stores all the cards that haven't been taken
+    global deck
+    deck = Deck()
+    # For storing all the player names
+    global names
+    names = []
+
+    print('Welcome to Python Poker!\n')
+    print('Python Poker will read one or more poker hands,')
+    print('taking wild cards into consideration, and will display')
+    print('the values of each hand, as well as the winner.\n')
+
+    while True:
+        start_round()
+        if not user_allows('\nDo you want to start another round?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
 
