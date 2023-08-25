@@ -950,6 +950,17 @@ def print_hand_table(hands, card_number):
         hand.print_hand()
 
     # Displaying wild cards, if any
+    print_wildcards()
+
+    # Displaying the winner for more than one hand
+    print_winning_hands(hands)
+
+
+def print_wildcards():
+    """
+    Prints a list of wild cards to the terminal,
+    surrounding them with two asterices (**)
+    """
     if len(deck.wildcards) > 0:
         wild_text = 'Wild cards: '
         for i in range(len(deck.wildcards)):
@@ -960,10 +971,16 @@ def print_hand_table(hands, card_number):
                 wild_text += ', '
         print(wild_text)
 
-    # Displaying the winner for more than one hand
+
+def print_winning_hands(hands):
+    """
+    Finds the winning hand (or hands) and prints
+    them to the terminal
+    """
     if len(hands) > 1:
         best_hand = get_best_hand(hands)
         winner = ''
+        # For only 1 winner
         if len(best_hand) == 1:
             winner = best_hand[0].name
         else:
