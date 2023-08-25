@@ -154,6 +154,16 @@ class Hand:
         fake_card = Card(rank, suit)
         self.fake_cards.append(fake_card)
 
+    def combine_all_cards(self):
+        """
+        Returns a sorted list of all real and fake cards
+        within this hand
+        """
+        new_cards = self.cards_sorted.copy()
+        new_cards.extend(self.fake_cards)
+        new_cards = self.sort(new_cards, False)
+        return new_cards
+
     def set_value(self):
         """
         Stores the value of the hand in its instance
@@ -400,7 +410,7 @@ class Hand:
                 # Adding the simulated wild cards to the sorted deck
                 for wild_rank in wildcard_ranks:
                     self.add_fake_card(wild_rank)
-                # Finding the best ranks for the remaining wild cards
+                # Finding the best ranks for the remaining fake cards
                 while wildcards > 0:
                     if high_rank < 14:
                         # Moving up the ranks until it reaches an Ace
@@ -940,31 +950,34 @@ def compare_subclasses(sub1, sub2):
     return '='
 
 
-def compare_high_cards(cards1, cards2):
+def compare_high_cards(hand1, hand2):
     """
     Compares the high cards of 2 hands and returns
     ">" if hand1 has higher cards, "<" if hand2 has
     higher cards, or "=" if they are equal
     """
     index = 0
+    cards1 = hand1.combine_all_cards()
+    cards2 = hand2.combine_all_cards()
     # Loops through all the cards until a difference is found,
     # or no cards are left
-    while True:
-        highcard1 = 0
-        highcard2 = 0
-        if index < len(cards1):
-            highcard1 = cards1[index]
-        if index < len(cards2):
-            highcard2 = cards2[index]
-        # If both hands went through all their cards without finding
-        # a difference, then they are identical
-        if highcard1 == 0 and highcard2 == 0:
-            return '='
-        comparison = compare_numbers(highcard1, highcard2)
-        # End the function once a difference is found
-        if comparison != '=':
-            return comparison
-        index += 1
+    # while True:
+
+    #     highcard1 = 0
+    #     highcard2 = 0
+    #     if index < len(cards1):
+    #         highcard1 = cards1[index]
+    #     if index < len(cards2):
+    #         highcard2 = cards2[index]
+    #     # If both hands went through all their cards without finding
+    #     # a difference, then they are identical
+    #     if highcard1 == 0 and highcard2 == 0:
+    #         return '='
+    #     comparison = compare_numbers(highcard1, highcard2)
+    #     # End the function once a difference is found
+    #     if comparison != '=':
+    #         return comparison
+    #     index += 1
 
 
 def compare_numbers(num1, num2):
