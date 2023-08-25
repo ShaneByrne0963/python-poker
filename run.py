@@ -732,6 +732,7 @@ def get_required_input(
     valid = False
     while not valid:
         user_input = input(message)
+        user_input = user_input.strip()
         if user_input == '':
             print_error(f'{input_type} is blank')
             continue
