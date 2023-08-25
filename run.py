@@ -273,32 +273,6 @@ class Hand:
             return of_kind_rank
         return None
 
-    def get_ranks(self):
-        """
-        Gets all ranks of cards in this hand, excluding
-        wild cards
-        """
-        ranks = []
-        for card in self.cards_sorted:
-            ranks.append(card.rank)
-        return ranks
-
-    def get_ranks_of_suit(self, suit):
-        """
-        Returns all the ranks of cards in this hand
-        that are of a given suit, including wildcards
-        """
-        suited_hand = []
-        # Adding the best card (Ace) for wild cards
-        wildcards = self.wildcards
-        while wildcards > 0:
-            suited_hand.append(14)
-            wildcards -= 1
-        for card in self.cards_sorted:
-            if card.suit == suit:
-                suited_hand.append(card.rank)
-        return suited_hand
-
     def is_flush(self):
         """
         Evaluates if the hand has 5 cards of the same suit,
@@ -916,13 +890,7 @@ def get_best_hand(hands):
         if 'Straight' in hand_name or 'Royal' in hand_name:
             best_hand.append(hand)
             continue
-        # Flush subscores contain the suit, which is a string
-        hand_cards = hand.get_ranks()
-        best_cards = best_hand[0].get_ranks()
-        if isinstance(hand_sub, str):
-            hand_cards = hand.get_ranks_of_suit(hand_sub)
-            best_cards = best_hand[0].get_ranks_of_suit(best_sub)
-        comparison = compare_high_cards(hand_cards, best_cards)
+        comparison = compare_high_cards(hand, best_hand)
         if comparison == '>':
             best_hand = [hand]
         elif comparison == '=':
