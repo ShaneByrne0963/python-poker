@@ -105,31 +105,40 @@ class Hand:
 
     def format_hand(self):
         """
-        Sorts the cards in descending order, removing
-        any wildcards and storing them in an integer
+        Updates the cards_sorted value of this hand, sorting
+        the cards in descending order
+        Sorts the cards in descending order in a dictionary,
+        removing any wildcards and storing them separately, and
+        setting self.cards_sorted to this dictionary
         """
-        # Resetting the sorted hand if previously sorted
-        self.cards_sorted = {
-            'no_wild': [],
-            'with_wild': []
-        }
         self.wildcards = 0
-        cards_template = self.cards.copy()
-        while len(cards_template) > 0:
-            # Finding the highest card in the list
-            highest_card = None
-            highest_value = 0
-            for card in cards_template:
-                card_val = card.rank
-                if card_val > highest_value:
-                    highest_card = card
-                    highest_value = card_val
-            if highest_card.is_wild():
+        for card in self.cards:
+            if card.is_wild():
                 self.wildcards += 1
-            else:
-                # Moving the highest card to the sorted cards dict
-                self.cards_sorted['no_wild'].append(highest_card)
-            cards_template.remove(highest_card)
+
+        sorted_cards = self.sort(self.cards, True)
+        self.cards_sorted['no_wild'] = sorted_cards
+        # Wild cards will be added later in get_value()
+        self.cards_sorted['with_wild'] = sorted_cards.copy()
+
+    def sort(self, hand_list, remove_wild):
+        """
+        Sorts a given hand by its rank in descending order
+        """
+        cards_temp = hand_list.copy()
+        cards_sorted = []
+        while len(cards_temp) > 0:
+            # Finding the highest ranking card in the list
+            highest_card = None
+            for card in cards_temp:
+                if (highest_card is None or
+                        card.rank > highest_card.rank):
+                    highest_card = card
+            # Only add wild cards if specified
+            if not (remove_wild and highest_card.is_wild()):
+                cards_sorted.append(highest_card)
+            cards_temp.remove(highest_card)
+        return cards_sorted
 
     def set_value(self):
         """
