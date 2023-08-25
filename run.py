@@ -161,6 +161,11 @@ class Hand:
         """
         new_cards = self.cards_sorted.copy()
         new_cards.extend(self.fake_cards)
+        # For Flushes, only cards of the same suit matter
+        if self.value['name'] == 'Flush':
+            new_cards = self.get_suit_only(
+                new_cards, self.value['subscore']
+            )
         new_cards = self.sort(new_cards, False)
         return new_cards
 
@@ -900,7 +905,7 @@ def get_best_hand(hands):
         if 'Straight' in hand_name or 'Royal' in hand_name:
             best_hand.append(hand)
             continue
-        comparison = compare_high_cards(hand, best_hand)
+        comparison = compare_high_cards(hand, best_hand[0])
         if comparison == '>':
             best_hand = [hand]
         elif comparison == '=':
