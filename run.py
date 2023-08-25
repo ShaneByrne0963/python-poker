@@ -255,11 +255,19 @@ class Hand:
     def is_of_kind(self, number, pairs):
         """
         Returns if the hand has has a certain number
-        of matching card ranks
+        of matching card ranks, and returns that rank
         """
         wildcards = self.wildcards
-        if pairs[0]['amount'] + wildcards >= number:
-            return pairs[0]['value']
+        highest_amount = pairs[0]['amount']
+        if highest_amount + wildcards >= number:
+            # Adding the wild cards to the sorted hand as the
+            # rank of the highest group of cards
+            of_kind_rank = pairs[0]['value']
+            while highest_amount < number:
+                self.add_phantom_card(of_kind_rank, '')
+                highest_amount += 1
+
+            return of_kind_rank
         return None
 
     def get_ranks(self):
