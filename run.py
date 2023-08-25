@@ -77,11 +77,10 @@ class Hand:
         """
         self.name = name
         self.cards = cards
+        self.cards_sorted = []
         self.wildcards = 0
-        self.cards_sorted = {
-            'no_wild': [],
-            'with_wild': []
-        }
+        # Used to store cards that wild cards are imitating
+        self.phantom_cards = []
         self.value = {
             'name': '',
             'score': 0,
@@ -102,14 +101,12 @@ class Hand:
             print_text += f'{card.description()}\t'
         print_text += self.value['name']
         print(print_text)
-        # For debugging
-        for key in self.cards_sorted:
-            desc_list = [key]
-            for card in self.cards_sorted[key]:
-                desc_list.append(get_card_description(
-                    card.rank, card.suit
-                ))
-            print(desc_list)
+        print_list = []
+        for card in self.cards_sorted:
+            desc = get_card_description(card.rank, card.suit)
+            print_list.append(desc)
+        print(print_list)
+        print(phantom_cards)
 
     def format_hand(self):
         """
@@ -124,10 +121,7 @@ class Hand:
             if card.is_wild():
                 self.wildcards += 1
 
-        sorted_cards = self.sort(self.cards, True)
-        self.cards_sorted['no_wild'] = sorted_cards
-        # Wild cards will be added later in get_value()
-        self.cards_sorted['with_wild'] = sorted_cards.copy()
+        self.cards_sorted = self.sort(self.cards, True)
 
     def sort(self, hand_list, remove_wild):
         """
@@ -150,16 +144,11 @@ class Hand:
 
     def add_phantom_card(self, rank, suit):
         """
-        Adds a card that does not belong to the deck to
-        cards_sorted, and then sorts the new hand. Used
-        to simulate wild cards
+        Adds a card that does not belong to the deck to the
+        hand, kept in phantom_cards
         """
-        simulated_card = Card(rank, suit)
-        self.cards_sorted['with_wild'].append(simulated_card)
-        new_sorted_hand = self.sort(
-            self.cards_sorted['with_wild'], False
-        )
-        self.cards_sorted['with_wild'] = new_sorted_hand
+        phantom_card = Card(rank, suit)
+        self.phantom_cards.append(phantom_card)
 
     def set_value(self):
         """
@@ -202,7 +191,7 @@ class Hand:
         if flush_suit is not None:
             return self.create_value_dict('Flush', flush_suit)
         # If the hand has 5 consecutive ranking cards
-        straight_high = self.is_straight(self.cards_sorted['no_wild'])
+        straight_high = self.is_straight(self.cards_sorted)
         if straight_high is not None:
             return self.create_value_dict('Straight', straight_high)
         # If the hand has 3 cards of the same rank
@@ -257,6 +246,7 @@ class Hand:
         Returns if the hand has has a certain number
         of matching card ranks, and returns that rank
         """
+        self.phantom_cards.clear()
         highest_amount = pairs[0]['amount']
         if highest_amount + self.wildcards >= number:
             # Adding the wild cards to the sorted hand as the
@@ -275,7 +265,7 @@ class Hand:
         wild cards
         """
         ranks = []
-        for card in self.cards_sorted['no_wild']:
+        for card in self.cards_sorted:
             ranks.append(card.rank)
         return ranks
 
@@ -290,7 +280,7 @@ class Hand:
         while wildcards > 0:
             suited_hand.append(14)
             wildcards -= 1
-        for card in self.cards_sorted['no_wild']:
+        for card in self.cards_sorted:
             if card.suit == suit:
                 suited_hand.append(card.rank)
         return suited_hand
@@ -315,7 +305,7 @@ class Hand:
         # appears in the hand
         values = []
         value_amount = []
-        for card in self.cards_sorted['no_wild']:
+        for card in self.cards_sorted:
             # Getting what property of the card will be checked
             # for repeats
             card_value = card.rank
@@ -359,6 +349,7 @@ class Hand:
         and, if true, returns the highest card in the
         straight. Returns None if false
         """
+        self.phantom_cards.clear()
         # Duplicating the wild cards as it will be altered
         # for this evaluation
         wildcards = self.wildcards
@@ -424,7 +415,7 @@ class Hand:
         for suit_sorting in CardType.suits:
             # Add an empty list for each suit
             suits.append([])
-            for card in self.cards_sorted['no_wild']:
+            for card in self.cards_sorted:
                 if card.suit == suit_sorting:
                     # Adds the card to the newest list
                     suits[-1].append(card)
