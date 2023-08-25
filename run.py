@@ -164,6 +164,16 @@ class Hand:
         new_cards = self.sort(new_cards, False)
         return new_cards
 
+    def get_suit_only(self, cards, suit):
+        """
+        Returns a hand that only contains a given suit
+        """
+        new_cards = []
+        for card in cards:
+            if card.suit == suit:
+                new_cards.append(suit)
+        return new_cards
+
     def set_value(self):
         """
         Stores the value of the hand in its instance
