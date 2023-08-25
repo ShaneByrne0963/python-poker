@@ -80,7 +80,7 @@ class Hand:
         self.cards_sorted = []
         self.wildcards = 0
         # Used to store cards that wild cards are imitating
-        self.phantom_cards = []
+        self.fake_cards = []
         self.value = {
             'name': '',
             'score': 0,
@@ -101,12 +101,16 @@ class Hand:
             print_text += f'{card.description()}\t'
         print_text += self.value['name']
         print(print_text)
-        print_list = []
+        print_list = ['Real:']
         for card in self.cards_sorted:
             desc = get_card_description(card.rank, card.suit)
             print_list.append(desc)
         print(print_list)
-        print(phantom_cards)
+        fake_list = ['Fake:']
+        for card in self.fake_cards:
+            desc = get_card_description(card.rank, card.suit)
+            fake_list.append(desc)
+        print(fake_list)
 
     def format_hand(self):
         """
@@ -142,13 +146,13 @@ class Hand:
             cards_temp.remove(highest_card)
         return cards_sorted
 
-    def add_phantom_card(self, rank, suit):
+    def add_fake_card(self, rank, suit):
         """
-        Adds a card that does not belong to the deck to the
-        hand, kept in phantom_cards
+        Adds a card that a wild card is imitating to the
+        hand. This card is not part of the main deck
         """
-        phantom_card = Card(rank, suit)
-        self.phantom_cards.append(phantom_card)
+        fake_card = Card(rank, suit)
+        self.fake_cards.append(fake_card)
 
     def set_value(self):
         """
@@ -246,14 +250,14 @@ class Hand:
         Returns if the hand has has a certain number
         of matching card ranks, and returns that rank
         """
-        self.phantom_cards.clear()
+        self.fake_cards.clear()
         highest_amount = pairs[0]['amount']
         if highest_amount + self.wildcards >= number:
             # Adding the wild cards to the sorted hand as the
             # rank of the highest group of cards
             of_kind_rank = pairs[0]['value']
             while highest_amount < number:
-                self.add_phantom_card(of_kind_rank, '')
+                self.add_fake_card(of_kind_rank, '')
                 highest_amount += 1
 
             return of_kind_rank
@@ -349,7 +353,7 @@ class Hand:
         and, if true, returns the highest card in the
         straight. Returns None if false
         """
-        self.phantom_cards.clear()
+        self.fake_cards.clear()
         # Duplicating the wild cards as it will be altered
         # for this evaluation
         wildcards = self.wildcards
@@ -389,16 +393,16 @@ class Hand:
                 print(wildcard_ranks)
                 # Adding the simulated wild cards to the sorted deck
                 for wild_rank in wildcard_ranks:
-                    self.add_phantom_card(wild_rank, '')
+                    self.add_fake_card(wild_rank, '')
                 # Finding the best ranks for the remaining wild cards
                 while wildcards > 0:
                     if high_rank < 14:
                         # Moving up the ranks until it reaches an Ace
                         high_rank += 1
-                        self.add_phantom_card(high_rank, '')
+                        self.add_fake_card(high_rank, '')
                     else:
                         # Moving down the ranks
-                        self.add_phantom_card(previous_rank, '')
+                        self.add_fake_card(previous_rank, '')
                         previous_rank -= 1
                     wildcards -= 1
                 return high_rank
