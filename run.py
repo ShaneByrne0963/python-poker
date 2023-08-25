@@ -146,7 +146,7 @@ class Hand:
             cards_temp.remove(highest_card)
         return cards_sorted
 
-    def add_fake_card(self, rank, suit):
+    def add_fake_card(self, rank, suit=''):
         """
         Adds a card that a wild card is imitating to the
         hand. This card is not part of the main deck
@@ -257,7 +257,7 @@ class Hand:
             # rank of the highest group of cards
             of_kind_rank = pairs[0]['value']
             while highest_amount < number:
-                self.add_fake_card(of_kind_rank, '')
+                self.add_fake_card(of_kind_rank)
                 highest_amount += 1
 
             return of_kind_rank
@@ -393,16 +393,16 @@ class Hand:
                 print(wildcard_ranks)
                 # Adding the simulated wild cards to the sorted deck
                 for wild_rank in wildcard_ranks:
-                    self.add_fake_card(wild_rank, '')
+                    self.add_fake_card(wild_rank)
                 # Finding the best ranks for the remaining wild cards
                 while wildcards > 0:
                     if high_rank < 14:
                         # Moving up the ranks until it reaches an Ace
                         high_rank += 1
-                        self.add_fake_card(high_rank, '')
+                        self.add_fake_card(high_rank)
                     else:
                         # Moving down the ranks
-                        self.add_fake_card(previous_rank, '')
+                        self.add_fake_card(previous_rank)
                         previous_rank -= 1
                     wildcards -= 1
                 return high_rank
@@ -437,20 +437,16 @@ class Hand:
         """
         # Stores the ranks of the full house
         house_ranks = []
-        wildcards = self.wildcards
         # Checking for the 3 of a Kind part of the Full House
         three_pair = self.is_of_kind(3, pairs)
         if three_pair is None:
             return None
         house_ranks.append(three_pair)
-        # Removing any wildcards that were used for the first part
-        # so they cannot be used again
-        if pairs[0]['amount'] < 3:
-            wildcards -= 3 - pairs[0]['amount']
-        # Checking for the pair
-        if pairs[1]['amount'] + wildcards < 2:
+        # Checking the second highest group of ranks
+        two_pair = pairs[1]['amount']
+        if two_pair < 2:
             return None
-        house_ranks.append(pairs[1]['value'])
+        house_ranks.append(two_pair)
         return house_ranks
 
     def take_from_deck(self, number):
