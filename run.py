@@ -77,9 +77,10 @@ class Hand:
         """
         self.name = name
         self.cards = cards
+        self.wildcards = 0
         self.cards_sorted = {
-            'cards': [],
-            'wildcards': 0
+            'no_wild': [],
+            'with_wild': []
         }
         self.value = {
             'name': '',
@@ -102,16 +103,17 @@ class Hand:
         print_text += self.value['name']
         print(print_text)
 
-    def sort(self):
+    def format_hand(self):
         """
         Sorts the cards in descending order, removing
         any wildcards and storing them in an integer
         """
         # Resetting the sorted hand if previously sorted
         self.cards_sorted = {
-            'cards': [],
-            'wildcards': 0
+            'no_wild': [],
+            'with_wild': []
         }
+        self.wildcards = 0
         cards_template = self.cards.copy()
         while len(cards_template) > 0:
             # Finding the highest card in the list
@@ -123,10 +125,10 @@ class Hand:
                     highest_card = card
                     highest_value = card_val
             if highest_card.is_wild():
-                self.cards_sorted['wildcards'] += 1
+                self.wildcards += 1
             else:
                 # Moving the highest card to the sorted cards dict
-                self.cards_sorted['cards'].append(highest_card)
+                self.cards_sorted['no_wild'].append(highest_card)
             cards_template.remove(highest_card)
 
     def set_value(self):
@@ -141,7 +143,7 @@ class Hand:
         starting with the highest value and working its way
         down until a match is found
         """
-        self.sort()
+        self.format_hand()
 
         pairs = self.get_repeating_values('rank')
         # If the hand has 5 cards of the same rank (with wildcards)
@@ -170,7 +172,7 @@ class Hand:
         if flush_suit is not None:
             return self.create_value_dict('Flush', flush_suit)
         # If the hand has 5 consecutive ranking cards
-        straight_high = self.is_straight(self.cards_sorted['cards'])
+        straight_high = self.is_straight(self.cards_sorted['no_wild'])
         if straight_high is not None:
             return self.create_value_dict('Straight', straight_high)
         # If the hand has 3 cards of the same rank
@@ -225,7 +227,7 @@ class Hand:
         Returns if the hand has has a certain number
         of matching card ranks
         """
-        wildcards = self.cards_sorted['wildcards']
+        wildcards = self.wildcards
         if pairs[0]['amount'] + wildcards >= number:
             return pairs[0]['value']
         return None
@@ -236,7 +238,7 @@ class Hand:
         wild cards
         """
         ranks = []
-        for card in self.cards_sorted['cards']:
+        for card in self.cards_sorted['no_wild']:
             ranks.append(card.rank)
         return ranks
 
@@ -247,11 +249,11 @@ class Hand:
         """
         suited_hand = []
         # Adding the best card (Ace) for wild cards
-        wildcards = self.cards_sorted['wildcards']
+        wildcards = self.wildcards
         while wildcards > 0:
             suited_hand.append(14)
             wildcards -= 1
-        for card in self.cards_sorted['cards']:
+        for card in self.cards_sorted['no_wild']:
             if card.suit == suit:
                 suited_hand.append(card.rank)
         return suited_hand
@@ -262,7 +264,7 @@ class Hand:
         returns the suit if it does, and None if it doesn't
         """
         suits = self.get_repeating_values('suit')
-        if suits[0]['amount'] + self.cards_sorted['wildcards'] >= 5:
+        if suits[0]['amount'] + self.wildcards >= 5:
             return suits[0]['value']
         return None
 
@@ -276,7 +278,7 @@ class Hand:
         # appears in the hand
         values = []
         value_amount = []
-        for card in self.cards_sorted['cards']:
+        for card in self.cards_sorted['no_wild']:
             # Getting what property of the card will be checked
             # for repeats
             card_value = card.rank
@@ -322,7 +324,7 @@ class Hand:
         """
         # Duplicating the wild cards as it will be altered
         # for this evaluation
-        wildcards = self.cards_sorted['wildcards']
+        wildcards = self.wildcards
         # Start at the lowest ranked card and work its way up
         previous_rank = 0
         straight_streak = 0
@@ -338,7 +340,7 @@ class Hand:
                 straight_streak = 1
                 previous_rank = rank
                 high_rank = rank
-                wildcards = self.cards_sorted['wildcards']
+                wildcards = self.wildcards
                 continue
             # If the rank is the same as the previous rank then
             # the loop will ignore it
@@ -371,7 +373,7 @@ class Hand:
         for suit_sorting in CardType.suits:
             # Add an empty list for each suit
             suits.append([])
-            for card in self.cards_sorted['cards']:
+            for card in self.cards_sorted['no_wild']:
                 if card.suit == suit_sorting:
                     # Adds the card to the newest list
                     suits[-1].append(card)
@@ -389,7 +391,7 @@ class Hand:
         """
         # Stores the ranks of the full house
         house_ranks = []
-        wildcards = self.cards_sorted['wildcards']
+        wildcards = self.wildcards
         # Checking for the 3 of a Kind part of the Full House
         three_pair = self.is_of_kind(3, pairs)
         if three_pair is None:
@@ -703,7 +705,10 @@ def get_hand_input(card_number):
         if contains_word(hand_input, 'random'):
             new_hand = Hand(player_name, [])
             deck.shuffle()
-            new_hand.take_from_deck(5)
+            random_cards = 5
+            if card_number > 0:
+                random_cards = card_number
+            new_hand.take_from_deck(random_cards)
             return new_hand
 
         # Splits the inputs into separate elements in a list
