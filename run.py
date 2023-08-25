@@ -948,6 +948,19 @@ def print_hand_table(hands, card_number):
     for hand in hands:
         hand.set_value()
         hand.print_hand()
+
+    # Displaying wild cards, if any
+    if len(deck.wildcards) > 0:
+        wild_text = 'Wild cards: '
+        for i in range(len(deck.wildcards)):
+            wild_card_text = str(deck.wildcards[i])
+            wild_text += f'*{wild_card_text}*'
+            # Commas to separate multiple wild cards
+            if i < len(deck.wildcards) - 1:
+                wild_text += ', '
+        print(wild_text)
+
+    # Displaying the winner for more than one hand
     if len(hands) > 1:
         best_hand = get_best_hand(hands)
         winner = ''
@@ -1179,7 +1192,7 @@ def start_round():
     hands and displaying the winner if more than one
     """
     # Resetting the player names and deck each round
-    deck = Deck()
+    deck.cards = deck.get_full()
     names.clear()
 
     wildcards = get_wildcards()
