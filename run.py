@@ -961,23 +961,22 @@ def compare_high_cards(hand1, hand2):
     cards2 = hand2.combine_all_cards()
     # Loops through all the cards until a difference is found,
     # or no cards are left
-    # while True:
-
-    #     highcard1 = 0
-    #     highcard2 = 0
-    #     if index < len(cards1):
-    #         highcard1 = cards1[index]
-    #     if index < len(cards2):
-    #         highcard2 = cards2[index]
-    #     # If both hands went through all their cards without finding
-    #     # a difference, then they are identical
-    #     if highcard1 == 0 and highcard2 == 0:
-    #         return '='
-    #     comparison = compare_numbers(highcard1, highcard2)
-    #     # End the function once a difference is found
-    #     if comparison != '=':
-    #         return comparison
-    #     index += 1
+    while True:
+        highcard1 = 0
+        highcard2 = 0
+        if index < len(cards1):
+            highcard1 = cards1[index].rank
+        if index < len(cards2):
+            highcard2 = cards2[index].rank
+        # If both hands went through all their cards without finding
+        # a difference, then they are identical
+        if highcard1 == 0 and highcard2 == 0:
+            return '='
+        comparison = compare_numbers(highcard1, highcard2)
+        # End the function once a difference is found
+        if comparison != '=':
+            return comparison
+        index += 1
 
 
 def compare_numbers(num1, num2):
