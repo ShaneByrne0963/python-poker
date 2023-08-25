@@ -294,9 +294,15 @@ class Hand:
         Evaluates if the hand has 5 cards of the same suit,
         returns the suit if it does, and None if it doesn't
         """
+        self.fake_cards.clear()
         suits = self.get_repeating_values('suit')
-        if suits[0]['amount'] + self.wildcards >= 5:
-            return suits[0]['value']
+        best_suit = suits[0]['value']
+        suit_amount = suits[0]['amount']
+        if suit_amount + self.wildcards >= 5:
+            while suit_amount < 5:
+                self.add_fake_card(14, best_suit)
+                suit_amount += 1
+            return best_suit
         return None
 
     def get_repeating_values(self, value_type):
