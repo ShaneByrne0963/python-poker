@@ -257,9 +257,8 @@ class Hand:
         Returns if the hand has has a certain number
         of matching card ranks, and returns that rank
         """
-        wildcards = self.wildcards
         highest_amount = pairs[0]['amount']
-        if highest_amount + wildcards >= number:
+        if highest_amount + self.wildcards >= number:
             # Adding the wild cards to the sorted hand as the
             # rank of the highest group of cards
             of_kind_rank = pairs[0]['value']
@@ -363,6 +362,7 @@ class Hand:
         # Duplicating the wild cards as it will be altered
         # for this evaluation
         wildcards = self.wildcards
+        wildcard_ranks = []
         # Start at the lowest ranked card and work its way up
         previous_rank = 0
         straight_streak = 0
@@ -379,31 +379,44 @@ class Hand:
                 previous_rank = rank
                 high_rank = rank
                 wildcards = self.wildcards
+                wildcard_ranks.clear()
                 continue
             # If the rank is the same as the previous rank then
             # the loop will ignore it
-            if rank < previous_rank:
-                if rank < previous_rank - 1:
+            if rank == previous_rank:
+                continue
+            if rank < previous_rank - 1:
+                wildcards -= 1
+                wildcard_ranks.append(previous_rank - 1)
+                # Starting the next iteration of the loop at the
+                # same card if a wild card is used in its place
+                i -= 1
+            straight_streak += 1
+            previous_rank -= 1
+            if straight_streak >= 5 - wildcards:
+                print(wildcards)
+                print(wildcard_ranks)
+                # Adding the simulated wild cards to the sorted deck
+                for wild_rank in wildcard_ranks:
+                    self.add_phantom_card(wild_rank, '')
+                # Finding the best ranks for the remaining wild cards
+                while wildcards > 0:
+                    if high_rank < 14:
+                        # Moving up the ranks until it reaches an Ace
+                        high_rank += 1
+                        self.add_phantom_card(high_rank, '')
+                    else:
+                        # Moving down the ranks
+                        self.add_phantom_card(previous_rank, '')
+                        previous_rank -= 1
                     wildcards -= 1
-                    # Starting the next iteration of the loop at the
-                    # same card if a wild card is used in its place
-                    i -= 1
-                straight_streak += 1
-                previous_rank -= 1
-                if straight_streak >= 5 - wildcards:
-                    # Adding any spare wild cards to the high end
-                    # of the straight
-                    high_rank += wildcards
-                    # Capping the rank value at 14 (Ace)
-                    if high_rank > 14:
-                        high_rank = 14
-                    return high_rank
+                return high_rank
         return None
 
     def is_straight_flush(self):
         """
         Checks if 5 cards are ranked in consecutive order
-        and of the same suit, if true, returns the highest card
+        and of the same suit. If true, returns the highest card
         in the straight. Returns None if false
         """
         # Sorts each card by its suit into a list of lists
