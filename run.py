@@ -896,17 +896,13 @@ def get_best_hand(hands):
         # greater subscore will prevail
         hand_sub = hand.value['subscore']
         best_sub = best_hand[0].value['subscore']
-        comparison = compare_subclasses(hand_sub, best_sub)
+        comparison = compare_subscores(hand_sub, best_sub)
         if comparison != '=':
             if comparison == '>':
                 best_hand = [hand]
             continue
-        # If a straight gets to this point, then the ranks
-        # of the hands are the exact same, so it's a draw
-        hand_name = hand.value['name']
-        if 'Straight' in hand_name or 'Royal' in hand_name:
-            best_hand.append(hand)
-            continue
+        # If both the score and subscore match, then check
+        # which has the higher ranked cards
         comparison = compare_high_cards(hand, best_hand[0])
         if comparison == '>':
             best_hand = [hand]
@@ -916,9 +912,9 @@ def get_best_hand(hands):
     return best_hand
 
 
-def compare_subclasses(sub1, sub2):
+def compare_subscores(sub1, sub2):
     """
-    Compares 2 subclasses and returns a string
+    Compares 2 subscores and returns a string
     '<', '>' or '='
     """
     # For "of Kind" and Straight hand values
