@@ -101,16 +101,6 @@ class Hand:
             print_text += f'{card.description()}\t'
         print_text += self.value['name']
         print(print_text)
-        print_list = ['Real:']
-        for card in self.cards_sorted:
-            desc = get_card_description(card.rank, card.suit)
-            print_list.append(desc)
-        print(print_list)
-        fake_list = ['Fake:']
-        for card in self.fake_cards:
-            desc = get_card_description(card.rank, card.suit)
-            fake_list.append(desc)
-        print(fake_list)
 
     def format_hand(self):
         """
@@ -564,10 +554,12 @@ class CardType:
             return None
         return best_matches
 
-    def find_values(self, words, value_type):
+    def find_values(self, words, value_type, remove_value=False):
         """
         Gets all the ranks or suits found in an input
         """
+        # Removing values from words without affecting the original list
+        words_copy = words.copy()
         found_values = []
         # Finding out what to compare the words to
         checking_values = (
@@ -578,7 +570,9 @@ class CardType:
             value_to_check = (
                 get_rank_name(value) if value_type == 'rank' else value
             )
-            found_value = self.find_single_value(words, value_to_check)
+            found_value = self.find_single_value(
+                words_copy, value_to_check
+            )
 
             if found_value is not None:
                 # Returns both the word that was found and the word that
@@ -588,6 +582,11 @@ class CardType:
                     'found': found_value
                 }
                 found_values.append(val_object)
+                # If specified, characters can only be used once
+                if remove_value:
+                    words_copy = self.remove_value(
+                        words_copy, found_value
+                    )
         return found_values
 
     def find_single_value(self, words, value):
@@ -836,7 +835,9 @@ def get_wildcards():
                     # Exiting the for loop
                     break
                 card = CardType(card_text)
-                ranks = card.find_values(card_text.split(' '), 'rank')
+                ranks = card.find_values(
+                    card_text.split(' '), 'rank', True
+                )
                 if len(ranks) == 0:
                     print_error(f'No ranks found in "{card_text}"')
                     is_valid = False
