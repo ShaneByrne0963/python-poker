@@ -190,7 +190,7 @@ class Hand:
             current_kind = 14
             for i in range(self.wildcards):
                 self.add_fake_card(current_kind)
-        # If the hand has 5 cards of the same rank (with wildcards)
+        # If the hand has 5 cards of the same rank
         else:
             current_kind = self.is_of_kind(5, pairs)
         if current_kind is not None:
@@ -391,8 +391,6 @@ class Hand:
             straight_streak += 1
             previous_rank -= 1
             if straight_streak >= 5 - wildcards:
-                print(wildcards)
-                print(wildcard_ranks)
                 # Adding the simulated wild cards to the sorted deck
                 for wild_rank in wildcard_ranks:
                     self.add_fake_card(wild_rank)
@@ -702,21 +700,15 @@ def validate_hand(cards_list, card_number):
     card_len = len(cards_list)
     # All hands must have the same length once one is entered
     if card_number == 0:
-        enough_cards = card_len >= 5 and card_len <= 8
+        enough_cards = number_in_range('card', card_len, 5, 8)
     else:
-        enough_cards = card_len == card_number
-
-    # Prints an error if the length does not meet the requirements
-    if not enough_cards:
-        card_text = 'between 5 and 8'
-        if card_number > 0:
-            card_text = str(card_number)
-        print_error(
-            f'Need {card_text} cards. You have given {card_len}'
+        enough_cards = number_in_range(
+            'card', card_len, card_number, card_number
         )
-    else:
-        formatted_hand = convert_hand(cards_list)
-        return formatted_hand
+    if not enough_cards:
+        return None
+    formatted_hand = convert_hand(cards_list)
+    return formatted_hand
 
 
 def get_hand_input(card_number):
@@ -1192,6 +1184,29 @@ def user_allows(message):
             return False
         else:
             print('Please enter Yes (Y) or No (N)')
+
+
+def number_in_range(name, number, low_range, high_range):
+    """
+    Returns if a given number is within a certain range,
+    and prints an error if it isn't
+    """
+    if number >= low_range and number <= high_range:
+        return True
+    # Building the error sentence
+    error_str = ''
+    if low_range == high_range:
+        error_str += f'Need exactly {low_range} '
+    elif number > high_range:
+        error_str = 'Can only have '
+        if low_range < high_range:
+            error_str += ' up to '
+        error_str += f'{high_range} '
+    else:
+        error_str = f'Need at least {low_range} '
+    error_str += f'{name}s. You have entered {number}'
+    print_error(error_str)
+    return False
 
 
 def string_to_list(text):
