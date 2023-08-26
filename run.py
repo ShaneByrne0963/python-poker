@@ -184,8 +184,15 @@ class Hand:
         self.format_hand()
 
         pairs = self.get_repeating_values('rank')
+        current_kind = None
+        # If all the cards in the hand are wild, set them all to Ace
+        if len(self.cards_sorted) == 0:
+            current_kind = 14
+            for i in range(self.wildcards):
+                self.add_fake_card(current_kind)
         # If the hand has 5 cards of the same rank (with wildcards)
-        current_kind = self.is_of_kind(5, pairs)
+        else:
+            current_kind = self.is_of_kind(5, pairs)
         if current_kind is not None:
             return self.create_value_dict('5 of a Kind', current_kind)
         # If the hand has 5 consecutive ranking cards of the same suit
