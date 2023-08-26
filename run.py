@@ -886,6 +886,16 @@ def get_rank_value(rank_name):
     return int(rank_name)
 
 
+def get_hand_names(hands):
+    """
+    Returns a list of all names from a list of hands
+    """
+    hand_names = []
+    for hand in hands:
+        hand_names.append(hand.name)
+    return hand_names
+
+
 def get_best_hand(hands):
     """
     Returns the hand with the best value out of a
@@ -1043,9 +1053,7 @@ def print_winning_hands(hands):
         else:
             # Building the sentence that displays each winner
             winner = 'Draw between '
-            winning_names = []
-            for hand in best_hand:
-                winning_names.append(hand.name)
+            winning_names = get_hand_names(best_hand)
             winner += get_list_as_sentence(winning_names)
         print(f'Winning hand: {winner}')
 
@@ -1320,6 +1328,14 @@ def start_round():
             break
         if not user_allows('\nDo you wish to add another hand?'):
             break
+    # Congratulates the winner at the end of the round
+    if len(player_hands) > 1:
+        winners = get_best_hand(player_hands)
+        winning_names = get_hand_names(winners)
+        winner_text = 'Congratulations '
+        winner_text += get_list_as_sentence(winning_names)
+        winner_text += '! You won!'
+        print(winner_text)
 
 
 def main():
