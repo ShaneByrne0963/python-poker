@@ -1031,7 +1031,7 @@ def print_wildcards():
     if len(deck.wildcards) > 0:
         wild_text = 'Wild cards: '
         for i in range(len(deck.wildcards)):
-            wild_card_text = str(deck.wildcards[i])
+            wild_card_text = get_rank_name(deck.wildcards[i])
             wild_text += f'*{wild_card_text}*'
             # Commas to separate multiple wild cards
             if i < len(deck.wildcards) - 1:
