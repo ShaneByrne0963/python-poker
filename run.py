@@ -805,14 +805,14 @@ def get_card_description(rank, suit):
 def get_wildcards():
     """
     Requests the user to enter a set of wild cards that
-    can affect the hand
+    can affect the hand. Can have up to 3
     """
     request_message = 'Do you wish to include wildcards in your game?\n'
     request_message += '- Wild cards are cards that can take form of any\n'
     request_message += '  rank or suit to make the best possible hand.'
     if user_allows(request_message):
         while True:
-            print('Please enter any wild cards')
+            print('Please enter up to 3 wild cards')
             print('- Only enter the rank of the card, i.e. 2 - Ace')
             wildcards = input('Wild Cards: ')
             # Adds a gap between the input and the next print
@@ -846,7 +846,9 @@ def get_wildcards():
             # Only return the wild cards once all of them are valid.
             # Repeat the while loop if there are invalid wild cards
             if is_valid:
-                return wildcard_ranks
+                wild_number = len(wildcard_ranks)
+                if number_in_range('wild card', wild_number, 0, 3):
+                    return wildcard_ranks
     else:
         return []
 
@@ -1200,7 +1202,7 @@ def number_in_range(name, number, low_range, high_range):
     elif number > high_range:
         error_str = 'Can only have '
         if low_range < high_range:
-            error_str += ' up to '
+            error_str += 'up to '
         error_str += f'{high_range} '
     else:
         error_str = f'Need at least {low_range} '
