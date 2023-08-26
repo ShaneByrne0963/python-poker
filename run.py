@@ -1023,16 +1023,28 @@ def print_winning_hands(hands):
         else:
             # Building the sentence that displays each winner
             winner = 'Draw between '
-            length = len(best_hand)
-            for i in range(length):
-                if i == length - 1:
-                    winner += 'and '
-                winner += best_hand[i].name
-                if i < length - 2:
-                    winner += ','
-                if i < length - 1:
-                    winner += ' '
+            winning_names = []
+            for hand in best_hand:
+                winning_names.append(hand.name)
+            winner += get_list_as_sentence(winning_names)
         print(f'Winning hand: {winner}')
+
+
+def get_list_as_sentence(my_list):
+    """
+    Returns a list of elements as a string in a
+    readable sentence, with every element separated
+    by a comma and an "and" for the last one
+    """
+    sentence = ''
+    length = len(my_list)
+    for i in range(length):
+        sentence += my_list[i]
+        if i == length - 2:
+            sentence += ' and '
+        elif i < length - 2:
+            sentence += ', '
+    return sentence
 
 
 def print_error(message, bullet_points=None):
