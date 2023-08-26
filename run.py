@@ -93,12 +93,23 @@ class Hand:
         Prints each card in this hand to the terminal
         """
         print_text = f'{self.name}:'
+        # Adding the spacing after the player name
         if len(print_text) >= 8:
             print_text += '\t'
         else:
             print_text += '\t\t'
+        # Printing each card
         for card in self.cards:
-            print_text += f'{card.description()}\t'
+            card_desc = card.description()
+            print_text += card_desc
+            if len(self.cards) < 6:
+                print_text += '\t'
+            else:
+                # Reducing the spacing for larger hands
+                space_amount = 6 - len(card_desc)
+                while space_amount > 0:
+                    print_text += ' '
+                    space_amount -= 1
         print_text += self.value['name']
         print(print_text)
 
@@ -980,9 +991,18 @@ def print_hand_table(hands, card_number):
     # Displaying wild cards first, if any
     print_wildcards()
 
+    # Printing the heading labels
     heading = 'Name:\t\tCards:'
     for i in range(card_number):
-        heading += '\t'
+        if card_number > 6:
+            # 6 spaces for each card, because "*10S*", the
+            # longest card string, has 5 chars, plus 1 for
+            # spacing. Skipping the first as "Cards:" has
+            # 6 characters
+            if i > 0:
+                heading += '      '
+        else:
+            heading += '\t'
     heading += 'Value:'
     print(heading)
     for hand in hands:
