@@ -167,3 +167,5 @@ Python Poker has been deployed to the Code Institute mock terminal on Heroku. Th
   - Click "Create repository from template". Codeanywhere will begin to build a new project from that template.
 
 ## Credits
+
+-[Tutorial on "# region" to create expandible blocks of text](https://github.com/microsoft/vscode-python/issues/1847#issuecomment-733200638)
