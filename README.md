@@ -37,13 +37,13 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 ### User Interface
 
-- **Introduction and Wild Cards**
-    - Python Poker begins with a short paragraph clearly stating its purpose to the user
-    - The paragraph was kept short to prevent overwhelming the user with information upon starting the program
-    - Sections of text are often separated by a blank line to further improve readability
-- ![The introduction to Python Poker](assets/images/readme/introduction.jpg)
+- **Overview**
+    - All bodies of text instructing the user on how to navigate through the program are kept as short as possible to prevent overwhelming the user with information
+    - Sections of text are separated by a blank line to improve readibility
+- **Wild Cards**
     - The user is first asked if their current round of poker includes wild cards. This is a simple yes/no question, which is clearly stated beside the answer input
     - Wild cards are requested before any player hands because all hands share the same wild cards
+- ![The introduction to Python Poker](assets/images/readme/introduction.jpg)
     - If the user responds with an answer that does not resemble "Yes" or "No", a message that explains this error will appear and the user will be asked again, until a yes/no answer is detected
 - ![Yes or no answer validation](assets/images/readme/yes-or-no.jpg)
     - If the user answers with no, then the wild cards section will be skipped and the program will move on to the next section
