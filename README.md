@@ -128,9 +128,25 @@ Python Poker was tested using [Code Institute's pep8 Validator](https://pep8ci.h
 
 ### Unfixed Bugs
 
+- No unfixed bugs
+
 ## Deployment and Local Development
 
 ### Deploy on Heroku
+
+Python Poker has been deployed to the Code Institute mock terminal on Heroku. The steps to deploy are as follows:
+- Navigate to [Heroku's main dashboard](https://dashboard.heroku.com/apps)
+- On the upper right hand side of the site, click on "New", then "Create new app"
+- Give the app a name, select your region, and click "Create app"
+- Once the app is created, navigate to the "Settings" tab
+- Scroll down to the "Config Vars" section and click "Reveal Config Vars". Two text input fields should appear
+- For the KEY input, enter "Port" and for the VALUE input enter "8000"
+- Scroll down to Buildpacks and click "Add buildpack", then select "Python" and then "Save changes"
+- Repeat the previous step, but select "nodejs" instead of Python
+- Return to the top of the page and navigate back to the "Deploy" tab
+- In the Deployment method section, select GitHub and connect to GitHub underneath
+- Search for the desired repository (For this project I used "python-poker") and click "Connect" once found
+- Underneath, you can enable automatic deploys or deploy the workspace manually. Select one and the workspace will be deployed
 
 ### Cloning Repositories
 
