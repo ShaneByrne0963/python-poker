@@ -150,6 +150,20 @@ Python Poker has been deployed to the Code Institute mock terminal on Heroku. Th
 
 ### Cloning Repositories
 
+- The project was cloned onto my desktop. The steps to clone are as follows:
+  - In the GitHub repository, click on the green button that says "Code". A drop-down menu will appear.
+  - In the "Local" tab of the drop-down, there will be a link under the "HTTPS" section. Click the copy button to the right of the link.
+  - In the search bar of your PC desktop, search for terminal and open.
+  - Type the following command: `git clone https://github.com/ShaneByrne0963/python-poker.git`. (The link is what was copied to the clipboard)
+  - The repository will be cloned to your desktop.
+
 ### Forking Repositories
+
+- Theis project was created using a forked repository created by Code Institute. This repository can be found [here](https://github.com/Code-Institute-Org/p3-template). The steps to fork are as follows:
+  - Navigate to the page of the repository you wish to fork.
+  - Click on the green button that says "Use this template". A drop-down will appear underneath, and select "create a new repository"
+  - Enter a repository name where specified.
+  - Ensure the workspace is set to public
+  - Click "Create repository from template". Codeanywhere will begin to build a new project from that template.
 
 ## Credits
