@@ -823,7 +823,7 @@ def get_wildcards():
     request_message += '  rank or suit to make the best possible hand.'
     if user_allows(request_message):
         while True:
-            print('Please enter up to 3 wild cards')
+            print('Please enter up to 3 wild cards, separated by a comma')
             print('- Only enter the rank of the card, i.e. 2 - Ace')
             wildcards = input('Wild Cards: ')
             # Adds a gap between the input and the next print
