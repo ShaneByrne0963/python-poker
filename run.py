@@ -826,43 +826,50 @@ def get_wildcards():
             print('Please enter up to 3 wild cards, separated by a comma')
             print('- Only enter the rank of the card, i.e. 2 - Ace')
             wildcards = input('Wild Cards: ')
+            wildcards = wildcards.strip()
             # Adds a gap between the input and the next print
             print('')
             if wildcards == '':
-                if user_allows('No wild cards entered. Continue?'):
+                if user_allows('No wild cards entered. Proceed anyway?'):
                     return []
                 else:
                     continue
-            cards_list = wildcards.split(',')
-            wildcard_ranks = []
-            is_valid = True
-            # Checking each input for a valid rank
-            for card_text in cards_list:
-                card_text = card_text.strip()
-                # Printing an error if an empty input is detected
-                if card_text == '':
-                    print_error('Blank card detected')
-                    is_valid = False
-                    # Exiting the for loop
-                    break
-                card = CardType(card_text)
-                ranks = card.find_values(
-                    card_text.split(' '), 'rank', True
-                )
-                if len(ranks) == 0:
-                    print_error(f'No ranks found in "{card_text}"')
-                    is_valid = False
-                    break
-                for rank in ranks:
-                    wildcard_ranks.append(rank['value'])
-            # Only return the wild cards once all of them are valid.
-            # Repeat the while loop if there are invalid wild cards
-            if is_valid:
-                wild_number = len(wildcard_ranks)
-                if number_in_range('wild card', wild_number, 0, 3):
-                    return wildcard_ranks
+            wildcard_ranks = validate_wildcards(wildcards)
+            if wildcard_ranks is not None:
+                return wildcard_ranks
     else:
         return []
+
+
+def validate_wildcards(wildcard_input):
+    """
+    Gets a list of wild cards from an input, returning the list if
+    valid and printing an error if not
+    """
+    cards_list = wildcard_input.split(',')
+    wildcard_ranks = []
+    # Checking each input for a valid rank
+    for card_text in cards_list:
+        card_text = card_text.strip()
+        # Printing an error if an empty input is detected
+        if card_text == '':
+            print_error('Blank card detected')
+            return None
+        card = CardType(card_text)
+        ranks = card.find_values(
+            card_text.split(' '), 'rank', True
+        )
+        if len(ranks) == 0:
+            print_error(f'No ranks found in "{card_text}"')
+            return None
+        for rank in ranks:
+            wildcard_ranks.append(rank['value'])
+    # Only return the wild cards once all of them are valid.
+    # Repeat the while loop if there are invalid wild cards
+    wild_number = len(wildcard_ranks)
+    if number_in_range('wild card', wild_number, 0, 3):
+        return wildcard_ranks
+    return None
 
 
 def get_rank_name(rank_number):

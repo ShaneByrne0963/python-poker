@@ -21,7 +21,8 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 ![The user is requested to enter their hand](assets/images/readme/features/hand-input.jpg)
 
 - Up to 3 wild cards, which are special cards that can take form of any rank or suit, can be included and specified by the user
-- Wild cards are commonly used in poker games, and can be tricky for new players to decide what type of card is best used in place of them, so they were included to inform the user the best hand they can make with them
+- Wild cards consist of card ranks that already exist in the deck, i.e. 2 - Ace, and will replace these card ranks for the round
+- These are commonly used in poker games, and can be tricky for new players to decide what type of card is best used in place of them, so they were included to inform the user the best hand they can make with them
 
 ![The user is requested to enter wild cards](assets/images/readme/features/wild-cards.jpg)
 
@@ -45,7 +46,10 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
     - If the user responds with an answer that does not resemble "Yes" or "No", a message that explains this error will appear and the user will be asked again, until a yes/no answer is detected
 - ![Yes or no answer validation](assets/images/readme/features/yes-or-no.jpg)
     - If the user answers with no, then the wild cards section will be skipped and the program will move on to the next section
-    - If answered with yes, the user will be asked to enter
+    - If answered with yes, the user will be asked to enter their wild cards, requesting each card to be separated by a comma
+    - If the user does not follow the instructions, or makes a mistake, the user will be notified of the issue and will be asked to enter their input again
+- ![An error is displayed for invalid inputs](assets/images/readme/features/wild-card-error.JPG)
+    - If the user does not enter any values, 
 
 ### Future Features
 
