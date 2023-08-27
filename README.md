@@ -81,6 +81,12 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 ### Future Features
 
+- A communal set of cards that are used by all players, for example, the "Flop", "Turn" and "River" in Texas Hold'em
+- Joker cards that can be added in the wild cards section
+- The option for the user to see every rank and suit to help very new poker players enter their hand
+- An explanation as to why a hand has a certain value, and the percentage chance to get such a hand
+- An in-depth explanation for why a particular player won
+
 ## Data Model
 
 ## Testing
