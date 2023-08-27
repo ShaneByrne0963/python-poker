@@ -49,7 +49,9 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
     - If answered with yes, the user will be asked to enter their wild cards, requesting each card to be separated by a comma
     - If the user does not follow the instructions, or makes a mistake, the user will be notified of the issue and will be asked to enter their input again
 - ![An error is displayed for invalid inputs](assets/images/readme/features/wild-card-error.JPG)
-    - If the user does not enter any values, 
+    - If the user does not enter any values, they will be asked if they want to proceed without wild cards
+    - This is done in case the user changed their mind about including wild cards in their game after saying yes
+- ![User can continue without wild cards if none entered](assets/images/readme/features/no-wild-cards.jpg)
 
 ### Future Features
 
