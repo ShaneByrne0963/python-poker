@@ -856,14 +856,15 @@ def validate_wildcards(wildcard_input):
             print_error('Blank card detected')
             return None
         card = CardType(card_text)
-        ranks = card.find_values(
-            card_text.split(' '), 'rank', True
-        )
+        rank_words = card_text.split(' ')
+        ranks = card.find_values(rank_words, 'rank', True)
         if len(ranks) == 0:
             print_error(f'No ranks found in "{card_text}"')
             return None
         for rank in ranks:
-            wildcard_ranks.append(rank['value'])
+            rank_value = rank['value']
+            if rank_value not in wildcard_ranks:
+                wildcard_ranks.append(rank['value'])
     # Only return the wild cards once all of them are valid.
     # Repeat the while loop if there are invalid wild cards
     wild_number = len(wildcard_ranks)
