@@ -31,6 +31,8 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 - Once the round has concluded, the program will give the option to start an entirely new round, and will continue doing so until the user ends the program
 
+![The option to start a new round](assets/images/readme/features/multiple-rounds.JPG)
+
 ### User Interface
 
 ### Future Features
