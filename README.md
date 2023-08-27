@@ -21,6 +21,7 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 ![The user is requested to enter their hand](assets/images/readme/features/hand-input.jpg)
 
 - Up to 3 wild cards, which are special cards that can take form of any rank or suit, can be included and specified by the user
+- Wild cards are commonly used in poker games, and can be tricky for new players to decide what type of card is best used in place of them, so they were included to inform the user the best hand they can make with them
 
 ![The user is requested to enter wild cards](assets/images/readme/features/wild-cards.jpg)
 
@@ -34,6 +35,17 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 ![The option to start a new round](assets/images/readme/features/multiple-rounds.JPG)
 
 ### User Interface
+
+- **Introduction and Wild Cards**
+    - Python Poker begins with a short paragraph clearly stating its purpose to the user
+    - The paragraph was kept short to prevent overwhelming the user with information upon starting the program
+    - Sections of text are often separated by a blank line to further improve readability
+- ![The introduction to Python Poker](assets/images/readme/features/introduction.jpg)
+    - The user is first asked if their current round of poker includes wild cards. This is a simple yes/no question, which is clearly stated beside the answer input
+    - If the user responds with an answer that does not resemble "Yes" or "No", a message that explains this error will appear and the user will be asked again, until a yes/no answer is detected
+- ![Yes or no answer validation](assets/images/readme/features/yes-or-no.jpg)
+    - If the user answers with no, then the wild cards section will be skipped and the program will move on to the next section
+    - If answered with yes, the user will be asked to enter
 
 ### Future Features
 

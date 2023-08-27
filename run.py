@@ -654,7 +654,7 @@ class CardType:
             return None
         card_objects = self.get()
         if card_objects is not None:
-            # If the evaluation finds more than one card in an input
+            # Only 1 card should exist in each input
             if len(card_objects) > 1:
                 # Printing out each card found in the error
                 found_cards = []
@@ -838,6 +838,7 @@ def get_wildcards():
             is_valid = True
             # Checking each input for a valid rank
             for card_text in cards_list:
+                card_text = card_text.strip()
                 # Printing an error if an empty input is detected
                 if card_text == '':
                     print_error('Blank card detected')
@@ -1236,10 +1237,7 @@ def number_in_range(name, number, low_range, high_range):
     if low_range == high_range:
         error_str += f'Need exactly {low_range} '
     elif number > high_range:
-        error_str = 'Can only have '
-        if low_range < high_range:
-            error_str += 'up to '
-        error_str += f'{high_range} '
+        error_str = f'Can only have up to {high_range} '
     else:
         error_str = f'Need at least {low_range} '
     error_str += f'{name}s. You have entered {number}'
