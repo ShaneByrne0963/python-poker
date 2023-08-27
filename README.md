@@ -62,6 +62,8 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
     - After a valid name has been entered, this new player will be welcomed and asked to enter the cards in their hand
     - The program clearly states the hand must contain between 5 and 8 cards, each being separated by a comma, and must contain a rank and a suit
 - ![Prompting the user for a list of cards](assets/images/readme/hand-prompt.jpg)
+    - Once a hand has been entered, all future hands must have the same amount of cards as the first hand. This will be updated in the instructions
+- ![Instructions with updated number of cards](assets/images/readme/static-card-number.JPG)
 - **Reading the User's Input**
     - Once the user enters their list of cards, each card will be checked for a rank and a suit.
     - The characters of the input are compared to the characters of each rank and suit. If at least 75% the input's characters also exist in the rank or suit it is evaluating, then the program assumes the user meant to enter that rank/suit. However, the first character has to be the same.
@@ -70,6 +72,12 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
     - If the text input consists of only one word, the characters of the rank and suit will be searched for through the input, attempting to find the best matching rank and suit
 - ![Single worded inputs are taken into consideration](assets/images/readme/one-word-input.jpg)
     - This type of word evaluation is done with every input request that is looking for a word, which greatly improves the usability throughout the program
+- **Displaying the Hands**
+    - Once a valid hand has been entered, a table containing all of the entered hands will be displayed
+    - If more than one hand exists, the winner will be added under the table
+    - Wild cards are highlighted in asterices (*). To remind the user these cards are wild, the list of wild cards stated above the table is also highlighted in this way
+    - The table is laid out in a way that can display a lot of information in an easy to read manner, without requiring the user to scroll through the terminal
+- ![A table containing all of the entered hands](assets/images/readme/hand-table.JPG)
 
 ### Future Features
 
