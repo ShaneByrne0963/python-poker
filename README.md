@@ -93,6 +93,26 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 ### Bugs
 
+Bug #1 (8/8/23): "TypeError: 'in `<string>`' requires string as left operand, not int" error displays when getting the rank of a card
+- Expected result: There should be no TypeError when finding the card rank
+- Solution: If an input is just a number, then it will be declared as an integer. Use the `str()` function on the value to fix this
+
+Bug #2 (8/8/23): Console is printing None when printing the cards after validation
+- Expected result: The console should only print the cards
+- Solution: Human error. I passed the `Hand.print_hand()` function as an argument for the `print()` function. However, this function is a void function and returns no values, which is why the console printed "None" at the end. To fix, remove the print function and just call `Hand.print_hand()` on its own
+
+Bug #3 (16/8/23): Hands with wild cards are returning better values than they actually have
+- Expected result: Wild cards should accurately give the best hand the player can make with them
+- Solution: The algorithm for checking how many repeating ranks occur in a hand was using the unsorted hand list, which contained the wild cards. This meant that if the hand contained multiple wild cards, then the wild cards themselves would be considered as pairs. Then the wild cards would be added on top of those cards effectively doubling those cards according to the hand evaluation. To fix this, check the sorted list, which has the wild cards removed from it, for repeating ranks instead.
+
+Bug #4 (25/8/23): Wild cards not saving once round starts
+- Expected result: Wild cards should remain until a new round has started
+- Solution: The deck is stored in a global variable. on `start_round()` call, this variable was set to a new instance of Deck each round. This way of doing it resulted of a different local variable, leaving the global variable unchanged. To fix this, call the deck instance's own function `get_full()`, which returns a list of all 52 cards in a deck, and set it's cards to what it returns
+
+Bug #5 (25/8/23): User can enter blank player name by entering only a space
+- Expected result: Player names must contain at least 1 character
+- Solution: Strip the input of any white space using the `strip()` function
+
 ### Manual Testing
 
 ### Validator Testing
