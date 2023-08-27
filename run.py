@@ -1334,7 +1334,7 @@ def start_round():
         winning_names = get_hand_names(winners)
         winner_text = 'Congratulations '
         winner_text += get_list_as_sentence(winning_names)
-        winner_text += '! You won!'
+        winner_text += '! You won!\n'
         print(winner_text)
 
 
@@ -1356,7 +1356,7 @@ def main():
 
     while True:
         start_round()
-        if not user_allows('\nDo you want to start another round?'):
+        if not user_allows('Do you want to start another round?'):
             break
     print('Thank you for using Python Poker! Goodbye!')
 

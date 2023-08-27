@@ -29,6 +29,8 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 ![Multiple players hands displayed in a table](assets/images/readme/features/multiple-players.jpg)
 
+- Once the round has concluded, the program will give the option to start an entirely new round, and will continue doing so until the user ends the program
+
 ### User Interface
 
 ### Future Features
