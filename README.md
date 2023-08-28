@@ -122,7 +122,7 @@ It also keeps track of how many of these cards are wild.
     - `get_value` to return a dictionary of information about the best possible value for the hand
     - `get_repeating_values` to return a list of groups of either ranks or suits in the hand, and
     - `get_suit_only` to return a list of Card instances in the hand that have a particular suit
-- A combination of these methods, as well as other methods that the class has, are used to determine the value of each hand and which hand is the best 
+- A combination of these methods, as well as other methods that the class has, are used to determine the value of each hand and which hand is the best
 
 ## Testing
 
@@ -156,6 +156,8 @@ Bug #5 (25/8/23): User can enter blank player name by entering only a space
 - Solution: Strip the input of any white space using the `strip()` function
 
 ### Manual Testing
+
+Due to the extensive testing required by this program, manual testing is recorded in a separate file and can be found [here](testing.md)
 
 ### Validator Testing
 
