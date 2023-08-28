@@ -1232,13 +1232,14 @@ def user_allows(message):
     while True:
         print(message)
         answer = input('Your answer (Y/N): ')
+        answer = answer.strip()
         print('')
         if contains_word(answer, 'Yes'):
             return True
         elif contains_word(answer, 'No'):
             return False
         else:
-            print('Please enter Yes (Y) or No (N)')
+            print('Please enter Yes (Y) or No (N)\n')
 
 
 def number_in_range(name, number, low_range, high_range):
