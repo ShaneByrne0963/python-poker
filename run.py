@@ -531,14 +531,17 @@ class CardInput:
         # Stores the found cards that consist of
         # the most letters of the input
         best_matches = []
-        match_score = 0
+        # At least 1 in 3 characters in the input must match the card
+        match_score = 33
+        has_ranks = False
+        missing_rank_message = f'No ranks found in "{self.text}"'
         has_suits = False
         # Divides the input into words if there are spaces in it
         input_words = self.text.split(' ')
 
         ranks = self.find_values(input_words, 'rank')
         if len(ranks) == 0:
-            print_error(f'No ranks found in "{self.text}"')
+            print_error(missing_rank_message)
             return None
         for rank in ranks:
             temp_words = input_words.copy()
@@ -558,6 +561,7 @@ class CardInput:
                     content_length, len(self.text)
                 )
                 if content_percent >= match_score:
+                    has_ranks = True
                     if content_percent > match_score:
                         match_score = content_percent
                         best_matches.clear()
@@ -566,6 +570,9 @@ class CardInput:
                         'suit': suit['value'],
                     }
                     best_matches.append(found_card)
+        if not has_ranks:
+            print_error(missing_rank_message)
+            return None
         if not has_suits:
             print_error(f'No suits found in "{self.text}"')
             return None
