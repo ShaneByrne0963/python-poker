@@ -47,7 +47,7 @@ class Deck:
             # deck, and returns None
             print('No more cards in the deck!')
             return None
-        if self.cards.count(card) > 0:
+        if card in self.cards:
             self.cards.remove(card)
             return card
         # Creates a card to print an error if the card
@@ -102,7 +102,7 @@ class Hand:
         for card in self.cards:
             card_desc = card.description()
             print_text += card_desc
-            if len(self.cards) < 6:
+            if len(self.cards) <= 6:
                 print_text += '\t'
             else:
                 # Reducing the spacing for larger hands

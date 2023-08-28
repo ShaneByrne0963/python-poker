@@ -89,6 +89,13 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 ## Data Model
 
+The data model for Python Poker consists of 4 different classes that play a key role in different parts of the program:
+
+### Deck
+
+- The Deck class stores all the cards that have not been taken by any of the existing hands, as well as any wild cards used in the current round
+- It also contains functions, such as `shuffle` to randomize the order of it's cards, `get_card` to check if a certain card exists in it, 
+
 ## Testing
 
 ### Bugs
