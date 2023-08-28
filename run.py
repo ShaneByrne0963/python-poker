@@ -18,7 +18,7 @@ class Deck:
         Returns a list every card in a deck
         """
         cards = []
-        for suit in CardType.suits:
+        for suit in CardInput.suits:
             for rank in range(2, 15):
                 card = Card(rank, suit)
                 cards.append(card)
@@ -427,7 +427,7 @@ class Hand:
         """
         # Sorts each card by its suit into a list of lists
         suits = []
-        for suit_sorting in CardType.suits:
+        for suit_sorting in CardInput.suits:
             # Add an empty list for each suit
             suits.append([])
             for card in self.cards_sorted:
@@ -508,7 +508,7 @@ class Card:
         return self.rank in deck.wildcards
 
 
-class CardType:
+class CardInput:
     """
     Stores a single card input by the user, and contains
     functions to convert that string into a card dictionary
@@ -518,7 +518,7 @@ class CardType:
 
     def __init__(self, text):
         """
-        Creates an instance of CardType
+        Creates an instance of CardInput
         """
         self.text = text
 
@@ -579,7 +579,7 @@ class CardType:
         found_values = []
         # Finding out what to compare the words to
         checking_values = (
-            range(2, 15) if value_type == 'rank' else CardType.suits
+            range(2, 15) if value_type == 'rank' else CardInput.suits
         )
         for value in checking_values:
             # Converting rank numbers to string format when necessary
@@ -763,7 +763,7 @@ def get_hand_input(card_number):
         for card_text in hand_list:
             # Removing any white space from the edge of each card input
             text_stripped = card_text.strip()
-            card_object = CardType(text_stripped)
+            card_object = CardInput(text_stripped)
             card_objects.append(card_object)
 
         cards = validate_hand(card_objects, card_number)
@@ -855,7 +855,7 @@ def validate_wildcards(wildcard_input):
         if card_text == '':
             print_error('Blank card detected')
             return None
-        card = CardType(card_text)
+        card = CardInput(card_text)
         rank_words = card_text.split(' ')
         ranks = card.find_values(rank_words, 'rank', True)
         if len(ranks) == 0:
@@ -881,8 +881,8 @@ def get_rank_name(rank_number):
     # For cards greater than 10
     if rank_number > 10:
         # The 11th rank will be "Jack", which is the first
-        # element [0] in CardType.ranks
-        return CardType.ranks[rank_number - 11]
+        # element [0] in CardInput.ranks
+        return CardInput.ranks[rank_number - 11]
     return str(rank_number)
 
 
@@ -890,8 +890,8 @@ def get_rank_value(rank_name):
     """
     Returns the rank of the card as an integer
     """
-    if rank_name in CardType.ranks:
-        return CardType.ranks.index(rank_name) + 11
+    if rank_name in CardInput.ranks:
+        return CardInput.ranks.index(rank_name) + 11
     return int(rank_name)
 
 

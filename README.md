@@ -93,8 +93,20 @@ The data model for Python Poker consists of 4 different classes that play a key 
 
 ### Deck
 
-- The Deck class stores all the cards that have not been taken by any of the existing hands, as well as any wild cards used in the current round
-- It also contains functions, such as `shuffle` to randomize the order of it's cards, `get_card` to check if a certain card exists in it, 
+- The Deck class stores all the cards that have not been taken by any of the existing hands, as well as any wild cards specified by the user.
+A global instance of Deck is created upon starting the program.
+- It also contains methods that relate to its list of cards, such as `get_full` to return a list of a full deck of cards,
+`shuffle` to randomize the order of it's cards,
+`get_card` to check if a certain card exists in it and `take_card` to take a card from the deck
+
+### Card
+
+- The Card class stores the rank (number) and suit of a card in the deck. Upon starting a new round, 52 instances of this class are created using the `get_full` method and stored in the global Deck instance
+- The class also has 2 methods: `description` to return a short string containing its properties that is used for the table, and `is_wild` to return a boolean if the card's rank exists in the Deck instance's list of wild cards
+
+### Hand
+
+- The most significant 
 
 ## Testing
 
@@ -131,7 +143,7 @@ Bug #5 (25/8/23): User can enter blank player name by entering only a space
 
 ### Validator Testing
 
-Python Poker was tested using [Code Institute's pep8 Validator](https://pep8ci.herokuapp.com/) and contains no issues
+Python Poker was tested using [Code Institute's pep8 Linter](https://pep8ci.herokuapp.com/) and contains no issues
 
 ### Unfixed Bugs
 
