@@ -307,6 +307,7 @@ class Hand:
         suit_amount = suits[0]['amount']
         if suit_amount + self.wildcards >= 5:
             while suit_amount < 5:
+                # Always pick the best rank for wild cards
                 self.add_fake_card(14, best_suit)
                 suit_amount += 1
             return best_suit

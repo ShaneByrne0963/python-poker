@@ -65,7 +65,7 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
     - Once a hand has been entered, all future hands must have the same amount of cards as the first hand. This will be updated in the instructions
 - ![Instructions with updated number of cards](assets/images/readme/static-card-number.JPG)
 - **Reading the User's Input**
-    - Once the user enters their list of cards, each card will be checked for a rank and a suit.
+    - Once the user enters their list of cards, each card will be checked for a rank and a suit
     - The characters of the input are compared to the characters of each rank and suit. If at least 75% the input's characters also exist in the rank or suit it is evaluating, then the program assumes the user meant to enter that rank/suit. However, the first character has to be the same.
     - This feature allows the text input to be more forgiving to spelling mistakes, and makes the program much easier to use for people with dyslexia
 - ![Spelling mistakes are considered when evaluating the cards](assets/images/readme/spelling-mistakes.JPG)
@@ -93,11 +93,21 @@ The data model for Python Poker consists of 4 different classes that play a key 
 
 ### Deck
 
-- The Deck class stores all the cards that have not been taken by any of the existing hands, as well as any wild cards specified by the user.
+- The Deck class stores all the cards that have not been taken by any of the existing hands, as well as any wild cards specified by the user
 A global instance of Deck is created upon starting the program.
 - It also contains methods that relate to its list of cards, such as `get_full` to return a list of a full deck of cards,
 `shuffle` to randomize the order of it's cards,
 `get_card` to check if a certain card exists in it and `take_card` to take a card from the deck
+
+### CardInput
+
+- The CardInput class stores a single card input by the user when entering their hand.
+It's main purpose is to determine the rank and suit the user most likely meant to type
+- The class is mostly made up of methods.
+The main method is `convert`, which converts the input text into a Card instance from the deck that has the best matching rank and suit.
+- Another method, `find_values`, gets all ranks or suits (depending on what is specified) in the input text.
+This method is a part of `convert`, but is also used to determine the wild cards entered by the user
+- This class uses the global Deck instance to validate if the card entered by the user exists in the deck
 
 ### Card
 
@@ -106,7 +116,13 @@ A global instance of Deck is created upon starting the program.
 
 ### Hand
 
-- The most significant 
+- The Hand class stores the list of Card instances taken from the Deck instance that were entered by the user, and the name of the player that owns the hand.
+It also keeps track of how many of these cards are wild.
+- This class has a lot of methods used to get information about the hand, such as:
+    - `get_value` to return a dictionary of information about the best possible value for the hand
+    - `get_repeating_values` to return a list of groups of either ranks or suits in the hand, and
+    - `get_suit_only` to return a list of Card instances in the hand that have a particular suit
+- A combination of these methods, as well as other methods that the class has, are used to determine the value of each hand and which hand is the best 
 
 ## Testing
 
