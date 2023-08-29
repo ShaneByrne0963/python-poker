@@ -16,13 +16,13 @@ Upon starting the program, the user is first asked a yes or no question on wheth
 
 ![Yes/no question displayed on terminal](assets/images/testing/yes-or-no/terminal-display.JPG)
 
-Note: All input requests that are accompanied by the text "Your Answer (Y/N): " use the same function `user_allows()`, which always returns a boolean value (Yes = True, No = False) and takes in no parameters that directly affect the algorithm. What this means is that these input requests use the exact same function to get a yes or no answer from the user with zero differences, so it is unnecessary to document the test cases on all of them
+Note: All input requests that are accompanied by the text "Your Answer (Y/N): " use the same function `user_allows()`, which always returns a boolean value (Yes = True, No = False) and takes in no parameters that directly affect the algorithm. What this means is that these input requests use the exact same function to get a yes or no answer from the user with zero differences, so it is unnecessary to document every test case on all of them
 
 Rules:
 - 75% of the characters of the input must contain "Yes" or "No"
 - The input must start with either "Y" or "N"
 
-### Failing Inputs
+### Invalid Inputs
 
 **Test 1: No input**
 
@@ -32,7 +32,7 @@ Rules:
 
 ![Yes/no question's response to white space input](assets/images/testing/yes-or-no/space-input.JPG)
 
-**Test 3: Input that terminal does not expect**
+**Test 3: Input that program does not expect**
 
 ![An input not expected by the yes/no question](assets/images/testing/yes-or-no/unknown-input.JPG)
 
@@ -80,6 +80,67 @@ Rules:
 
 ![User enters "y"](assets/images/testing/yes-or-no/input-y.JPG)
 
-- "y" is a valid input because the first letter of the input (In this case, the only letter) is the same as the first letter of the word, and 100% of the input is in "Yes"
+- "y" is a valid input because the first letter of the input (In this case, the only letter) is the same as the first letter of the word,
+and 100% of the input is in "Yes"
 - Also note the word comparison is not case sensitive
+- This also works for the "No" answer ("n")
 
+![User enters "n"](assets/images/testing/yes-or-no/input-n.JPG)
+
+
+## Section 2: Wild Cards
+
+This section of the program only runs if the user answers Section 1 with a "Yes" input. It requests a list of wildcards that will be used in the upcoming round
+
+![Wild card request displayed on terminal](assets/images/testing/wild-cards/terminal-display.jpg)
+
+Rules:
+- Each wild card input must contain at least 1 rank (Any number between 2 and 10, or "Jack", "Queen", "King" or "Ace")
+- The wild cards should be separated by a comma
+- No more than 3 wild cards can be entered
+
+### Invalid Inputs
+
+**Test 1: No rank in any wild card**
+
+![User enters invalid rank](assets/images/testing/wild-cards/invalid-rank-input.jpg)
+
+- Note that "Pick" and "Sticks" contain the letter "k", which could be attributed to "King".
+- However, "k" is not the first letter of these words, so the program correctly identifies them as not this rank
+
+### Valid Inputs
+
+**Test 1: No input**
+
+![Response to no input](assets/images/testing/wild-cards/no-input.JPG)
+
+- In this section, no input is actually a valid input as for this case, the program will assume the user may have changed their mind about including wild cards.
+
+**Test 2: White space input**
+
+
+## Section 3: Proceeding Without Wildcards
+
+
+## Section 4: Name Request
+
+### Invalid Inputs
+
+**Test 1: No input**
+
+**Test 2: White space input**
+
+
+## Section 5: Hand Request
+
+### Invalid Inputs
+
+**Test 1: No input**
+
+**Test 2: White space input**
+
+
+## Section 6: Adding another hand
+
+
+## Section 7: Starting another round
