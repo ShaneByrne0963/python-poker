@@ -105,8 +105,15 @@ Rules:
 
 ![User enters invalid rank](assets/images/testing/wild-cards/invalid-rank-input.jpg)
 
+- The user will be told that the first invalid card rank contains no ranks
 - Note that "Pick" and "Sticks" contain the letter "k", which could be attributed to "King".
 - However, "k" is not the first letter of these words, so the program correctly identifies them as not this rank
+
+**Test 2: More than 3 wild cards**
+
+![4 wild cards entered](assets/images/testing/wild-cards/too-many-wildcards.JPG)
+
+- The user will be reminded about how many wild cards they can enter, and told how many cards they actually entered
 
 ### Valid Inputs
 
@@ -140,7 +147,10 @@ Rules:
 **Test 2: White space input**
 
 
-## Section 6: Adding another hand
+## Section 6: Displaying the Hands
 
 
-## Section 7: Starting another round
+## Section 7: Adding Another Hand
+
+
+## Section 8: Starting Another Round
