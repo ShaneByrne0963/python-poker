@@ -546,27 +546,27 @@ The following rules apply to:
 To see all invalid inputs, see "Section 1: Yes or No Questions"
 - Here, we will only be testing the valid ranks (True/False) to see if they result in moving to the intended sections
 
-![Asking the user if they want another hand](assets/images/testing/new-round/terminal-display.JPG)
+![Asking the user if they want another hand](assets/images/testing/new-hand/terminal-display.JPG)
 
 **Test 1: User answers "Yes"**
 
-![User responds with "Yes"](assets/images/testing/new-round/round-continue.JPG)
+![User responds with "Yes"](assets/images/testing/new-hand/round-continue.JPG)
 
 - If the user answers "Yes", the program will return to Section 4 (name request),
 and start the process of getting a new hand from the user over again
 
 **Test 2: User answers "No"**
 
-![User responds with "No"](assets/images/testing/new-round/round-end.JPG)
+![User responds with "No"](assets/images/testing/new-hand/round-end.JPG)
 
 - If the user answers "No", the round will end and the program will move to Section 10 below
 - If multiple hands are entered, the winner will be congratulated
 
-![Congratulating the winner](assets/images/testing/new-round/round-end-winner.JPG)
+![Congratulating the winner](assets/images/testing/new-hand/round-end-winner.JPG)
 
 - If multiple winners exist, then all of them will be congratulated
 
-![Congratulating all winners](assets/images/testing/new-round/multiple-winners.JPG)
+![Congratulating all winners](assets/images/testing/new-hand/multiple-winners.JPG)
 
 
 ## Section 9: Hand Request with Prior Players
@@ -604,3 +604,24 @@ Added rules:
 
 
 ## Section 10: Starting Another Round
+
+- Once a round has ended, the user will be asked if they want to start another
+- This is a yes/no question that uses the function `user_allows()`.
+To see all invalid inputs, see "Section 1: Yes or No Questions"
+- Here, we will only be testing the valid ranks (True/False) to see if they result in moving to the intended sections
+
+![Asking the user if they want another hand](assets/images/testing/new-round/terminal-display.JPG)
+
+**Test 1: User answers "Yes"**
+
+![User responds with "Yes"](assets/images/testing/new-round/input-yes.JPG)
+
+- If the user answers "Yes", the program will restart and begin again at Section 1,
+where they will be asked if they want wild cards in their new round
+- All hands and wild cards from the previous round are erased
+
+**Test 2: User answers "No"**
+
+![User responds with "No"](assets/images/testing/new-round/input-no.JPG)
+
+- If the user answers "No", the program will terminate with a goodbye message
