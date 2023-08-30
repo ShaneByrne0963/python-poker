@@ -549,6 +549,7 @@ class CardInput:
             # If any rank takes up the entire input,
             # then there are no suits in it
             if not self.has_input(temp_words):
+                has_ranks = True
                 has_suits = False
                 break
             suits = self.find_values(temp_words, 'suit')
