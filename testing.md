@@ -106,7 +106,7 @@ This section of the program only runs if the user answers Section 1 with a "Yes"
 
 Rules:
 - Each wild card input must contain at least 1 rank (Any number between 2 and 10, or "Jack", "Queen", "King" or "Ace")
-- The wild cards should be separated by a comma
+- The wild cards must be separated by a comma
 - No more than 3 wild cards can be entered
 
 ### Invalid Inputs
@@ -135,6 +135,17 @@ Rules:
 
 - If more than one rank is found in an input, then each rank found will be shown to the user, allowing them to correct their mistake easier
 
+**Test 5: No commas separating the wild cards**
+
+![3 wild cards not separated by a comma](assets/images/testing/wild-cards/no-commas.JPG)
+
+- If there are no commas between the ranks, it will treat the input as only one card and produce an error
+- The user is told what cards were found in the one input
+
+![3 wild cards in onw word](assets/images/testing/wild-cards/no-spaces.JPG)
+
+- The same is true if the user also didn't enter spaces either
+
 ### Valid Inputs
 
 **Test 1: No input**
@@ -149,42 +160,7 @@ Rules:
 
 - A white space ("  ") input is treated the exact same as if the user entered no input at all
 
-**Test 3: No commas separating ranks**
-
-![User entering wild cards with no commas](assets/images/testing/wild-cards/input-no-comma.JPG)
-
-![The result of the input](assets/images/testing/wild-cards/output-no-comma.JPG)
-
-- Despite what the instructions suggest, commas are not necessary to enter wild cards
-- However, if the user enters a list of wildcards without using commas and one of the ranks is invalid,
-the program will not notify the user that there was an error and continue without using the invalid card
-- Giving the user feedback on any invalid input is why separating ranks with commas is recommended
-
-![User entering an invalid input without separating other words with commas](assets/images/testing/wild-cards/input-one-invalid.JPG)
-
-![The result of the invalid input](assets/images/testing/wild-cards/output-one-invalid.JPG)
-
-- Also, if multiple ranks are found in one word, without commas the program will use all ranks found
-
-![Input that contains both "Queen" and "Ace"](assets/images/testing/wild-cards/multiple-rank-word.JPG)
-
-![Result of this input](assets/images/testing/wild-cards/multiple-rank-word-output.JPG)
-
-- I decided to keep this feature for users more familiar with the program, who are less likely to make mistakes
-- This feature reduces the amount of characters needed to type for this input
-
-**Test 4: No commas or spaces separating ranks**
-
-![3 wild cards bunched together in one string](assets/images/testing/wild-cards/input-no-spaces.JPG)
-
-![The result having no spaces](assets/images/testing/wild-cards/output-no-spaces.JPG)
-
-- If the user doesn't have any commas or spaces, the program searches for each rank in the string
-- Again, while this works, the program doesn't recommend it to new players because if they make a mistake, it can result in unintended ranks detected
-
-- This was left in for users more experienced with the program, as they won't need to enter a comma or space for each rank
-
-**Test 5: Trying all valid ranks**
+**Test 3: Trying all valid ranks**
 
 - Note: All possible amounts of wild cards (1 - 3 per round) are also being tested here
 
@@ -218,7 +194,7 @@ Ace:
 ![Rank Ace entered](assets/images/testing/wild-cards/valid-ranks/input-ace.JPG)
 ![Rank Ace returned](assets/images/testing/wild-cards/valid-ranks/output-ace.JPG)
 
-**Test 6: Misspelling worded ranks**
+**Test 4: Misspelling worded ranks**
 
 ![User misspells "Jack", "Queen" and "King"](assets/images/testing/wild-cards/input-misspelled.JPG)
 
@@ -228,7 +204,7 @@ Ace:
 - Above, all first letters of the misspelled words are the same as the intended ranks,
 and 100% of the characters exist in these ranks, so they are a match
 
-**Test 7: Comma at end of input**
+**Test 5: Comma at end of input**
 
 ![User ending the input with a comma](assets/images/testing/wild-cards/input-comma-end.JPG)
 
