@@ -465,6 +465,21 @@ This table will show all player hands, any wild cards, and the winner if there a
 
 ## Section 7: Displaying the Winner
 
+- This could be the considered the second part of Displaying the Table. It isn't an input request but it highly depends on what the user enters
+- From testing in Section 6, I can confirm that each value is ranked as intended, with "High Card" being the lowest of value and "5 of a Kind" being the highest
+
+**Test 1: Comparing paired hands of the same value**
+
+The following rules apply for:
+- Pair
+- Two Pair
+- 3 of a Kind
+- Full House
+- 4 of a Kind
+- 5 of a Kind
+
+![Comparing hands that both have Pairs]()
+
 
 ## Section 8: Adding Another Hand
 

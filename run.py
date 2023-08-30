@@ -177,7 +177,7 @@ class Hand:
         new_cards = []
         for card in cards:
             if card.suit == suit:
-                new_cards.append(suit)
+                new_cards.append(card)
         return new_cards
 
     def set_value(self):
