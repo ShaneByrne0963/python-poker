@@ -571,5 +571,36 @@ and start the process of getting a new hand from the user over again
 
 ## Section 9: Hand Request with Prior Players
 
+- This is an extension of Section 5 (Hand Request without Prior Players), so we will only document the added rules.
+See Section 5 for the rest of the test cases
+
+Added rules:
+- The number of cards must be the same as the previous hand (instead of 5 - 8 cards)
+- A card that exists in another player's hand cannot be entered in this hand
+
+![Updated text with multiple players](assets/images/testing/hand-with-players/terminal-display.JPG)
+
+### Invalid Inputs
+
+**Test 1: Different card amount**
+
+![User enters 5 cards instead of 7](assets/images/testing/hand-with-players/unmatching-number-input.JPG)
+
+- Error message is updated to say exactly how many cards the user needs
+
+**Test 2: Card existing somewhere else**
+
+![Another player has the 6 of Clubs](assets/images/testing/hand-with-players/duplicate-card-input.JPG)
+
+- The program will treat this duplicate as if the user entered the same card twice
+
+### Valid Inputs
+
+**Test 1: "Random"**
+
+![User enters "random"](assets/images/testing/hand-with-players/input-random.JPG)
+
+- If the user enters "random", they will be dealt the same number of cards as the previous hand
+
 
 ## Section 10: Starting Another Round
