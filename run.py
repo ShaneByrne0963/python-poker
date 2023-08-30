@@ -891,9 +891,18 @@ def validate_wildcards(wildcard_input):
             rank_value = rank['value']
             if rank_value not in wildcard_ranks:
                 wildcard_ranks.append(rank['value'])
-    # Only return the wild cards once all of them are valid.
-    # Repeat the while loop if there are invalid wild cards
+    # If more ranks are found than cards entered, make sure
+    # it is correct before setting them
     wild_number = len(wildcard_ranks)
+    if wild_number > len(cards_list):
+        print("Found wild cards:")
+        for rank in wildcard_ranks:
+            rank_name = get_rank_name(rank)
+            print(f'- {rank_name}')
+        if not user_allows('Is this correct?'):
+            return None
+
+    # Checking if the number of wild cards is less than 3
     if number_in_range('wild card', wild_number, 0, 3):
         return wildcard_ranks
     return None
