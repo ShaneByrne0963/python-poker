@@ -408,6 +408,60 @@ and asks if the user wants to add another hand
 
 ## Section 6: Displaying the Hands
 
+- After the user successfully enters a hand, a table will be displayed.
+This table will show all player hands, any wild cards, and the winner if there are multiple players
+- This is not a direct user input, so there are no invalid test cases, but it heavily depends on the user's previous inputs, so they will be tested
+
+![The table showing one player](assets/images/testing/hand-no-players/valid-input.JPG)
+
+**Test 1: Wild cards**
+
+!["Queen" and "Ace" displaying as wild cards above table](assets/images/testing/display-hand/wild-cards.JPG)
+
+- If any wild cards are present in the game, they will be displayed on top of the grid
+- Wild cards are wrapped in asterices (*), so the wild cards displayed over the table are also wapped in this way to make this apparent to the user
+
+**Test 2: Multiple players**
+
+![More than 1 player in the table](assets/images/testing/display-hand/multiple-hands.JPG)
+
+- The winner is displayed underneath the table of hands
+
+**Test 3: More than 5 cards per hand**
+
+![The table showing a hand that has 8 cards](assets/images/testing/display-hand/table-8-cards.JPG)
+
+- The table expands horizontally when there are more cards
+
+**Test 4: Getting every possible hand value**
+
+![Hands ranging from High Card to Flush](assets/images/testing/display-hand/lower-half-values.JPG)
+
+![Hands ranging from Full House to Royal Flush](assets/images/testing/display-hand/upper-half-values.JPG)
+
+- Note: As I added these values in, each time the winner was updated to the newest player, which works as expected as their values got higher
+
+**Test 5: Getting every possible hand value with wild cards**
+
+![Hands with wild cards from High Card to Flush](assets/images/testing/display-hand/lower-half-wild.JPG)
+
+![Hands with wild cards from Full House to 5 of a Kind](assets/images/testing/display-hand/upper-half-wild.JPG)
+
+- Note: Two Pair is impossible to make with wild cards as 3 of a Kind will always take precedence
+- Also 5 of a Kind is only possible with wild cards
+
+**Test 6: All the cards in a hand are wild**
+
+![Every card is wild](assets/images/testing/display-hand/all-wild.JPG)
+
+- The program will assign a hand with all wild cards the value of 5 aces, which is unbeatable
+
+**Test 7: Not enough cards to add another hand**
+
+![The round ends when the deck runs out of cards](assets/images/testing/display-hand/no-more-cards.JPG)
+
+- When there are not enough cards to support another player, the winner will be congratulated and the round will end, moving to Section 10
+
 
 ## Section 7: Displaying the Winner
 
