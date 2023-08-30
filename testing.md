@@ -273,12 +273,13 @@ Rules:
 
 **Test 1: Entering a name that meets all requirements**
 
-![User enters a valid name](assets/images/testing/player-name/valid-input.JPG)
+![User enters a valid name](assets/images/readme/hand-prompt.jpg)
+
+
+## Section 5: Hand Request with No Prior Players
 
 - Once a valid name is entered, the program will move on to getting that player's cards
-
-
-## Section 5: Hand Request
+- This
 
 ### Invalid Inputs
 
@@ -291,6 +292,9 @@ Rules:
 
 
 ## Section 7: Adding Another Hand
+
+
+## Section 8: Hand Request with Prior Players
 
 
 ## Section 8: Starting Another Round

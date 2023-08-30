@@ -757,8 +757,6 @@ def get_hand_input(card_number):
         print('- Each card must contain a rank and a suit.')
         print('- Example: "King of Hearts", "King Heart", "KH"\n')
         hand_input = get_required_input('Hand', 'Enter hand here: ')
-        print('')
-
         # Creates a random hand if the user specifies it
         if contains_word(hand_input, 'random'):
             new_hand = Hand(player_name, [])
