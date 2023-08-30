@@ -2,6 +2,8 @@
 
 ## Introduction
 
+<hr>
+
 There are several sections of Python Poker that require user input, each having their own set of rules for the data to be valid
 
 For each input, the following will be tested:
@@ -15,6 +17,8 @@ For the purposes of testing Python Poker, the following will be defined as:
 - *Valid input*: Any input that triggers the program to move to a different section
 
 ## Section 1: Yes or No Questions
+
+<hr>
 
 Upon starting the program, the user is first asked a yes or no question on whether they want to include wild cards in their round.
 
@@ -93,6 +97,8 @@ and 100% of the input is in "Yes"
 
 
 ## Section 2: Wild Cards
+
+<hr>
 
 This section of the program only runs if the user answers Section 1 with a "Yes" input. It requests a list of wildcards that will be used in the upcoming round
 
@@ -233,6 +239,8 @@ the program does not consider what is after the comma a blank card, which would 
 
 ## Section 3: Proceeding Without Wildcards
 
+<hr>
+
 - If the user doesn't enter any wild cards when prompted, the program will ask the user if they want to continue without wild cards
 - This is a yes/no question that uses the function `user_allows()`.
 To see all invalid inputs, see "Section 1: Yes or No Questions"
@@ -254,6 +262,8 @@ To see all invalid inputs, see "Section 1: Yes or No Questions"
 
 
 ## Section 4: Name Request
+
+<hr>
 
 - After successfully moving from the wild card section, the user will then be asked to enter their name
 - Each hand has a player name, in order to tell the user which player is the winner
@@ -290,6 +300,8 @@ Rules:
 
 
 ## Section 5: Hand Request with No Prior Players
+
+<hr>
 
 - Once a valid name is entered, the program will move on to getting that player's cards
 
@@ -377,6 +389,26 @@ there is 2 different types of information to get from each input: the rank and t
 - When a valid input is entered, the program displays all of the hands entered in a table,
 and asks if the user wants to add another hand
 
+**Test 2: All valid ranks and suits**
+
+- For this test, we will also be testing every suit, as well as every hand size
+
+Ranks 2 to 6, and hand size of 5
+
+![Ranks 2 to 6, and hand size of 5](assets/images/testing/hand-no-players/ranks-2-6.JPG)
+
+Ranks 7 to Queen, and hand size of 6
+
+![Ranks 7 to Queen, and hand size of 6](assets/images/testing/hand-no-players/ranks-7-q.JPG)
+
+Ranks King to 6, and hand size of 7
+
+![Ranks King to 6, and hand size of 7](assets/images/testing/hand-no-players/ranks-k-6.JPG)
+
+Ranks 7 to Ace, and hand size of 8
+
+![Ranks 7 to Ace, and hand size of 8](assets/images/testing/hand-no-players/ranks-7-a.JPG)
+
 **Test 2: Misspelling ranks and suits**
 
 ![All inputs are misspelled](assets/images/testing/hand-no-players/input-misspell.JPG)
@@ -407,6 +439,8 @@ and asks if the user wants to add another hand
 
 
 ## Section 6: Displaying the Hands
+
+<hr>
 
 - After the user successfully enters a hand, a table will be displayed.
 This table will show all player hands, any wild cards, and the winner if there are multiple players
@@ -465,6 +499,8 @@ This table will show all player hands, any wild cards, and the winner if there a
 
 
 ## Section 7: Displaying the Winner
+
+<hr>
 
 - This could be the considered the second part of Displaying the Table. It isn't an input request but it highly depends on what the user enters
 - From testing in Section 6, I can confirm that each value is ranked as intended, with "High Card" being the lowest of value and "5 of a Kind" being the highest
@@ -541,6 +577,8 @@ The following rules apply to:
 
 ## Section 8: Adding Another Hand
 
+<hr>
+
 - Once the table has been displayed, the user will be asked if they want to enter another hand into the table
 - This is a yes/no question that uses the function `user_allows()`.
 To see all invalid inputs, see "Section 1: Yes or No Questions"
@@ -570,6 +608,8 @@ and start the process of getting a new hand from the user over again
 
 
 ## Section 9: Hand Request with Prior Players
+
+<hr>
 
 - This is an extension of Section 5 (Hand Request without Prior Players), so we will only document the added rules.
 See Section 5 for the rest of the test cases
@@ -604,6 +644,8 @@ Added rules:
 
 
 ## Section 10: Starting Another Round
+
+<hr>
 
 - Once a round has ended, the user will be asked if they want to start another
 - This is a yes/no question that uses the function `user_allows()`.
