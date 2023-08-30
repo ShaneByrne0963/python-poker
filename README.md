@@ -128,6 +128,10 @@ It also keeps track of how many of these cards are wild.
     - `get_suit_only` to return a list of Card instances in the hand that have a particular suit
 - A combination of these methods, as well as other methods that the class has, are used to determine the value of each hand and which hand is the best
 
+## External Libraries
+
+`random`: This library is used to shuffle the deck if the user desires a random hand
+
 ## Testing
 
 ### Bugs
