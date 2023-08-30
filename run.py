@@ -886,6 +886,7 @@ def validate_wildcards(wildcard_input):
                 f'Multiple ranks found in "{card_text}"',
                 rank_names
             )
+            return None
         for rank in ranks:
             rank_value = rank['value']
             if rank_value not in wildcard_ranks:

@@ -115,6 +115,14 @@ Rules:
 
 - The user will be reminded about how many wild cards they can enter, and told how many cards they actually entered
 
+**Test 3: Blank wild card**
+
+![Empty space for one wild card](assets/images/testing/wild-cards/blank-input.JPG)
+
+**Test 4: Multiple ranks in one wild card**
+
+!["Jack" and "Queen" both entered as one wild card]()
+
 ### Valid Inputs
 
 **Test 1: No input**
