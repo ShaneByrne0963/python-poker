@@ -127,6 +127,8 @@ Rules:
 
 !["Jack" and "Queen" both entered as one wild card](assets/images/testing/wild-cards/multiple-rank-input.JPG)
 
+- If more than one rank is found in an input, then each rank found will be shown to the user, allowing them to correct their mistake easier
+
 ### Valid Inputs
 
 **Test 1: No input**
@@ -165,7 +167,18 @@ the program will not notify the user that there was an error and continue withou
 - I decided to keep this feature for users more familiar with the program, who are less likely to make mistakes
 - This feature reduces the amount of characters needed to type for this input
 
-**Test 4: Trying all valid ranks**
+**Test 4: No commas or spaces separating ranks**
+
+![3 wild cards bunched together in one string](assets/images/testing/wild-cards/input-no-spaces.JPG)
+
+![The result having no spaces](assets/images/testing/wild-cards/output-no-spaces.JPG)
+
+- If the user doesn't have any commas or spaces, the program searches for each rank in the string
+- Again, while this works, the program doesn't recommend it to new players because if they make a mistake, it can result in unintended ranks detected
+
+- This was left in for users more experienced with the program, as they won't need to enter a comma or space for each rank
+
+**Test 5: Trying all valid ranks**
 
 - Note: All possible amounts of wild cards (1 - 3 per round) are also being tested here
 
@@ -199,7 +212,7 @@ Ace:
 ![Rank Ace entered](assets/images/testing/wild-cards/valid-ranks/input-ace.JPG)
 ![Rank Ace returned](assets/images/testing/wild-cards/valid-ranks/output-ace.JPG)
 
-**Test 5: Misspelling worded ranks**
+**Test 6: Misspelling worded ranks**
 
 ![User misspells "Jack", "Queen" and "King"](assets/images/testing/wild-cards/input-misspelled.JPG)
 
@@ -209,7 +222,7 @@ Ace:
 - Above, all first letters of the misspelled words are the same as the intended ranks,
 and 100% of the characters exist in these ranks, so they are a match
 
-**Test 6: Comma at end of input**
+**Test 7: Comma at end of input**
 
 ![User ending the input with a comma](assets/images/testing/wild-cards/input-comma-end.JPG)
 
@@ -279,22 +292,130 @@ Rules:
 ## Section 5: Hand Request with No Prior Players
 
 - Once a valid name is entered, the program will move on to getting that player's cards
-- This
+
+Rules:
+- The hand must contain between 5 and 8 cards
+- Each card must contain a rank and a suit
+- Each card must be separated by a comma (unlike with wild cards where it is only recommended)
+- Only one rank and suit should be entered
+- No card should exist more than once in the hand
 
 ### Invalid Inputs
 
 **Test 1: No input**
 
+![Response to no input](assets/images/testing/hand-no-players/no-input.JPG)
+
 **Test 2: White space input**
+
+![Response to white space input](assets/images/testing/hand-no-players/white-space-input.JPG)
+
+**Test 3: Entering a normal string**
+
+![Response to a normal string](assets/images/testing/hand-no-players/single-input.JPG)
+
+- The program treats a simple string as a single input, and tells the user they need more cards
+
+**Test 4: Entering too many cards**
+
+![Too many cards entered](assets/images/testing/hand-no-players/too-many-inputs.JPG)
+
+- The program evaluates how many inputs have been entered before checking if any are valid.
+This is why there is no error about only entering numbers
+- Also note the error message sentence changes depending on if the user enters not enough or too many cards
+
+**Test 5: Empty string for card**
+
+![One card is left blank](assets/images/testing/hand-no-players/blank-card-input.JPG)
+
+**Test 6: One invalid card entered**
+
+!["Other Card" is not a valid card](assets/images/testing/hand-no-players/invalid-card-input.JPG)
+
+- The program first checks for ranks in a card, which is why it does not mention that there are also no suits present
+
+**Test 7: No rank detected in a card**
+
+![No ranks detected in "S"](assets/images/testing/hand-no-players/missing-rank-input.JPG)
+
+- The same result occurs for an invalid rank as if the card is completely invalid, as seen in Test 6 above
+
+**Test 8: No suit detected in a card**
+
+![No suits detected in "Jack"](assets/images/testing/hand-no-players/missing-suit-input.JPG)
+
+- The same error message is shown as if there were no ranks found, except "rank" is changed to "suit"
+
+**Test 9: Multiple different cards found in one input**
+
+![K-A-S-C contains several different cards](assets/images/testing/hand-no-players/multiple-card-input.JPG)
+
+- If multiple cards are found in a single input, every card found will be shown in a list.
+- This makes it easier for the user to find where their mistake was
+
+**Test 10: No commas to divide the cards**
+
+![Cards have no commas to divide them](assets/images/testing/hand-no-players/no-comma-input.JPG)
+
+- Unlike with the wild card section, cards need to have a comma between them because
+there is 2 different types of information to get from each input: the rank and the suit
+- If commas were not present here, the program could mix up the different ranks and suits to get cards the user did not intend to enter
+- If commas aren't used, the program will treat the input as one card
+
+**Test 11: A card in the hand exists twice**
+
+![4 of Diamonds is entered twice](assets/images/testing/hand-no-players/duplicate-card-input.JPG)
+
+- Only one of each card exists in the deck, so the user cannot have more than one
+
+### Valid Inputs
+
+**Test 1: Entering a valid hand**
+
+![The user enters a valid hand](assets/images/testing/hand-no-players/valid-input.JPG)
+
+- When a valid input is entered, the program displays all of the hands entered in a table,
+and asks if the user wants to add another hand
+
+**Test 2: Misspelling ranks and suits**
+
+![All inputs are misspelled](assets/images/testing/hand-no-players/input-misspell.JPG)
+
+- This input request uses the same word interpreter as the one mentioned in the previous sections
+- In the image above, Each rank and suit contains at least 75% of the word it is trying to represent
+- If there are no spaces, the rank or suit will then be searched for in the string
+- The rank and suit that takes up the most amount of characters in the input will be chosen
+
+**Test 3: Comma at end of hand**
+
+![The user ended the input with a comma](assets/images/testing/hand-no-players/input-comma-end.JPG)
+
+- If a comma is entered at the end, what is after that comma won't be treated like a blank card
+
+**Test 4: "Random"**
+
+!["Random" entered](assets/images/testing/hand-no-players/input-random.JPG)
+
+- If the user enters "random", they will be dealt a random hand
+
+**Test 5: "Random" misspelled**
+
+!["Random" is spelled incorrectly](assets/images/testing/hand-no-players/input-random-misspell.JPG)
+
+- The word interpreter will still recognise "rnadm" as "random", and deal a random hand as normal
+- This also works if the user simply enters the letter "r"
 
 
 ## Section 6: Displaying the Hands
 
 
-## Section 7: Adding Another Hand
+## Section 7: Displaying the Winner
 
 
-## Section 8: Hand Request with Prior Players
+## Section 8: Adding Another Hand
 
 
-## Section 8: Starting Another Round
+## Section 9: Hand Request with Prior Players
+
+
+## Section 10: Starting Another Round
