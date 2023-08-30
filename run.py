@@ -878,7 +878,7 @@ def validate_wildcards(wildcard_input):
         if len(ranks) == 0:
             print_error(f'No ranks found in "{card_text}"')
             return None
-        elif len(ranks) > 1 and len(cards_list) > 1:
+        elif len(ranks) > 1:
             rank_names = []
             for rank in ranks:
                 rank_name = get_rank_name(rank['value'])
@@ -892,18 +892,8 @@ def validate_wildcards(wildcard_input):
             rank_value = rank['value']
             if rank_value not in wildcard_ranks:
                 wildcard_ranks.append(rank['value'])
-    # If more ranks are found than cards entered, make sure
-    # it is correct before setting them
-    wild_number = len(wildcard_ranks)
-    if wild_number > len(cards_list):
-        print("Found wild cards:")
-        for rank in wildcard_ranks:
-            rank_name = get_rank_name(rank)
-            print(f'- {rank_name}')
-        if not user_allows('Is this correct?'):
-            return None
-
     # Checking if the number of wild cards is less than 3
+    wild_number = len(wildcard_ranks)
     if number_in_range('wild card', wild_number, 0, 3):
         return wildcard_ranks
     return None
