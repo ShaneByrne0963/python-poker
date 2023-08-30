@@ -242,6 +242,15 @@ To see all invalid inputs, see "Section 1: Yes or No Questions"
 
 ## Section 4: Name Request
 
+- After successfully moving from the wild card section, the user will then be asked to enter their name
+- Each hand has a player name, in order to tell the user which player is the winner
+
+![Requesting the user for a name]
+
+Rules:
+- The name must be 12 characters or under
+- If more than one player is entered, each name must be unique (Different cases are acceptable)
+
 ### Invalid Inputs
 
 **Test 1: No input**
