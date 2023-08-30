@@ -695,7 +695,11 @@ def convert_hand(cards_list):
     Example: "10 of Diamonds" => {'rank': 10, 'suit': 'Diamonds'}
     """
     new_cards = []
-    for card in cards_list:
+    for index in range(len(cards_list)):
+        card = cards_list[index]
+        # Stopping the loop if the user enters a comma at the end
+        if card.text == '' and index == len(cards_list) - 1:
+            break
         card_obj = card.convert()
         if card_obj is not None:
             deck.take_card(card_obj)
@@ -857,10 +861,14 @@ def validate_wildcards(wildcard_input):
     cards_list = wildcard_input.split(',')
     wildcard_ranks = []
     # Checking each input for a valid rank
-    for card_text in cards_list:
+    for index in range(len(cards_list)):
+        card_text = cards_list[index]
         card_text = card_text.strip()
         # Printing an error if an empty input is detected
         if card_text == '':
+            # In case the user entered a comma at the end
+            if index == len(cards_list) - 1:
+                break
             print_error('Blank card detected')
             return None
         card = CardInput(card_text)
@@ -1135,9 +1143,10 @@ def contains_word(input_word, word):
     # The first letters have to be the same for them to match
     if input_list[0] != word_list[0]:
         return False
-    # For integer words
+    # Integers must contain the full number, in the correct order
     if word.isdigit():
-        return word in input_word
+        if word not in input_word:
+            return False
     matching_letters = 1
     total_letters = 1
 

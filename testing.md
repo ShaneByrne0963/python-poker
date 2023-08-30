@@ -138,8 +138,45 @@ Rules:
 - Despite what the instructions suggest, commas are not necessary to enter wild cards
 - However, if the user enters a list of wildcards without using commas and one of the ranks is invalid,
 the program will not notify the user that there was an error and continue without using the invalid card
+- Giving the user feedback on any invalid input is why separating ranks with commas is recommended
 
+![User entering an invalid input without separating other words with commas](assets/images/testing/wild-cards/input-one-invalid.JPG)
 
+![The result of the invalid input](assets/images/testing/wild-cards/output-one-invalid.JPG)
+
+**Test 4: Trying all valid ranks**
+
+- Note: All possible amounts of wild cards (1 - 3) are also being tested here
+
+2:
+
+![Rank 2 entered](assets/images/testing/wild-cards/valid-ranks/input-2.JPG)
+![Rank 2 returned](assets/images/testing/wild-cards/valid-ranks/output-2.JPG)
+
+3 and 4:
+
+![Ranks 3 and 4 entered](assets/images/testing/wild-cards/valid-ranks/input-3-4.JPG)
+![Ranks 3 and 4 returned](assets/images/testing/wild-cards/valid-ranks/output-3-4.JPG)
+
+5, 6 and 7:
+
+![Ranks 5, 6 and 7 entered]()
+![Ranks 5, 6 and 7 returned]()
+
+8, 9 and 10:
+
+![Ranks 5, 6 and 7 entered]()
+![Ranks 5, 6 and 7 returned]()
+
+Jack, Queen and King:
+
+![Ranks 5, 6 and 7 entered]()
+![Ranks 5, 6 and 7 returned]()
+
+Ace:
+
+![Rank Ace entered](assets/images/testing/wild-cards/valid-ranks/input-ace.JPG)
+![Rank Ace returned](assets/images/testing/wild-cards/valid-ranks/output-ace.JPG)
 
 
 ## Section 3: Proceeding Without Wildcards
