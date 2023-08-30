@@ -410,6 +410,7 @@ and asks if the user wants to add another hand
 
 - After the user successfully enters a hand, a table will be displayed.
 This table will show all player hands, any wild cards, and the winner if there are multiple players
+- The value of a hand will be determined by the best 5 cards in that hand, i.e. which 5 cards can make the best possible hand
 - This is not a direct user input, so there are no invalid test cases, but it heavily depends on the user's previous inputs, so they will be tested
 
 ![The table showing one player](assets/images/testing/hand-no-players/valid-input.JPG)
@@ -468,9 +469,9 @@ This table will show all player hands, any wild cards, and the winner if there a
 - This could be the considered the second part of Displaying the Table. It isn't an input request but it highly depends on what the user enters
 - From testing in Section 6, I can confirm that each value is ranked as intended, with "High Card" being the lowest of value and "5 of a Kind" being the highest
 
-**Test 1: Comparing paired hands of the same value**
+**Test 1: Pairs of the same value**
 
-The following rules apply for:
+The following rules apply for any value consisting of groups of cards:
 - Pair
 - Two Pair
 - 3 of a Kind
@@ -478,7 +479,64 @@ The following rules apply for:
 - 4 of a Kind
 - 5 of a Kind
 
-![Comparing hands that both have Pairs]()
+![Comparing hands that both have Pairs](assets/images/testing/display-winner/pairs-same-value.JPG)
+
+- If the hand value involves pairs of ranks, then the rank of the pairs of the hands will be compared.
+- In the image above, player 2 has a pair of 6's, whereas player 1 only has a pair of 4's, so player 2 wins
+
+![Two Pair with both hands having the same ranking high pair](assets/images/testing/display-winner/two-pair-same-value.JPG)
+
+- With Two Pair, the higher ranking pair will be compared first, and if they match then the other pair will be compared
+
+![Comparing 2 Full Houses](assets/images/testing/display-winner/full-house-same-value.JPG)
+
+- With Full House, the 3 of a kind will be compared first, then the pair
+
+**Test 2: Straights of the same value**
+
+The following rules apply to:
+- Straight
+- Straight Flush
+- Royal Flush
+
+![Comparing hands that both have Straights](assets/images/testing/display-winner/straight-same-value.JPG)
+
+- Player 2 has a higher ranking straight, so they win
+- If more than 5 cards in the hand and all ranks in the straight are the same, then the highest card outside of the straight will be evaluated
+
+![Checking the other cards if more than 5](assets/images/testing/display-winner/straight-same-rank.JPG)
+
+**Test 3: Comparing Flush Hands**
+
+![Comparing 2 hands that have a Flush value](assets/images/testing/display-winner/flush-same-value.JPG)
+
+- The player with the highest card in their flush is the winner.
+- If the highest cards are the same, the hand will move down the ranks until a difference is found
+
+**Test 4: Comparing high cards**
+
+![Both hands have no value](assets/images/testing/display-winner/high-card-same-value.JPG)
+
+- If both hands have only high cards, then the player with the highest card will be the winner
+- If the highest cards are the same, then the second highest card will be compared and so on
+
+![The lowest cards are evaluated because the high cards are the same](assets/images/testing/display-winner/high-card-same-ranks.JPG)
+
+- Here, all the card ranks are the same except player 2 has a 4 instead of a 2, so player 2 is the winner
+- This evaluation also takes place if pair values (mentioned in Test 1) are of the same rank
+
+![Matching Pairs will have their high cards compared](assets/images/testing/display-winner/pairs-same-rank.JPG)
+
+**Test 5: Draws**
+
+![Exact same hands that have a Pair value](assets/images/testing/display-winner/pairs-draw.JPG)
+
+![Exact same hands that have a Straight Flush value](assets/images/testing/display-winner/straight-draw.JPG)
+
+![Exact same hands that have a Flush value](assets/images/testing/display-winner/flush-draw.JPG)
+
+- The examples above conatin hands that are exact copies of each other
+- In situations like these, the program simply declares both hands winners
 
 
 ## Section 8: Adding Another Hand
