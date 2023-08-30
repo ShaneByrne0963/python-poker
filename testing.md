@@ -160,23 +160,25 @@ the program will not notify the user that there was an error and continue withou
 
 5, 6 and 7:
 
-![Ranks 5, 6 and 7 entered]()
-![Ranks 5, 6 and 7 returned]()
+![Ranks 5, 6 and 7 entered](assets/images/testing/wild-cards/valid-ranks/input-5-6-7.JPG)
+![Ranks 5, 6 and 7 returned](assets/images/testing/wild-cards/valid-ranks/output-5-6-7.JPG)
 
 8, 9 and 10:
 
-![Ranks 5, 6 and 7 entered]()
-![Ranks 5, 6 and 7 returned]()
+![Ranks 8, 9 and 10 entered](assets/images/testing/wild-cards/valid-ranks/input-8-9-10.JPG)
+![Ranks 8, 9 and 10 returned](assets/images/testing/wild-cards/valid-ranks/output-8-9-10.JPG)
 
 Jack, Queen and King:
 
-![Ranks 5, 6 and 7 entered]()
-![Ranks 5, 6 and 7 returned]()
+![Ranks Jack, Queen and King entered](assets/images/testing/wild-cards/valid-ranks/input-j-q-k.JPG)
+![Ranks Jack, Queen and King returned](assets/images/testing/wild-cards/valid-ranks/output-j-q-k.JPG)
 
 Ace:
 
 ![Rank Ace entered](assets/images/testing/wild-cards/valid-ranks/input-ace.JPG)
 ![Rank Ace returned](assets/images/testing/wild-cards/valid-ranks/output-ace.JPG)
+
+**Test 5: Misspelling worded ranks**
 
 
 ## Section 3: Proceeding Without Wildcards
