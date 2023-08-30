@@ -10,6 +10,10 @@ For each input, the following will be tested:
 - Each rule will be broken, depending on the section
 - Every valid input will also be entered to ensure they work
 
+For the purposes of testing Python Poker, the following will be defined as:
+- *Invalid input*: Any input that asks the user to re-enter their input, correcting their mistakes
+- *Valid input*: Any input that triggers the program to move to a different section
+
 ## Section 1: Yes or No Questions
 
 Upon starting the program, the user is first asked a yes or no question on whether they want to include wild cards in their round.
@@ -121,7 +125,7 @@ Rules:
 
 **Test 4: Multiple ranks in one wild card**
 
-!["Jack" and "Queen" both entered as one wild card]()
+!["Jack" and "Queen" both entered as one wild card](assets/images/testing/wild-cards/multiple-rank-input.JPG)
 
 ### Valid Inputs
 
@@ -152,9 +156,18 @@ the program will not notify the user that there was an error and continue withou
 
 ![The result of the invalid input](assets/images/testing/wild-cards/output-one-invalid.JPG)
 
+- Also, if multiple ranks are found in one word, without commas the program will use all ranks found
+
+![Input that contains both "Queen" and "Ace"](assets/images/testing/wild-cards/multiple-rank-word.JPG)
+
+![Result of this input](assets/images/testing/wild-cards/multiple-rank-word-output.JPG)
+
+- I decided to keep this feature for users more familiar with the program, who are less likely to make mistakes
+- This feature reduces the amount of characters needed to type for this input
+
 **Test 4: Trying all valid ranks**
 
-- Note: All possible amounts of wild cards (1 - 3) are also being tested here
+- Note: All possible amounts of wild cards (1 - 3 per round) are also being tested here
 
 2:
 
@@ -187,6 +200,22 @@ Ace:
 ![Rank Ace returned](assets/images/testing/wild-cards/valid-ranks/output-ace.JPG)
 
 **Test 5: Misspelling worded ranks**
+
+![User misspells "Jack", "Queen" and "King"](assets/images/testing/wild-cards/input-misspelled.JPG)
+
+![Program understands user's intended ranks](assets/images/testing/wild-cards/output-misspelled.JPG)
+
+- This section uses the same function as the word interpreter described in Section 1.
+- Above, all first letters of the misspelled words are the same as the intended ranks,
+and 100% of the characters exist in these ranks, so they are a match
+
+**Test 6: Comma at end of input**
+
+![User ending the input with a comma](assets/images/testing/wild-cards/input-comma-end.JPG)
+
+- It is possible that the user could enter a comma after every rank, including the last one
+- If there is no text (or is only white space) after the last comma,
+the program does not consider what is after the comma a blank card, which would make the input invalid
 
 
 ## Section 3: Proceeding Without Wildcards
