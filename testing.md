@@ -220,6 +220,25 @@ the program does not consider what is after the comma a blank card, which would 
 
 ## Section 3: Proceeding Without Wildcards
 
+- If the user doesn't enter any wild cards when prompted, the program will ask the user if they want to continue without wild cards
+- This is a yes/no question that uses the function `user_allows()`.
+To see all invalid inputs, see "Section 1: Yes or No Questions"
+- Here, we will only be testing the valid ranks (True/False) to see if they result in moving to the intended sections
+
+![Asking the user to proceed without wild cards](assets/images/testing/wild-cards/no-input.JPG)
+
+**Test 1: User enters "Yes"**
+
+![Answering "Yes" to the question](assets/images/testing/yes-or-no/no-wildcards/input-yes.JPG)
+
+- If "Yes", the program will skip the wild card section as if the user originally entered "No" for wild cards
+
+**Test 2: User enters "No"**
+
+![Answering "No" to the question](assets/images/testing/yes-or-no/no-wildcards/input-no.JPG)
+
+- If "No", the program will allow the user to enter wild cards once again
+
 
 ## Section 4: Name Request
 
