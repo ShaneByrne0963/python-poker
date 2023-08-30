@@ -535,11 +535,38 @@ The following rules apply to:
 
 ![Exact same hands that have a Flush value](assets/images/testing/display-winner/flush-draw.JPG)
 
-- The examples above conatin hands that are exact copies of each other
+- The examples above contain hands that are exact copies of each other
 - In situations like these, the program simply declares both hands winners
 
 
 ## Section 8: Adding Another Hand
+
+- Once the table has been displayed, the user will be asked if they want to enter another hand into the table
+- This is a yes/no question that uses the function `user_allows()`.
+To see all invalid inputs, see "Section 1: Yes or No Questions"
+- Here, we will only be testing the valid ranks (True/False) to see if they result in moving to the intended sections
+
+![Asking the user if they want another hand](assets/images/testing/new-round/terminal-display.JPG)
+
+**Test 1: User answers "Yes"**
+
+![User responds with "Yes"](assets/images/testing/new-round/round-continue.JPG)
+
+- If the user answers "Yes", the program will return to Section 4 (name request),
+and start the process of getting a new hand from the user over again
+
+**Test 2: User answers "No"**
+
+![User responds with "No"](assets/images/testing/new-round/round-end.JPG)
+
+- If the user answers "No", the round will end and the program will move to Section 10 below
+- If multiple hands are entered, the winner will be congratulated
+
+![Congratulating the winner](assets/images/testing/new-round/round-end-winner.JPG)
+
+- If multiple winners exist, then all of them will be congratulated
+
+![Congratulating all winners](assets/images/testing/new-round/multiple-winners.JPG)
 
 
 ## Section 9: Hand Request with Prior Players
