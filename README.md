@@ -12,6 +12,10 @@ This program has been deplyed to Heroku and can be found [here](https://python-p
 
 ![Python Poker displayed on multiple screens](./assets/images/readme/site-display.jpg)
 
+## Flow Chart of program structure
+
+![Flow chart of how the program works](assets/images/readme/flow-chart.JPG)
+
 ## Features
 
 ### Content

@@ -872,6 +872,7 @@ def validate_wildcards(wildcard_input):
             print_error('Blank card detected')
             return None
         card = CardInput(card_text)
+        # Splitting the input into words
         rank_words = card_text.split(' ')
         ranks = card.find_values(rank_words, 'rank', True)
         if len(ranks) == 0:
