@@ -255,7 +255,27 @@ Rules:
 
 **Test 1: No input**
 
+![Response to no input](assets/images/testing/player-name/no-input.JPG)
+
 **Test 2: White space input**
+
+![Response to white space input](assets/images/testing/player-name/white-space-input.JPG)
+
+**Test 3: More than 12 characters**
+
+![13 character name entered is invalid](assets/images/testing/player-name/too-many-letters.JPG)
+
+**Test 4: Using a name already taken**
+
+![User entering a name that is already taken](assets/images/testing/player-name/taken-input.JPG)
+
+### Valid Inputs
+
+**Test 1: Entering a name that meets all requirements**
+
+![User enters a valid name](assets/images/testing/player-name/valid-input.JPG)
+
+- Once a valid name is entered, the program will move on to getting that player's cards
 
 
 ## Section 5: Hand Request
