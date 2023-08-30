@@ -1135,6 +1135,9 @@ def contains_word(input_word, word):
     # The first letters have to be the same for them to match
     if input_list[0] != word_list[0]:
         return False
+    # For integer words
+    if word.isdigit():
+        return word in input_word
     matching_letters = 1
     total_letters = 1
 
@@ -1147,8 +1150,6 @@ def contains_word(input_word, word):
             matching_letters += 1
             # Each letter in the word cannot be used twice
             word_list.remove(char)
-    if word.isdigit() and len(word_list) > 0:
-        return False
     match = get_percent(matching_letters, total_letters)
     # 75% of the input's characters must exist in the word
     return match >= 75
@@ -1177,8 +1178,15 @@ def extract_word(input_word, word):
     """
     # endregion
 
+    # For empty inputs
     if len(input_word) == 0:
         return None
+
+    if word.isdigit():
+        if word in input_word:
+            return word
+        else:
+            return None
     # Lists have more functions that are useful for this evaluation
     input_list = string_to_list(input_word)
     word_list = string_to_list(word)
@@ -1218,9 +1226,6 @@ def extract_word(input_word, word):
                 len(word_list) == 0):
             break
         index += 1
-    # For numbers, the extraced word must contain the full number
-    if word.isdigit() and len(word_list) > 0:
-        return None
     return final_string
 
 

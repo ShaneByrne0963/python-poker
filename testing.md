@@ -125,6 +125,22 @@ Rules:
 
 **Test 2: White space input**
 
+![Response to white space input](assets/images/testing/wild-cards/space-input.JPG)
+
+- A white space ("  ") input is treated the exact same as if the user entered no input at all
+
+**Test 3: No commas separating ranks**
+
+![User entering wild cards with no commas](assets/images/testing/wild-cards/input-no-comma.JPG)
+
+![The result of the input](assets/images/testing/wild-cards/output-no-comma.JPG)
+
+- Despite what the instructions suggest, commas are not necessary to enter wild cards
+- However, if the user enters a list of wildcards without using commas and one of the ranks is invalid,
+the program will not notify the user that there was an error and continue without using the invalid card
+
+
+
 
 ## Section 3: Proceeding Without Wildcards
 
